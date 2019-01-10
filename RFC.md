@@ -40,6 +40,23 @@ User can organize the meeting with the goard games. In order to plan the meeting
 * Who - mandatory
 * Which games
 * Notes
+* Status: new/cancelled
 
 The application informs the user if there are some conflicts about: when and who.
-Who - it is possible to enter email addresses to invite people who are not users.
+Where - there is an option to copy address from user profile.
+Who - it is possible to enter email addresses to invite people who are not the users.
+Creating new meeting causes that there are sent mails to all invited users and to all invited people who are not the users. Email sent to users contains all information about the meeting. Email sent to people who are not the users contains all information about the meeting and link to registration page (email address entered by default).  
+Only organizer (user who added the meeting) can edit/cancel the meeting. There are sent mails to "Who" about all changes of the meeting.
+It is not possible to edit cancelled meeting.  
+Each user added as "Who" can send the message about the meeting to all the invited users:
+* Message - mandatory  
+All messages are visible with the date of sending and who sent the message. There is mail sent to all invited people about the message as well.
+
+### Results, scores
+It is possible to add the results of the game:
+* Meeting
+* Game - mandatory
+* Number of points
+* User
+* Description
+
