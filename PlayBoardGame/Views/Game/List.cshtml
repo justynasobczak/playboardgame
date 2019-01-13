@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Game>
+
+<div class="bg-primary m-1 p-1"><h4>Games</h4></div>
+
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+<table class="table table-sm table-bordered">
+    <tr><th>Title</th></tr>
+    @if (Model.Count() == 0)
+    {
+        <tr><td class="text-center">No games</td></tr>
+    }
+    else
+    {
+        foreach (var game in Model)
+        {
+            <tr>
+                <td>@game.Title</td>
+            </tr>
+        }
+    }
+</table>
+
+
