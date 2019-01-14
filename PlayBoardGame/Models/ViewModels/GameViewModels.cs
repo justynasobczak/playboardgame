@@ -8,4 +8,11 @@ namespace PlayBoardGame.Models.ViewModels
     {
         public IEnumerable<Game> Games { get; set; }
     }
+
+    public class CreateEditGameViewModel
+    {
+        public int GameID { get; set; }
+        [Required(ErrorMessage = "Please enter a game name")]
+        public string Title { get; set; }
+    }
 }

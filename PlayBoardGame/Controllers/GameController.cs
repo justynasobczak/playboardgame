@@ -16,14 +16,14 @@ namespace PlayBoardGame.Controllers
 
         public ViewResult List() => View(new GamesListViewModel { Games = _gameRepository.Games});
 
-        public ViewResult Edit(int GameID) => View(_gameRepository.Games.FirstOrDefault(g => g.GameID == GameID) );
+        public ViewResult Edit(int GameID) => View(new CreateEditGameViewModel { Title = _gameRepository.Games.FirstOrDefault(g => g.GameID == GameID).Title, GameID = GameID });
 
         [HttpPost]
-        public IActionResult Edit(Game game)
+        public IActionResult Edit(CreateEditGameViewModel game)
         {
             if (ModelState.IsValid)
             {
-                _gameRepository.SaveGame(game);
+                _gameRepository.SaveGame(new Game { Title = game.Title, GameID = game.GameID});
                 return RedirectToAction("List");
             } else
             {
@@ -31,7 +31,7 @@ namespace PlayBoardGame.Controllers
             }
         }
         
-        public ViewResult Create() => View("Edit", new Game());
+        public ViewResult Create() => View("Edit", new CreateEditGameViewModel());
 
         [HttpPost]
         public IActionResult Delete(int gameID)
