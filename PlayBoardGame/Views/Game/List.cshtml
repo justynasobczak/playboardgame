@@ -1,10 +1,7 @@
 ﻿@model GamesListViewModel
-
 @{
-    ViewBag.Title = "List of games";
+    ViewBag.Title = "Games";
 }
-
-<div class="bg-primary m-1 p-1"><h4>Games</h4></div>
 <table class="table table-sm table-bordered">
     <tr>
         <th class="text-left">Title</th>
@@ -32,6 +29,6 @@
         }
     }
 </table>
-<div class="text-center">
+<div class="text-left">
     <a asp-action="Create" class="btn btn-primary">Add Game</a>
 </div>

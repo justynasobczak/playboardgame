@@ -21,7 +21,14 @@ namespace PlayBoardGame
             services.AddDbContext<ApplicationDBContext>(options => 
             options.UseSqlServer(_configuration["Data:PlayBoardGame:ConnectionString"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
-            services.AddIdentity<AppUser, IdentityRole>()
+            services.AddIdentity<AppUser, IdentityRole>(opts => {
+                opts.User.RequireUniqueEmail = true;
+                opts.Password.RequiredLength = 6;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireLowercase = false;
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireDigit = false;
+            })
                 .AddEntityFrameworkStores<ApplicationDBContext>()
                 .AddDefaultTokenProviders();
         }
@@ -39,7 +46,7 @@ namespace PlayBoardGame
             app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Game}/{action=List}/{id?}");
+                    template: "{controller=Account}/{action=Login}/{id?}");
             });
         }
     }

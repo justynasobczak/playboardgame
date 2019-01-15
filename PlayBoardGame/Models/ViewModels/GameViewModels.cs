@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
-using PlayBoardGame.Models;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlayBoardGame.Models.ViewModels
 {
