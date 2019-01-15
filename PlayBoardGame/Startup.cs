@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using PlayBoardGame.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PlayBoardGame.Models;
 
 namespace PlayBoardGame
 {
@@ -20,6 +21,9 @@ namespace PlayBoardGame
             services.AddDbContext<ApplicationDBContext>(options => 
             options.UseSqlServer(_configuration["Data:PlayBoardGame:ConnectionString"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
+            services.AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDBContext>()
+                .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,6 +34,7 @@ namespace PlayBoardGame
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
             }
+            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseMvc(routes => {
                 routes.MapRoute(
