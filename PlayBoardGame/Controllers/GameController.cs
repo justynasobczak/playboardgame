@@ -14,23 +14,37 @@ namespace PlayBoardGame.Controllers
             _gameRepository = gameRepository;
         }
 
-        public ViewResult List() => View(new GamesListViewModel { Games = _gameRepository.Games});
+        public ViewResult List() => View(new GamesListViewModel { Games = _gameRepository.Games });
 
-        public ViewResult Edit(int GameID) => View(new CreateEditGameViewModel { Title = _gameRepository.Games.FirstOrDefault(g => g.GameID == GameID).Title, GameID = GameID });
+        public IActionResult Edit(int GameID)
+        {
+            Game game = _gameRepository.Games.FirstOrDefault(g => g.GameID == GameID);
+            if (game != null)
+            {
+                var vm = new CreateEditGameViewModel
+                {
+                    Title = game.Title,
+                    GameID = game.GameID
+                };
+                return View(vm);
+            };
+            return RedirectToAction("Error", "Error");
+        }
 
         [HttpPost]
         public IActionResult Edit(CreateEditGameViewModel game)
         {
             if (ModelState.IsValid)
             {
-                _gameRepository.SaveGame(new Game { Title = game.Title, GameID = game.GameID});
+                _gameRepository.SaveGame(new Game { Title = game.Title, GameID = game.GameID });
                 return RedirectToAction("List");
-            } else
+            }
+            else
             {
                 return View(game);
             }
         }
-        
+
         public ViewResult Create() => View("Edit", new CreateEditGameViewModel());
 
         [HttpPost]
