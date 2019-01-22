@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace PlayBoardGame.Models
 {
@@ -14,5 +15,7 @@ namespace PlayBoardGame.Models
         public string City { get; set; }
 
         public string PostalCode { get; set; }
+
+        public ICollection<GameAppUser> GameAppUser { get; set; }
     }
 }

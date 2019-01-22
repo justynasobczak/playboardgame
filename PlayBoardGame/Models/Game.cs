@@ -1,8 +1,13 @@
-﻿namespace PlayBoardGame.Models
+﻿using System.Collections.Generic;
+
+namespace PlayBoardGame.Models
 {
     public class Game
     {
         public int GameID { get; set; }
+
         public string Title { get; set; }
+
+        public ICollection<GameAppUser> GameAppUser { get; set; }
     }
 }
