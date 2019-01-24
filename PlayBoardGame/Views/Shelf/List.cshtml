@@ -1,0 +1,28 @@
+﻿@model ShelfListViewModel
+@{
+    ViewBag.Title = "My shelf";
+}
+<table class="table table-sm table-bordered">
+    <tr>
+        <th class="text-left">Title</th>
+    </tr>
+
+    @if (Model.Shelf.Count() == 0)
+    {
+        <tr><td colspan="1" class="text-center">No games</td></tr>
+    }
+    else
+    {
+        foreach (Game game in Model.Shelf)
+        {
+            <tr>
+                <td>@game.Title</td>
+            </tr>
+        }
+    }
+</table>
+<div class="text-left">
+    <a asp-action="Edit" class="btn btn-primary">Edit My shelf</a>
+</div>
+
+

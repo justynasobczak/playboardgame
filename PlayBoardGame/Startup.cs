@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PlayBoardGame.Models;
+using PlayBoardGame.Infrastructure;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace PlayBoardGame
 {
@@ -21,6 +24,9 @@ namespace PlayBoardGame
             services.AddDbContext<ApplicationDBContext>(options => 
             options.UseSqlServer(_configuration["Data:PlayBoardGame:ConnectionString"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
+            services.AddTransient<IShelfRepository, EFShelfRepository>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<ContextProvider>();
             services.AddIdentity<AppUser, IdentityRole>(opts => {
                 opts.User.RequireUniqueEmail = true;
                 opts.Password.RequiredLength = 6;
