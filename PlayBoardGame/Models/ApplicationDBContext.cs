@@ -25,6 +25,6 @@ namespace PlayBoardGame.Models
                 .HasForeignKey(bc => bc.UserId);
         }
         public DbSet<Game> Games { get; set; }
-        //public DbSet<GameAppUser> GameAppUser { get; set; }
+        public DbSet<GameAppUser> GameAppUser { get; set; }
     }
 }

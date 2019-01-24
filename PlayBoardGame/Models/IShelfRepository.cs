@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -11,6 +8,8 @@ namespace PlayBoardGame.Models
 
         IQueryable<Game> AvailableGames { get; }
 
-        void SaveShelf(int GameId);
+        void AddToShelf(int GameId);
+
+        GameAppUser RemoveFromShelf(int GameId);
     }
 }

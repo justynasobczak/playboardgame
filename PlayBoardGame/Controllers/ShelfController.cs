@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -37,11 +35,22 @@ namespace PlayBoardGame.Controllers
             {
                 foreach (int gameId in model.IdsToAdd ?? new int[] { })
                 {
-                    _shelfRepository.SaveShelf(gameId);
+                    _shelfRepository.AddToShelf(gameId);
                 }
-                return RedirectToAction("List");
+
+                foreach (int gameId in model.IdsToDelete ?? new int[] { })
+                {
+                    _shelfRepository.RemoveFromShelf(gameId);
+                }
             }
-            return View(model);
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(List));
+            }
+            else
+            {
+                return Edit();
+            }
 
         }
     }

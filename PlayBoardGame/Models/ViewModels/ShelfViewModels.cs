@@ -16,7 +16,6 @@ namespace PlayBoardGame.Models.ViewModels
 
     public class ShelfModificationViewModel
     {
-        [Required]
         public int[] IdsToAdd { get; set; }
         public int[] IdsToDelete { get; set; }
     }
