@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 using System.Linq;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize(Roles = "Admins")]
     public class GameController : Controller
     {
         private IGameRepository _gameRepository;

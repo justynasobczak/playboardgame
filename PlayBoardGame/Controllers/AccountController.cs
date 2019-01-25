@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PlayBoardGame.Models.ViewModels;
-using PlayBoardGame.Models;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PlayBoardGame.Models;
+using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
         private UserManager<AppUser> _userManager;
@@ -17,10 +19,19 @@ namespace PlayBoardGame.Controllers
             _signInManager = signInManager;
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            if (!User?.Identity?.IsAuthenticated ?? false)
+            {
+                return View();
+            }
+            return RedirectToAction("List", "Shelf");
         }
 
         [HttpPost]
@@ -38,7 +49,7 @@ namespace PlayBoardGame.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("List", "Game");
+                    return RedirectToAction("List", "Shelf");
                 }
                 else
                 {
@@ -53,7 +64,11 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            if (!User?.Identity?.IsAuthenticated ?? false)
+            {
+                return View();
+            }
+            return RedirectToAction("List", "Shelf");
         }
 
         [HttpPost]
@@ -70,7 +85,7 @@ namespace PlayBoardGame.Controllers
                         user, vm.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("List", "Game");
+                        return RedirectToAction("List", "Shelf");
                     }
                 }
                 ModelState.AddModelError(nameof(LoginViewModel.Email), "Invalid user or password");

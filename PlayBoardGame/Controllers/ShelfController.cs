@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Controllers
 {
+    [AllowAnonymous]
     public class ShelfController : Controller
     {
         private IShelfRepository _shelfRepository;
@@ -24,7 +26,6 @@ namespace PlayBoardGame.Controllers
                 Shelf = _shelfRepository.Shelf,
                 AvailableGames = _shelfRepository.AvailableGames
             };
-
             return View(mv);
         }
 
@@ -51,8 +52,6 @@ namespace PlayBoardGame.Controllers
             {
                 return Edit();
             }
-
         }
     }
-
 }

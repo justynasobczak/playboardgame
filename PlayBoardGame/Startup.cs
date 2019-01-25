@@ -54,6 +54,7 @@ namespace PlayBoardGame
                     name: "default",
                     template: "{controller=Account}/{action=Login}/{id?}");
             });
+            SeedData.EnsurePopulatedAsync(app, _configuration);
         }
     }
 }
