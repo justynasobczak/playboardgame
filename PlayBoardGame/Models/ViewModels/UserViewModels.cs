@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace PlayBoardGame.Models
+namespace PlayBoardGame.Models.ViewModels
 {
-    public class AppUser : IdentityUser
-
+    public class UserProfileViewModel
     {
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
         public string Street { get; set; }
@@ -16,6 +16,6 @@ namespace PlayBoardGame.Models
 
         public string PostalCode { get; set; }
 
-        public ICollection<GameAppUser> GameAppUser { get; set; } = new List<GameAppUser>();
+        public string PhoneNumber { get; set; }
     }
 }

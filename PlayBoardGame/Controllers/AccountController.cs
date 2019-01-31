@@ -104,7 +104,6 @@ namespace PlayBoardGame.Controllers
             foreach (IdentityError error in result.Errors)
             {
                 ModelState.AddModelError("", error.Description);
-
             }
         }
     }

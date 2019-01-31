@@ -5,7 +5,7 @@ using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class ShelfController : Controller
     {
         private IShelfRepository _shelfRepository;

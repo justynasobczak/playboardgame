@@ -14,14 +14,9 @@
             {
                 <a asp-controller="Game" asp-action="List" class="btn btn-primary float-right">Games</a>
             }
-            @if (User?.Identity?.IsAuthenticated ?? false)
-            {
-                <a asp-controller="Shelf" asp-action="List" class="btn btn-primary float-right">My shelf</a>
-            }
-            @if (User?.Identity?.IsAuthenticated ?? false)
-            {
-                <a asp-controller="Account" asp-action="Logout" class="btn btn-primary float-right">Logout</a>
-            }
+            <a asp-controller="Account" asp-action="Logout" class="btn btn-primary float-right">Logout</a>
+            <a asp-controller="User" asp-action="UserProfile" class="btn btn-primary float-right">User profile</a>
+            <a asp-controller="Shelf" asp-action="List" class="btn btn-primary float-right">My shelf</a>
         </h4>
     </div>
     <div class="m-1 p-1">

@@ -8,6 +8,6 @@ namespace PlayBoardGame.Models
 
         public string Title { get; set; }
 
-        public virtual ICollection<GameAppUser> GameAppUser { get; set; } = new List<GameAppUser>();
+        public ICollection<GameAppUser> GameAppUser { get; set; } = new List<GameAppUser>();
     }
 }
