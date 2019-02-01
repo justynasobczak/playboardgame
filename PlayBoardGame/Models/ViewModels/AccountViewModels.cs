@@ -9,6 +9,7 @@ namespace PlayBoardGame.Models.ViewModels
         public string Email { get; set; }
 
         [Required, MinLength(6)]
+        [UIHint("password")]
         public string Password { get; set; }
     }
 
@@ -18,6 +19,7 @@ namespace PlayBoardGame.Models.ViewModels
         public string Email { get; set; }
 
         [Required]
+        [UIHint("password")]
         public string Password { get; set; }
     }
 }

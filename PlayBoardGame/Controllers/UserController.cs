@@ -67,5 +67,43 @@ namespace PlayBoardGame.Controllers
                 return View(vm);
             }
         }
+
+        public IActionResult ChangePassword()
+        {
+            var vm = new ChangePasswordViewModel();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                if (user != null)
+                {
+                    var isCorrectOld = await _userManager.CheckPasswordAsync(user, vm.OldPassword);
+                    if (isCorrectOld)
+                    {
+                        var result = await _userManager.ChangePasswordAsync(user, vm.OldPassword, vm.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction("List", "Shelf");
+                        }
+                        return RedirectToAction("Error", "Error");
+                    } else
+                    {
+                        ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), "Invalid old password");
+                        return View(vm);
+                    }
+                }
+                return RedirectToAction("Error", "Error");
+            }
+            else
+            {
+                return View(vm);
+            }
+        }
     }
 }
