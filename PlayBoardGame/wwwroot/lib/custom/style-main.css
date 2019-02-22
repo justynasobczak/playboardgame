@@ -1,0 +1,33 @@
+﻿body {
+    font-size: 17px;
+    background-color: #F4F4F4;
+}
+
+#banner {
+    background: url(img/chess-banner.jpg) no-repeat center center;
+    background-size: cover;
+    height: 10vh;
+}
+
+h1 {
+    font-size: 36px;
+    font-weight: 400;
+    color: #090909;
+    margin: 20px;
+}
+
+.navbar {
+    min-height: 57px;
+    letter-spacing: 4px;
+}
+
+.bg-menu {
+    background-color: #090909;
+    -webkit-box-shadow: -2px -1px 23px 2px rgba(0,0,0,0.81);
+    -moz-box-shadow: -2px -1px 23px 2px rgba(0,0,0,0.81);
+    box-shadow: -2px -1px 23px 2px rgba(0,0,0,0.81);
+}
+
+.submit-bigsave {
+    margin-top: 30px;
+}

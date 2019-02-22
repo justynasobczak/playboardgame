@@ -2,26 +2,73 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewBag.Title</title>
-    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <meta name="description" content="Let's play boardgames">
+    <meta name="keywords" content="boardgame">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/custom/style-main.css">
+    <!--[if lt IE 9]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <![endif]-->
 </head>
 <body>
-    <div class="bg-primary m-1 p-1">
-        <h4>
-            @ViewBag.Title
-            @if (User?.Identity?.Name == "Admin")
-            {
-                <a asp-controller="Game" asp-action="List" class="btn btn-primary float-right">Games</a>
-            }
-            <a asp-controller="Account" asp-action="Logout" class="btn btn-primary float-right">Logout</a>
-            <a asp-controller="User" asp-action="UserProfile" class="btn btn-primary float-right">User profile</a>
-            <a asp-controller="User" asp-action="ChangePassword" class="btn btn-primary float-right">Change password</a>
-            <a asp-controller="Shelf" asp-action="List" class="btn btn-primary float-right">My shelf</a>
-        </h4>
-    </div>
-    <div class="m-1 p-1">
-        @RenderBody()
-    </div>
+    <header>
+        <div class="col-12" id="banner"></div>
+        <nav class="navbar bg-menu navbar-dark navbar-expand-lg">
+            <a class="navbar-brand" href="#">Let's play boardgames</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
+                    aria-controls="mainmenu" aria-expanded="false" aria-label="switch for navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainmenu">
+                <ul class="navbar-nav ml-5 mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"> Start </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-expanded="false" id="submenu" aria-haspopup="true">Profile</a>
+
+                        <div class="dropdown-menu" aria-labelledby="submenu">
+                            <a asp-controller="User" asp-action="UserProfile" class="dropdown-item"> User profile </a>
+                            <div class="dropdown-divider"></div>
+                            <a asp-controller="User" asp-action="ChangePassword" class="dropdown-item"> Change password </a>
+                            <div class="dropdown-divider"></div>
+                            <a asp-controller="Account" asp-action="Logout" class="dropdown-item"> Logout </a>
+                        </div>
+                    </li>
+                    @if (User?.Identity?.Name == "Admin")
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="Game" asp-action="List" class="nav-link"> Games </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a asp-controller="Shelf" asp-action="List" class="nav-link"> My shelf </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <header>
+                            <h1>@ViewBag.Title</h1>
+                        </header>
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="~/lib/jquery/jquery.slim.min.js"></script>
+    <script src="~/lib/popper.js/umd/popper.min.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>

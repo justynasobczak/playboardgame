@@ -3,7 +3,8 @@
     ViewBag.Title = "Registration";
 }
 <div asp-validation-summary="All" class="text-danger"></div>
-<form method="post" asp-controller="Account" asp-action="Register">
+<form method="post" asp-controller="Account" asp-action="Register" class="form-container">
+    <h1>Let's play boardgames</h1>
     <div class="form-group">
         <label asp-for="Email">Email</label>
         <div><span asp-validation-for="Email" class="text-danger"></span></div>
@@ -15,7 +16,7 @@
         <input asp-for="Password" class="form-control" />
     </div>
     <div class="text-left">
-        <button class="btn btn-primary" type="submit">Register</button>
-        <a asp-action="Login">Log In</a>
+        <button class="btn btn-info btn-block" type="submit">Register</button>
+        <a asp-action="Login" class="btn btn-light btn-block">Log In</a>
     </div>
 </form>
