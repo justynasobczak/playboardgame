@@ -2,17 +2,16 @@
 @{
     ViewBag.Title = "Registration";
 }
-<div asp-validation-summary="All" class="text-danger"></div>
-<form method="post" asp-controller="Account" asp-action="Register" class="form-container">
+<form method="post" asp-controller="Account" asp-action="Register" class="form-container" novalidate>
     <h1>Let's play boardgames</h1>
     <div class="form-group">
         <label asp-for="Email">Email</label>
-        <div><span asp-validation-for="Email" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="Email" class="text-danger"></span></div>
         <input asp-for="Email" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Password">Password</label>
-        <div><span asp-validation-for="Password" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="Password" class="text-danger"></span></div>
         <input asp-for="Password" class="form-control" />
     </div>
     <div class="text-left">

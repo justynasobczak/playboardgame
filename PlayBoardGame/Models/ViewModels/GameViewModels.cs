@@ -12,7 +12,7 @@ namespace PlayBoardGame.Models.ViewModels
     {
         public int GameID { get; set; }
 
-        [Required(ErrorMessage = "Please enter a game name")]
+        [Required]
         public string Title { get; set; }
     }
 }

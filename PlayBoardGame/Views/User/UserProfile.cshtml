@@ -6,32 +6,32 @@
 <form asp-action="UserProfile" method="post">
     <div class="form-group">
         <label asp-for="FirstName">First name</label>
-        <div><span asp-validation-for="FirstName" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="FirstName" class="text-danger"></span></div>
         <input asp-for="FirstName" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="LastName">Last name</label>
-        <div><span asp-validation-for="LastName" class="text-danger"></span></div>
+        <div  class="custom-danger"><span asp-validation-for="LastName" class="text-danger"></span></div>
         <input asp-for="LastName" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Street">Street</label>
-        <div><span asp-validation-for="Street" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="Street" class="text-danger"></span></div>
         <input asp-for="Street" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="City">City</label>
-        <div><span asp-validation-for="City" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="City" class="text-danger"></span></div>
         <input asp-for="City" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="PostalCode">Postal code</label>
-        <div><span asp-validation-for="PostalCode" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="PostalCode" class="text-danger"></span></div>
         <input asp-for="PostalCode" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="PhoneNumber">Phone number</label>
-        <div><span asp-validation-for="PhoneNumber" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="PhoneNumber" class="text-danger"></span></div>
         <input asp-for="PhoneNumber" class="form-control" />
     </div>
     <button class="btn btn-info btn-block submit-bigsave" type="submit">Save</button>

@@ -55,7 +55,7 @@ namespace PlayBoardGame.Controllers
                 {
                     foreach (IdentityError error in result.Errors)
                     {
-                        ModelState.AddModelError("", error.Description);
+                        ModelState.AddModelError(nameof(RegisterViewModel.Email), error.Description);
                     }
                 }
             }
@@ -97,14 +97,6 @@ namespace PlayBoardGame.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
-        }
-
-        private void AddErrorsFromResult(IdentityResult result)
-        {
-            foreach (IdentityError error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-        }
+        }   
     }
 }
