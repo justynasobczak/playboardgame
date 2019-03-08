@@ -8,6 +8,8 @@ using PlayBoardGame.Models;
 using PlayBoardGame.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
+using PlayBoardGame.Email.SendGrid;
+using PlayBoardGame.Email.Template;
 
 namespace PlayBoardGame
 {
@@ -25,6 +27,8 @@ namespace PlayBoardGame
             options.UseSqlServer(_configuration["Data:PlayBoardGame:ConnectionString"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
             services.AddTransient<IShelfRepository, EFShelfRepository>();
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddTransient<IEmailTemplateSender, EmailTemplateSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ContextProvider>();
             services.AddIdentity<AppUser, IdentityRole>(opts => {

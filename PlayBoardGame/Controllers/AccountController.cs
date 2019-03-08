@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PlayBoardGame.Email.SendGrid;
+using PlayBoardGame.Email.Template;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -12,11 +14,14 @@ namespace PlayBoardGame.Controllers
     {
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
+        private IEmailTemplateSender _templateSender;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+            IEmailTemplateSender templateSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _templateSender = templateSender;
         }
 
         public IActionResult AccessDenied()
@@ -49,6 +54,21 @@ namespace PlayBoardGame.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);
+                    SendEmailResponse response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                    {
+                        IsHTML = true,
+                        FromEmail = "playboardgame@test.com",
+                        FromName = "Let's play boardgame",
+                        //ToEmail = user.Email,
+                        ToEmail = "justyn.szczepan@gmail.com",
+                        Subject = "Welcome to Let's play boardgame"
+                    }, "Welcome to Let's play boardgame", "This is content", "This is button", "www.test.pl");
+
+                    if (!response.Successful)
+                    {
+                        TempData["EmailErrorMessage"] = "Please contact support because of unknow error from email sending server.";
+                    }
+
                     return RedirectToAction("List", "Shelf");
                 }
                 else
@@ -97,6 +117,6 @@ namespace PlayBoardGame.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
-        }   
+        }
     }
 }
