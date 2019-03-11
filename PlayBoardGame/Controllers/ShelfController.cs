@@ -15,9 +15,11 @@ namespace PlayBoardGame.Controllers
             _shelfRepository = shelfRepository;
         }
 
-        public ViewResult List() => View(new
-            ShelfListViewModel
-        { Shelf = _shelfRepository.Shelf });
+        public ViewResult List() => View(
+            new ShelfListViewModel { 
+                Shelf = _shelfRepository.Shelf 
+            }
+        );
 
         public ViewResult Edit()
         {
@@ -34,6 +36,15 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Hmmm. I wonder if a regular condition wouldn't be better. At least no need to create an empty array
+                // when nothing to do.
+                // if (model.IdsToAdd != null) {
+                //     foreach (int gameId in model.IdsToAdd)
+                //     {
+                //         _shelfRepository.AddToShelf(gameId);
+                //     }
+                // }
+
                 foreach (int gameId in model.IdsToAdd ?? new int[] { })
                 {
                     _shelfRepository.AddToShelf(gameId);

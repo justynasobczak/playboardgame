@@ -32,7 +32,8 @@ namespace PlayBoardGame.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            if (!User?.Identity?.IsAuthenticated ?? false)
+            var isAuthenticated = !User?.Identity?.IsAuthenticated ?? false;
+            if (isAuthenticated)
             {
                 return View();
             }
@@ -66,7 +67,7 @@ namespace PlayBoardGame.Controllers
 
                     if (!response.Successful)
                     {
-                        TempData["EmailErrorMessage"] = "Please contact support because of unknow error from email sending server.";
+                        TempData["EmailErrorMessage"] = "Please contact support because of unknown error from email sending server.";
                     }
 
                     return RedirectToAction("List", "Shelf");

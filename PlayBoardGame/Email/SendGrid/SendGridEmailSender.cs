@@ -56,7 +56,8 @@ namespace PlayBoardGame.Email.SendGrid
 
                 if (errorResponse.Errors == null || errorResponse.Errors.Count == 0)
                 {
-                    errorResponse.Errors = new List<string>(new[] { "Unknow error from email sending server. Please contact support." });
+                    // maybe it could be good to log the errors to a file to investagate what bad happened later?
+                    errorResponse.Errors = new List<string>(new[] { "Unknown error from email sending server. Please contact support." });
                 }
                 return errorResponse;
             }
@@ -69,6 +70,7 @@ namespace PlayBoardGame.Email.SendGrid
                 }
                 return new SendEmailResponse
                 {
+                    // maybe it could be good to log the errors to a file to investagate what bad happened later?
                     Errors = new List<string>(new[] { "Unknown error occurred" })
                 };
             }

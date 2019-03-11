@@ -24,7 +24,8 @@ namespace PlayBoardGame.Email.Template
                 templateText = await reader.ReadToEndAsync();
             }
 
-            templateText = templateText.Replace("--Title--", title)
+            templateText = templateText
+                .Replace("--Title--", title)
                 .Replace("--Content--", content)
                 .Replace("--ButtonText--", buttonText)
                 .Replace("--ButtonUrl--", buttonUrl);

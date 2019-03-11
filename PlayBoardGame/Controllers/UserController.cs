@@ -58,6 +58,7 @@ namespace PlayBoardGame.Controllers
                     {
                         return RedirectToAction("List", "Shelf");
                     }
+                    // This error is not really needed. The next one can handle it.
                     return RedirectToAction("Error", "Error");
                 }
                 return RedirectToAction("Error", "Error");
@@ -91,6 +92,7 @@ namespace PlayBoardGame.Controllers
                         {
                             return RedirectToAction("List", "Shelf");
                         }
+                        // This return is not really needed.
                         return RedirectToAction("Error", "Error");
                     } else
                     {
