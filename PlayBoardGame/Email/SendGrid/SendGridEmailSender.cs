@@ -26,7 +26,7 @@ namespace PlayBoardGame.Email.SendGrid
 
             var client = new SendGridClient(apiKey);
 
-            var from = new EmailAddress(details.FromEmail, details.FromName);
+            var from = new EmailAddress(_configuration["Data:SendGridFrom:FromEmail"], _configuration["Data:SendGridFrom:FromName"]);
 
             var to = new EmailAddress(details.ToEmail, details.ToName);
 

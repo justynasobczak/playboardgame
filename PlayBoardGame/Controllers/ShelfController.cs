@@ -34,12 +34,12 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                foreach (int gameId in model.IdsToAdd ?? new int[] { })
+                foreach (int gameId in model.IdsToAdd)
                 {
                     _shelfRepository.AddToShelf(gameId);
                 }
 
-                foreach (int gameId in model.IdsToDelete ?? new int[] { })
+                foreach (int gameId in model.IdsToDelete)
                 {
                     _shelfRepository.RemoveFromShelf(gameId);
                 }

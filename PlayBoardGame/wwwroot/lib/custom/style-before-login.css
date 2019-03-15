@@ -14,11 +14,23 @@
     box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
 }
 
-button[type=submit] {
-    margin-top: 30px;
-}
-
 .custom-danger {
     font-size: 17px;
     padding: 5px 0px;
+}
+
+.beforeLoginLinks {
+    margin-top: 5px;
+    font-size: 17px;
+}
+
+a:link, a:visited {
+    color: #138496;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+a:hover {
+    color: #138496;
+    text-decoration: underline;
 }

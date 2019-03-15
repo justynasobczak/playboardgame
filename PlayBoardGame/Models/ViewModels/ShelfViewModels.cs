@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -16,7 +15,7 @@ namespace PlayBoardGame.Models.ViewModels
 
     public class ShelfModificationViewModel
     {
-        public int[] IdsToAdd { get; set; }
-        public int[] IdsToDelete { get; set; }
+        public IEnumerable<int> IdsToAdd { get; } = new List<int>();
+        public IEnumerable<int> IdsToDelete { get; } = new List<int>();
     }
 }

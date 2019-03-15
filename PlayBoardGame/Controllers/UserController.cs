@@ -58,7 +58,6 @@ namespace PlayBoardGame.Controllers
                     {
                         return RedirectToAction("List", "Shelf");
                     }
-                    return RedirectToAction("Error", "Error");
                 }
                 return RedirectToAction("Error", "Error");
             }
@@ -91,7 +90,6 @@ namespace PlayBoardGame.Controllers
                         {
                             return RedirectToAction("List", "Shelf");
                         }
-                        return RedirectToAction("Error", "Error");
                     } else
                     {
                         ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), "Invalid old password");

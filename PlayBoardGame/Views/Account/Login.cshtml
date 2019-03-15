@@ -3,7 +3,7 @@
     ViewBag.Title = "Login";
 }
 <form asp-action="Login" method="post" class="form-container">
-    <h1>Let's play boardgames</h1>
+    <h1>Let's play board games</h1>
     <div class="form-group">
         <label asp-for="Email"></label>
         <div class="custom-danger"><span asp-validation-for="Email" class="text-danger"></span></div>
@@ -14,9 +14,7 @@
         <div class="custom-danger"><span asp-validation-for="Password" class="text-danger"></span></div>
         <input asp-for="Password" class="form-control" />
     </div>
-    <div class="text-left">
-        <button class="btn btn-info btn-block" type="submit">Log In</button>
-        <a asp-action="Register" class="btn btn-light btn-block">Register</a>
-    </div>
+    <button class="btn btn-info btn-block" type="submit">Log In</button>
+    <div class="beforeLoginLinks">Forgotten Password? <a asp-action="SendResetPasswordLink">Reset password</a></div>
+    <div class="beforeLoginLinks">Don't have an account? <a asp-action="Register">Register</a></div>
 </form>
-

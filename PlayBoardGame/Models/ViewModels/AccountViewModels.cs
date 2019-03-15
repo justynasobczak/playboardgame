@@ -22,4 +22,23 @@ namespace PlayBoardGame.Models.ViewModels
         [UIHint("password")]
         public string Password { get; set; }
     }
+
+    public class SendResetPasswordLinkViewModel
+    {
+        [Required]
+        public string Email { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        [Required]
+        public string Email { get; set; }
+
+        [Required, MinLength(6)]
+        [Display(Name = "New password")]
+        [UIHint("password")]
+        public string NewPassword { get; set; }
+
+        public string EmailToken { get; set; }
+    }
 }

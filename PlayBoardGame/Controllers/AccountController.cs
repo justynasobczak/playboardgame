@@ -57,16 +57,14 @@ namespace PlayBoardGame.Controllers
                     SendEmailResponse response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
                         IsHTML = true,
-                        FromEmail = "playboardgame@test.com",
-                        FromName = "Let's play boardgame",
                         //ToEmail = user.Email,
                         ToEmail = "justyn.szczepan@gmail.com",
-                        Subject = "Welcome to Let's play boardgame"
-                    }, "Welcome to Let's play boardgame", "This is content", "This is button", "www.test.pl");
+                        Subject = "Welcome to Let's play board game"
+                    }, "Welcome to Let's play board game", "This is content", "This is button", "www.test.pl");
 
                     if (!response.Successful)
                     {
-                        TempData["EmailErrorMessage"] = "Please contact support because of unknow error from email sending server.";
+                        TempData["EmailErrorMessage"] = "Please contact support because of unknown error from email sending server.";
                     }
 
                     return RedirectToAction("List", "Shelf");
@@ -117,6 +115,83 @@ namespace PlayBoardGame.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public IActionResult SendResetPasswordLink()
+        {
+            if (!User?.Identity?.IsAuthenticated ?? false)
+            {
+                return View();
+            }
+            return RedirectToAction("List", "Shelf");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendResetPasswordLink(SendResetPasswordLinkViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByEmailAsync(vm.Email);
+                if (user != null)
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var resetLink = Url.Action("ResetPassword", "Account", new { emailToken = token },
+                        protocol: HttpContext.Request.Scheme);
+                    SendEmailResponse response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                    {
+                        IsHTML = true,
+                        //ToEmail = user.Email,
+                        ToEmail = "justyn.szczepan@gmail.com",
+                        Subject = "Reset password"
+                    }, "Reset password", "This is content", "This is button", resetLink);
+                    if (response.Successful)
+                    {
+                        //TO DO: confirmation message
+                        return RedirectToAction("Login");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                            "Please contact support because of unknown error from email sending server.");
+                    }
+                }
+                ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                    "Entered email address doesn't match any account");
+            }
+            return View(vm);
+        }
+
+        public IActionResult ResetPassword(string emailToken)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await _userManager.FindByEmailAsync(vm.Email);
+                if (user != null)
+                {
+                    var result = await _userManager.ResetPasswordAsync(user, vm.EmailToken, vm.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        //TO DO: confirmation message
+                        return RedirectToAction("Login");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email), "Error while resetting the password");
+                    }
+                } else
+                {
+                    ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                    "Entered email address doesn't match any account");
+                }
+            }
+            return View(vm);
         }
     }
 }

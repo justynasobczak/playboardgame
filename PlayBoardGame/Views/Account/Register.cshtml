@@ -3,7 +3,7 @@
     ViewBag.Title = "Registration";
 }
 <form method="post" asp-controller="Account" asp-action="Register" class="form-container" novalidate>
-    <h1>Let's play boardgames</h1>
+    <h1>Let's play board games</h1>
     <div class="form-group">
         <label asp-for="Email">Email</label>
         <div class="custom-danger"><span asp-validation-for="Email" class="text-danger"></span></div>
@@ -16,6 +16,6 @@
     </div>
     <div class="text-left">
         <button class="btn btn-info btn-block" type="submit">Register</button>
-        <a asp-action="Login" class="btn btn-light btn-block">Log In</a>
+        <div class="beforeLoginLinks">Already have an account? <a asp-action="Login">Log In</a></div>
     </div>
 </form>
