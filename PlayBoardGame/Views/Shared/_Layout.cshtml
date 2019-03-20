@@ -61,6 +61,18 @@
                         <header>
                             <h1>@ViewBag.Title</h1>
                         </header>
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success">
+                                <p>@TempData["SuccessMessage"]</p>
+                            </div>
+                        }
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger">
+                                <p>@TempData["ErrorMessage"]</p>
+                            </div>
+                        }
                         @RenderBody()
                     </div>
                 </div>

@@ -39,6 +39,7 @@ namespace PlayBoardGame.Controllers
             if (ModelState.IsValid)
             {
                 _gameRepository.SaveGame(new Game { Title = game.Title, GameID = game.GameID });
+                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("List");
             }
             else
@@ -53,6 +54,7 @@ namespace PlayBoardGame.Controllers
         public IActionResult Delete(int gameID)
         {
             Game deletedGame = _gameRepository.DeleteGame(gameID);
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction("List");
         }
     }

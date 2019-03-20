@@ -46,6 +46,7 @@ namespace PlayBoardGame.Controllers
             }
             if (ModelState.IsValid)
             {
+                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction(nameof(List));
             }
             else

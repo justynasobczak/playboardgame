@@ -56,6 +56,7 @@ namespace PlayBoardGame.Controllers
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
+                        TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                         return RedirectToAction("List", "Shelf");
                     }
                 }
@@ -88,11 +89,12 @@ namespace PlayBoardGame.Controllers
                         var result = await _userManager.ChangePasswordAsync(user, vm.OldPassword, vm.NewPassword);
                         if (result.Succeeded)
                         {
+                            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                             return RedirectToAction("List", "Shelf");
                         }
                     } else
                     {
-                        ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), "Invalid old password");
+                        ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), Constants.WrongOldPasswordMessage);
                         return View(vm);
                     }
                 }

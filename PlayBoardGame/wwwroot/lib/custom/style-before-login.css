@@ -34,3 +34,7 @@ a:hover {
     color: #138496;
     text-decoration: underline;
 }
+
+.beforeLoginAlert {
+    font-size: 17px;
+}
