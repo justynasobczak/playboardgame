@@ -40,7 +40,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel vm)
+        public async Task<IActionResult> RegisterAsync(RegisterViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace PlayBoardGame.Controllers
                     }
                 }
             }
-            return View(vm);
+            return View("Register", vm);
         }
 
         public IActionResult Login()
@@ -91,7 +91,7 @@ namespace PlayBoardGame.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel vm)
+        public async Task<IActionResult> LoginAsync(LoginViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -108,10 +108,10 @@ namespace PlayBoardGame.Controllers
                 }
                 ModelState.AddModelError(nameof(LoginViewModel.Email), Constants.UserOrPasswordErrorMessage);
             }
-            return View(vm);
+            return View("Login", vm);
         }
 
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
@@ -128,7 +128,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendResetPasswordLink(SendResetPasswordLinkViewModel vm)
+        public async Task<IActionResult> SendResetPasswordLinkAsync(SendResetPasswordLinkViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -159,7 +159,7 @@ namespace PlayBoardGame.Controllers
                 ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
                     Constants.LackOfEmailMatchMessage);
             }
-            return View(vm);
+            return View("SendResetPasswordLink", vm);
         }
 
         public IActionResult ResetPassword(string emailToken)
@@ -168,30 +168,40 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel vm)
+        public async Task<IActionResult> ResetPasswordAsync(ResetPasswordViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 AppUser user = await _userManager.FindByEmailAsync(vm.Email);
                 if (user != null)
                 {
-                    var result = await _userManager.ResetPasswordAsync(user, vm.EmailToken, vm.NewPassword);
-                    if (result.Succeeded)
+                    if (!await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.EmailToken))
                     {
-                        TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                        return RedirectToAction("Login");
+                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                    Constants.NotValidTokenMessage);
                     }
                     else
                     {
-                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email), Constants.GeneralResetPasswordErrorMessage);
+                        var result = await _userManager.ResetPasswordAsync(user, vm.EmailToken, vm.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+                            return RedirectToAction("Login");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email), Constants.GeneralResetPasswordErrorMessage);
+                        }
+
                     }
-                } else
+                }
+                else
                 {
                     ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
                     Constants.LackOfEmailMatchMessage);
                 }
             }
-            return View(vm);
+            return View("ResetPassword", vm);
         }
     }
 }

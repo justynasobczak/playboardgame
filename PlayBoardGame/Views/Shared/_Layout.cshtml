@@ -33,11 +33,11 @@
                            aria-expanded="false" id="submenu" aria-haspopup="true">Profile</a>
 
                         <div class="dropdown-menu" aria-labelledby="submenu">
-                            <a asp-controller="User" asp-action="UserProfile" class="dropdown-item"> User profile </a>
+                            <a asp-controller="User" asp-action="UserProfileAsync" class="dropdown-item"> User profile </a>
                             <div class="dropdown-divider"></div>
                             <a asp-controller="User" asp-action="ChangePassword" class="dropdown-item"> Change password </a>
                             <div class="dropdown-divider"></div>
-                            <a asp-controller="Account" asp-action="Logout" class="dropdown-item"> Logout </a>
+                            <a asp-controller="Account" asp-action="LogoutAsync" class="dropdown-item"> Logout </a>
                         </div>
                     </li>
                     @if (User?.Identity?.Name == "Admin")

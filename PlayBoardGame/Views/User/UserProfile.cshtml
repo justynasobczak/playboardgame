@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "User Profile";
 }
-<form asp-action="UserProfile" method="post">
+<form asp-action="UserProfileAsync" method="post">
     <div class="form-group">
         <label asp-for="FirstName">First name</label>
         <div class="custom-danger"><span asp-validation-for="FirstName" class="text-danger"></span></div>

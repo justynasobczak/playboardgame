@@ -19,7 +19,7 @@ namespace PlayBoardGame.Controllers
             _signInManager = signInManager;
         }
 
-        public async Task<IActionResult> UserProfile()
+        public async Task<IActionResult> UserProfileAsync()
         {
             AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
             if (user != null)
@@ -33,13 +33,13 @@ namespace PlayBoardGame.Controllers
                     PostalCode = user.PostalCode,
                     PhoneNumber = user.PhoneNumber
                 };
-                return View(vm);
+                return View("UserProfile", vm);
             };
             return RedirectToAction("Error", "Error");
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserProfile(UserProfileViewModel vm)
+        public async Task<IActionResult> UserProfileAsync(UserProfileViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -64,7 +64,7 @@ namespace PlayBoardGame.Controllers
             }
             else
             {
-                return View(vm);
+                return View("UserProfile", vm);
             }
         }
 
@@ -76,7 +76,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel vm)
+        public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -95,14 +95,14 @@ namespace PlayBoardGame.Controllers
                     } else
                     {
                         ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), Constants.WrongOldPasswordMessage);
-                        return View(vm);
+                        return View("ChangePassword", vm);
                     }
                 }
                 return RedirectToAction("Error", "Error");
             }
             else
             {
-                return View(vm);
+                return View("ChangePassword", vm);
             }
         }
     }

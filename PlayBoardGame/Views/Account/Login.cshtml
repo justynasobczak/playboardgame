@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Login";
 }
-<form asp-action="Login" method="post" class="form-container">
+<form asp-action="LoginAsync" method="post" class="form-container">
     <h1>Let's play board games</h1>
     @if (TempData["SuccessMessage"] != null)
     {
