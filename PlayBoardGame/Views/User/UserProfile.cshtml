@@ -11,23 +11,28 @@
     </div>
     <div class="form-group">
         <label asp-for="LastName">Last name</label>
-        <div  class="custom-danger"><span asp-validation-for="LastName" class="text-danger"></span></div>
+        <div class="custom-danger"><span asp-validation-for="LastName" class="text-danger"></span></div>
         <input asp-for="LastName" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="Street">Street</label>
-        <div class="custom-danger"><span asp-validation-for="Street" class="text-danger"></span></div>
-        <input asp-for="Street" class="form-control" />
+        <label asp-for="Address.Street">Street</label>
+        <div class="custom-danger"><span asp-validation-for="Address.Street" class="text-danger"></span></div>
+        <input asp-for="Address.Street" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="City">City</label>
-        <div class="custom-danger"><span asp-validation-for="City" class="text-danger"></span></div>
-        <input asp-for="City" class="form-control" />
+        <label asp-for="Address.City">City</label>
+        <div class="custom-danger"><span asp-validation-for="Address.City" class="text-danger"></span></div>
+        <input asp-for="Address.City" class="form-control" />
     </div>
     <div class="form-group">
-        <label asp-for="PostalCode">Postal code</label>
-        <div class="custom-danger"><span asp-validation-for="PostalCode" class="text-danger"></span></div>
-        <input asp-for="PostalCode" class="form-control" />
+        <label asp-for="Address.PostalCode">Postal code</label>
+        <div class="custom-danger"><span asp-validation-for="Address.PostalCode" class="text-danger"></span></div>
+        <input asp-for="Address.PostalCode" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Address.EnumCountry">Country</label>
+        <div class="custom-danger"><span asp-validation-for="Address.EnumCountry" class="text-danger"></span></div>
+        <select asp-for="Address.EnumCountry" asp-items="Html.GetEnumSelectList<CountryEnum>()" class="form-control"></select>
     </div>
     <div class="form-group">
         <label asp-for="PhoneNumber">Phone number</label>

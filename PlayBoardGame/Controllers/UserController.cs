@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -28,11 +29,25 @@ namespace PlayBoardGame.Controllers
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
-                    Street = user.Street,
-                    City = user.City,
-                    PostalCode = user.PostalCode,
-                    PhoneNumber = user.PhoneNumber
+                    PhoneNumber = user.PhoneNumber,
+                    Address = new AddressViewModels
+                    {
+                        Street = user.Street,
+                        City = user.City,
+                        PostalCode = user.PostalCode,
+                    }
                 };
+                if (user.Country != null)
+                {
+                    if (Enum.TryParse(user.Country, out CountryEnum myCountry))
+                    {
+                        vm.Address.EnumCountry = myCountry;
+                    }
+                    //TODO: Add log if failed
+                } else
+                {
+                    vm.Address.EnumCountry = CountryEnum.None;
+                }
                 return View("UserProfile", vm);
             };
             return RedirectToAction("Error", "Error");
@@ -48,9 +63,10 @@ namespace PlayBoardGame.Controllers
                 {
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;
-                    user.Street = vm.Street;
-                    user.City = vm.City;
-                    user.PostalCode = vm.PostalCode;
+                    user.Street = vm.Address.Street;
+                    user.City = vm.Address.City;
+                    user.Country = vm.Address.EnumCountry.ToString();
+                    user.PostalCode = vm.Address.PostalCode;
                     user.PhoneNumber = vm.PhoneNumber;
 
                     var result = await _userManager.UpdateAsync(user);
@@ -92,7 +108,8 @@ namespace PlayBoardGame.Controllers
                             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                             return RedirectToAction("List", "Shelf");
                         }
-                    } else
+                    }
+                    else
                     {
                         ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), Constants.WrongOldPasswordMessage);
                         return View("ChangePassword", vm);
