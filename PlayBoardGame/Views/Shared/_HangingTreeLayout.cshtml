@@ -13,6 +13,9 @@
     <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
         <![endif]-->
+    <link rel="stylesheet" href="~/hanging-tree/style.css" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
+    <script src="~/hanging-tree/hangingTree.js"></script>
 </head>
 <body>
     <header>
@@ -50,7 +53,7 @@
                         <a asp-controller="Shelf" asp-action="List" class="nav-link"> My shelf </a>
                     </li>
                     <li class="nav-item">
-                        <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Hanging tree </a>
+                        <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Game </a>
                     </li>
                 </ul>
             </div>
@@ -60,22 +63,10 @@
         <section>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-12">
                         <header>
                             <h1>@ViewBag.Title</h1>
                         </header>
-                        @if (TempData["SuccessMessage"] != null)
-                        {
-                            <div class="alert alert-success">
-                                <p>@TempData["SuccessMessage"]</p>
-                            </div>
-                        }
-                        @if (TempData["ErrorMessage"] != null)
-                        {
-                            <div class="alert alert-danger">
-                                <p>@TempData["ErrorMessage"]</p>
-                            </div>
-                        }
                         @RenderBody()
                     </div>
                 </div>
@@ -87,3 +78,4 @@
     <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
+

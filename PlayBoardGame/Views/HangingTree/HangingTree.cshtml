@@ -1,0 +1,24 @@
+﻿@model Game
+@{
+    Layout = "_HangingTreeLayout";
+    ViewBag.Title = "Hanging tree";
+}
+<div id="main" class="col-sm-12">
+    <div id="clue" class="col-sm-12"></div>
+    <div class="row">
+        <div id="hangingTree" class="col-sm-6">
+            <img src="~/hanging-tree/img/s0.jpg" alt="tree" class="imageTree"/>
+        </div>
+        <div class="col-sm-1"></div>
+        <div id="alphabet" class="col-sm-4"></div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+<script>
+    window.onload = function () {
+        start('@Html.Raw(Model.Title)');
+    };
+</script>
+
+
+

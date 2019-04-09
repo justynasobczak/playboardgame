@@ -1,0 +1,69 @@
+﻿#main {
+    background-color: black;
+    color: lightgray;
+    font-size: 28px;
+    font-family: 'Inconsolata';
+    font-weight: 700;
+    text-align: center;
+}
+
+#clue {
+    padding: 20px;
+    letter-spacing: 5px;
+}
+
+#hangingTree {
+    text-align: center;
+}
+
+.imageTree {
+    width: 100%;
+    height: auto;
+}
+
+#alphabet {
+    margin-bottom: 20px;
+}
+
+.letter {
+    border: 3px solid grey;
+    margin: 3px;
+    cursor: pointer;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.letterUnverified {
+    border: 3px solid grey;
+    cursor: pointer;
+}
+
+    .letterUnverified:hover {
+        background-color: #222222;
+        color: white;
+        border: 3px solid white;
+    }
+
+.reset {
+    color: green;
+    cursor: pointer;
+    font-size: 35px;
+}
+
+    .reset:hover {
+        color: white;
+    }
+
+.letterSuccess {
+    cursor: default;
+    background-color: #003300;
+    color: #00C000;
+    border: 3px solid #00C000;
+}
+
+.letterFail {
+    cursor: default;
+    background-color: #330000;
+    color: #C00000;
+    border: 3px solid #C00000;
+}
