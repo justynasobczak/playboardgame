@@ -13,7 +13,7 @@
         }
         else
         {
-            @foreach (Game game in Model.AvailableGames)
+            foreach (Game game in Model.AvailableGames)
             {
                 <tr>
                     <td>@game.Title</td>
@@ -31,7 +31,7 @@
         }
         else
         {
-            @foreach (Game game in Model.Shelf)
+            foreach (Game game in Model.Shelf)
             {
                 <tr>
                     <td>@game.Title</td>

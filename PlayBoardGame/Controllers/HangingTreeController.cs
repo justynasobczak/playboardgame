@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 
@@ -6,7 +7,7 @@ namespace PlayBoardGame.Controllers
 {
     public class HangingTreeController : Controller
     {
-        private IGameRepository _gameRepository;
+        private readonly IGameRepository _gameRepository;
 
         public HangingTreeController(IGameRepository gameRepository)
         {
@@ -15,7 +16,10 @@ namespace PlayBoardGame.Controllers
 
         public ViewResult HangingTree()
         {
-            Game game = ToolsExtensions.Random(_gameRepository.Games);
+        
+            var game = _gameRepository.Games.Any() ? 
+                ToolsExtensions.Random(_gameRepository.Games) : new Game {Title = "Empty base", GameID = 44};
+            
             return View(game);
         }
     }
