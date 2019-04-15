@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="$APPLICATION_CONFIG_DIR$/consoles/db" t="IncludeRecursive" />
+    <e p="$APPLICATION_CONFIG_DIR$/extensions" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.3/system/extResources" t="IncludeRecursive" />
+    <e p="$USER_HOME$/.Rider2018.3/system/resharper-host/local/Transient/ReSharperHost/v183/SolutionCaches/_PlayBoardGame.-1540675639.00" t="ExcludeRecursive" />
+    <e p="$USER_HOME$/.nuget/packages/microsoft.net.test.sdk/16.0.1/build/netcoreapp1.0" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.1/build/netcoreapp1.0/xunit.runner.reporters.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.1/build/netcoreapp1.0/xunit.runner.utility.netcoreapp10.dll" t="Include" />
+    <e p="$USER_HOME$/.nuget/packages/xunit.runner.visualstudio/2.4.1/build/netcoreapp1.0/xunit.runner.visualstudio.dotnetcore.testadapter.dll" t="Include" />
+    <e p="$PROJECT_DIR$" t="IncludeFlat">
+      <e p="PlayBoardGame" t="IncludeRecursive">
+        <e p="Constants.cs" t="Include" />
+        <e p="Controllers" t="Include">
+          <e p="AccountController.cs" t="Include" />
+          <e p="ErrorController.cs" t="Include" />
+          <e p="EventController.cs" t="Include" />
+          <e p="GameController.cs" t="Include" />
+          <e p="HangingTreeController.cs" t="Include" />
+          <e p="ShelfController.cs" t="Include" />
+          <e p="UserController.cs" t="Include" />
+        </e>
+        <e p="Email" t="Include">
+          <e p="SendGrid" t="Include">
+            <e p="IEmailSender.cs" t="Include" />
+            <e p="SendEmailDetails.cs" t="Include" />
+            <e p="SendEmailResponse.cs" t="Include" />
+            <e p="SendGridEmailSender.cs" t="Include" />
+            <e p="SendGridResponse.cs" t="Include" />
+            <e p="SendGridResponseError.cs" t="Include" />
+          </e>
+          <e p="Template" t="Include">
+            <e p="EmailTemplateSender.cs" t="Include" />
+            <e p="IEmailTemplateSender.cs" t="Include" />
+            <e p="mailTemplate.html" t="Include" />
+          </e>
+        </e>
+        <e p="GlobalSuppressions.cs" t="Include" />
+        <e p="Infrastructure" t="Include">
+          <e p="ContextProvider.cs" t="Include" />
+          <e p="ToolsExtensions.cs" t="Include" />
+        </e>
+        <e p="Migrations" t="Include">
+          <e p="20190113044645_Initial.Designer.cs" t="Include" />
+          <e p="20190113044645_Initial.cs" t="Include" />
+          <e p="20190115015043_IdentityAdded.Designer.cs" t="Include" />
+          <e p="20190115015043_IdentityAdded.cs" t="Include" />
+          <e p="20190122070254_ManyUsersGames.Designer.cs" t="Include" />
+          <e p="20190122070254_ManyUsersGames.cs" t="Include" />
+          <e p="20190322023505_AddCountry.Designer.cs" t="Include" />
+          <e p="20190322023505_AddCountry.cs" t="Include" />
+          <e p="20190412021524_AddEvents.Designer.cs" t="Include" />
+          <e p="20190412021524_AddEvents.cs" t="Include" />
+          <e p="ApplicationDBContextModelSnapshot.cs" t="Include" />
+        </e>
+        <e p="Models" t="Include">
+          <e p="AppUser.cs" t="Include" />
+          <e p="ApplicationDBContext.cs" t="Include" />
+          <e p="EFEventRepository.cs" t="Include" />
+          <e p="EFGameRepository.cs" t="Include" />
+          <e p="EFShelfRepository.cs" t="Include" />
+          <e p="Event.cs" t="Include" />
+          <e p="Game.cs" t="Include" />
+          <e p="GameAppUser.cs" t="Include" />
+          <e p="IEventRepository.cs" t="Include" />
+          <e p="IGameRepository.cs" t="Include" />
+          <e p="IShelfRepository.cs" t="Include" />
+          <e p="SeedData.cs" t="Include" />
+          <e p="ViewModels" t="Include">
+            <e p="AccountViewModels.cs" t="Include" />
+            <e p="AddressViewModels.cs" t="Include" />
+            <e p="GameViewModels.cs" t="Include" />
+            <e p="ShelfViewModels.cs" t="Include" />
+            <e p="UserViewModels.cs" t="Include" />
+          </e>
+        </e>
+        <e p="PlayBoardGame.csproj" t="IncludeRecursive" />
+        <e p="Program.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="launchSettings.json" t="Include" />
+        </e>
+        <e p="Startup.cs" t="Include" />
+        <e p="Views" t="Include">
+          <e p="Account" t="Include">
+            <e p="AccessDenied.cshtml" t="Include" />
+            <e p="Login.cshtml" t="Include" />
+            <e p="Register.cshtml" t="Include" />
+            <e p="ResetPassword.cshtml" t="Include" />
+            <e p="SendResetPasswordLink.cshtml" t="Include" />
+            <e p="_ViewStart.cshtml" t="Include" />
+          </e>
+          <e p="Error" t="Include">
+            <e p="Error.cshtml" t="Include" />
+          </e>
+          <e p="Event" t="Include">
+            <e p="Calendar.cshtml" t="Include" />
+            <e p="Calendar.cshtml.cs" t="Include" />
+            <e p="test.cshtml" t="Include" />
+            <e p="test.cshtml.cs" t="Include" />
+          </e>
+          <e p="Game" t="Include">
+            <e p="Edit.cshtml" t="Include" />
+            <e p="List.cshtml" t="Include" />
+          </e>
+          <e p="HangingTree" t="Include">
+            <e p="HangingTree.cshtml" t="Include" />
+          </e>
+          <e p="Shared" t="Include">
+            <e p="_BeforeLoginLayout.cshtml" t="Include" />
+            <e p="_HangingTreeLayout.cshtml" t="Include" />
+            <e p="_Layout.cshtml" t="Include" />
+          </e>
+          <e p="Shelf" t="Include">
+            <e p="Edit.cshtml" t="Include" />
+            <e p="List.cshtml" t="Include" />
+          </e>
+          <e p="User" t="Include">
+            <e p="ChangePassword.cshtml" t="Include" />
+            <e p="UserProfile.cshtml" t="Include" />
+          </e>
+          <e p="_ViewImports.cshtml" t="Include" />
+          <e p="_ViewStart.cshtml" t="Include" />
+        </e>
+        <e p="appsettings.json" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="libman.json" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="PlayBoardGame.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="wwwroot" t="Include">
+          <e p="hanging-tree" t="Include">
+            <e p="hangingTree.js" t="Include" />
+            <e p="img" t="Include">
+              <e p="s0.jpg" t="Include" />
+              <e p="s1.jpg" t="Include" />
+              <e p="s2.jpg" t="Include" />
+              <e p="s3.jpg" t="Include" />
+              <e p="s4.jpg" t="Include" />
+              <e p="s5.jpg" t="Include" />
+              <e p="s6.jpg" t="Include" />
+              <e p="s7.jpg" t="Include" />
+              <e p="s8.jpg" t="Include" />
+              <e p="s9.jpg" t="Include" />
+            </e>
+            <e p="style.css" t="Include" />
+          </e>
+          <e p="lib" t="Include">
+            <e p="custom" t="Include">
+              <e p="img" t="Include">
+                <e p="chess-banner.jpg" t="Include" />
+                <e p="elder-login.jpg" t="Include" />
+              </e>
+              <e p="style-before-login.css" t="Include" />
+              <e p="style-main.css" t="Include" />
+            </e>
+            <e p="fullcalendar" t="Include">
+              <e p="fullcalendar.css" t="Include" />
+              <e p="fullcalendar.js" t="Include" />
+              <e p="fullcalendar.min.css" t="Include" />
+              <e p="fullcalendar.min.js" t="Include" />
+              <e p="fullcalendar.print.css" t="Include" />
+              <e p="fullcalendar.print.min.css" t="Include" />
+              <e p="gcal.js" t="Include" />
+              <e p="gcal.min.js" t="Include" />
+              <e p="locale" t="Include">
+                <e p="af.js" t="Include" />
+                <e p="ar-dz.js" t="Include" />
+                <e p="ar-kw.js" t="Include" />
+                <e p="ar-ly.js" t="Include" />
+                <e p="ar-ma.js" t="Include" />
+                <e p="ar-sa.js" t="Include" />
+                <e p="ar-tn.js" t="Include" />
+                <e p="ar.js" t="Include" />
+                <e p="be.js" t="Include" />
+                <e p="bg.js" t="Include" />
+                <e p="bs.js" t="Include" />
+                <e p="ca.js" t="Include" />
+                <e p="cs.js" t="Include" />
+                <e p="da.js" t="Include" />
+                <e p="de-at.js" t="Include" />
+                <e p="de-ch.js" t="Include" />
+                <e p="de.js" t="Include" />
+                <e p="el.js" t="Include" />
+                <e p="en-au.js" t="Include" />
+                <e p="en-ca.js" t="Include" />
+                <e p="en-gb.js" t="Include" />
+                <e p="en-ie.js" t="Include" />
+                <e p="en-nz.js" t="Include" />
+                <e p="es-do.js" t="Include" />
+                <e p="es-us.js" t="Include" />
+                <e p="es.js" t="Include" />
+                <e p="et.js" t="Include" />
+                <e p="eu.js" t="Include" />
+                <e p="fa.js" t="Include" />
+                <e p="fi.js" t="Include" />
+                <e p="fr-ca.js" t="Include" />
+                <e p="fr-ch.js" t="Include" />
+                <e p="fr.js" t="Include" />
+                <e p="gl.js" t="Include" />
+                <e p="he.js" t="Include" />
+                <e p="hi.js" t="Include" />
+                <e p="hr.js" t="Include" />
+                <e p="hu.js" t="Include" />
+                <e p="id.js" t="Include" />
+                <e p="is.js" t="Include" />
+                <e p="it.js" t="Include" />
+                <e p="ja.js" t="Include" />
+                <e p="ka.js" t="Include" />
+                <e p="kk.js" t="Include" />
+                <e p="ko.js" t="Include" />
+                <e p="lb.js" t="Include" />
+                <e p="lt.js" t="Include" />
+                <e p="lv.js" t="Include" />
+                <e p="mk.js" t="Include" />
+                <e p="ms-my.js" t="Include" />
+                <e p="ms.js" t="Include" />
+                <e p="nb.js" t="Include" />
+                <e p="nl-be.js" t="Include" />
+                <e p="nl.js" t="Include" />
+                <e p="nn.js" t="Include" />
+                <e p="pl.js" t="Include" />
+                <e p="pt-br.js" t="Include" />
+                <e p="pt.js" t="Include" />
+                <e p="ro.js" t="Include" />
+                <e p="ru.js" t="Include" />
+                <e p="sk.js" t="Include" />
+                <e p="sl.js" t="Include" />
+                <e p="sq.js" t="Include" />
+                <e p="sr-cyrl.js" t="Include" />
+                <e p="sr.js" t="Include" />
+                <e p="sv.js" t="Include" />
+                <e p="th.js" t="Include" />
+                <e p="tr.js" t="Include" />
+                <e p="uk.js" t="Include" />
+                <e p="vi.js" t="Include" />
+                <e p="zh-cn.js" t="Include" />
+                <e p="zh-hk.js" t="Include" />
+                <e p="zh-tw.js" t="Include" />
+              </e>
+              <e p="locale-all.js" t="Include" />
+            </e>
+            <e p="jquery" t="Include">
+              <e p="core.js" t="Include" />
+              <e p="jquery.js" t="Include" />
+              <e p="jquery.min.js" t="Include" />
+              <e p="jquery.min.map" t="Include" />
+              <e p="jquery.slim.js" t="Include" />
+              <e p="jquery.slim.min.js" t="Include" />
+              <e p="jquery.slim.min.map" t="Include" />
+            </e>
+            <e p="popper.js" t="Include">
+              <e p="esm" t="Include">
+                <e p="popper-utils.js" t="Include" />
+                <e p="popper-utils.js.map" t="Include" />
+                <e p="popper-utils.min.js" t="Include" />
+                <e p="popper-utils.min.js.map" t="Include" />
+                <e p="popper.js" t="Include" />
+                <e p="popper.js.map" t="Include" />
+                <e p="popper.min.js" t="Include" />
+                <e p="popper.min.js.map" t="Include" />
+              </e>
+              <e p="popper-utils.js" t="Include" />
+              <e p="popper-utils.js.map" t="Include" />
+              <e p="popper-utils.min.js" t="Include" />
+              <e p="popper-utils.min.js.map" t="Include" />
+              <e p="popper.js" t="Include" />
+              <e p="popper.js.map" t="Include" />
+              <e p="popper.min.js" t="Include" />
+              <e p="popper.min.js.map" t="Include" />
+              <e p="umd" t="Include">
+                <e p="popper-utils.js" t="Include" />
+                <e p="popper-utils.js.map" t="Include" />
+                <e p="popper-utils.min.js" t="Include" />
+                <e p="popper-utils.min.js.map" t="Include" />
+                <e p="popper.js" t="Include" />
+                <e p="popper.js.map" t="Include" />
+                <e p="popper.min.js" t="Include" />
+                <e p="popper.min.js.map" t="Include" />
+              </e>
+            </e>
+            <e p="twitter-bootstrap" t="Include">
+              <e p="css" t="Include">
+                <e p="bootstrap-grid.css" t="Include" />
+                <e p="bootstrap-grid.css.map" t="Include" />
+                <e p="bootstrap-grid.min.css" t="Include" />
+                <e p="bootstrap-grid.min.css.map" t="Include" />
+                <e p="bootstrap-reboot.css" t="Include" />
+                <e p="bootstrap-reboot.css.map" t="Include" />
+                <e p="bootstrap-reboot.min.css" t="Include" />
+                <e p="bootstrap-reboot.min.css.map" t="Include" />
+                <e p="bootstrap.css" t="Include" />
+                <e p="bootstrap.css.map" t="Include" />
+                <e p="bootstrap.min.css" t="Include" />
+                <e p="bootstrap.min.css.map" t="Include" />
+              </e>
+              <e p="js" t="Include">
+                <e p="bootstrap.bundle.js" t="Include" />
+                <e p="bootstrap.bundle.js.map" t="Include" />
+                <e p="bootstrap.bundle.min.js" t="Include" />
+                <e p="bootstrap.bundle.min.js.map" t="Include" />
+                <e p="bootstrap.js" t="Include" />
+                <e p="bootstrap.js.map" t="Include" />
+                <e p="bootstrap.min.js" t="Include" />
+                <e p="bootstrap.min.js.map" t="Include" />
+              </e>
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="PlayBoardGame.sln" t="IncludeFlat" />
+      <e p="PlayBoardGames.Tests" t="IncludeRecursive">
+        <e p="GameControllerTests.cs" t="Include" />
+        <e p="PlayBoardGames.Tests.csproj" t="IncludeRecursive" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="netcoreapp2.2" t="Include">
+              <e p="PlayBoardGames.Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="packages" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
