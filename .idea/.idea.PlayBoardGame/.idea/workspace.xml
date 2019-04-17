@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="82d304da-e208-43fb-80c3-c8cd19330698" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/PlayBoardGame/Controllers/EventController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PlayBoardGame/Controllers/EventController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlayBoardGame/Startup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PlayBoardGame/Startup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PlayBoardGame/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PlayBoardGame/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlayBoardGame/Views/Shared/_HangingTreeLayout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/PlayBoardGame/Views/Shared/_HangingTreeLayout.cshtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PlayBoardGame/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/PlayBoardGame/Views/Shared/_Layout.cshtml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -49,7 +46,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Shared/_Layout.cshtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="554">
+            <state relative-caret-position="362">
               <caret line="58" column="21" selection-start-line="56" selection-start-column="16" selection-end-line="58" selection-end-column="21" />
               <folding>
                 <marker date="1555303488235" expanded="true" signature="17:4096" ph="&lt;html.../&gt;" />
@@ -87,11 +84,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://cc8784e0-1ef5-47f9-950e-cbe2b935150e/database/PlayBoardGame/schema/dbo/table/Events">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Shared/_HangingTreeLayout.cshtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
+            <state relative-caret-position="416">
+              <caret line="26" column="57" lean-forward="true" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
               <folding>
                 <marker date="1555303539308" expanded="true" signature="17:4003" ph="&lt;html.../&gt;" />
                 <marker date="1555303539308" expanded="true" signature="24:914" ph="&lt;head.../&gt;" />
@@ -137,24 +143,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="20" column="40" lean-forward="true" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
+            <state relative-caret-position="-162">
+              <caret line="34" column="38" lean-forward="true" selection-start-line="34" selection-start-column="38" selection-end-line="34" selection-end-column="38" />
               <folding>
-                <marker date="1555303310637" expanded="true" signature="0:36" ph="@..." />
-                <marker date="1555303310637" expanded="true" signature="226:1781" ph="@{...}" />
-                <marker date="1555303310637" expanded="true" signature="416:1779" ph="&lt;script.../&gt;" />
-                <marker date="1555303310637" expanded="true" signature="462:1764" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="512:1147" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="624:1035" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="698:970" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="740:942" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="1076:1132" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="1202:1754" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="1304:1739" ph="{...}" />
-                <marker date="1555303310637" expanded="true" signature="1462:1640" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="0:36" ph="@..." />
+                <marker date="1555478578268" expanded="true" signature="64:726" ph="&lt;div.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="120:719" ph="&lt;div.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="155:708" ph="&lt;div.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="195:443" ph="&lt;div.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="328:424" ph="&lt;h4.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="456:537" ph="&lt;div.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="550:693" ph="&lt;div.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="889:3023" ph="@{...}" />
+                <marker date="1555478578268" expanded="true" signature="1079:3021" ph="&lt;script.../&gt;" />
+                <marker date="1555478578268" expanded="true" signature="1125:3006" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1175:1810" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1287:1698" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1361:1633" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1403:1605" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1739:1795" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1865:2996" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="1967:2981" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="2125:2303" ph="{...}" />
+                <marker date="1555478578268" expanded="true" signature="2451:2963" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -213,9 +227,9 @@
         <option value="$PROJECT_DIR$/PlayBoardGame/Controllers/EventController.cs" />
         <option value="$PROJECT_DIR$/PlayBoardGame/Views/Event/test.cshtml.cs" />
         <option value="$PROJECT_DIR$/PlayBoardGame/Views/Event/test.cshtml" />
-        <option value="$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml" />
         <option value="$PROJECT_DIR$/PlayBoardGame/Views/Shared/_Layout.cshtml" />
         <option value="$PROJECT_DIR$/PlayBoardGame/Views/Shared/_HangingTreeLayout.cshtml" />
+        <option value="$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml" />
       </list>
     </option>
   </component>
@@ -258,24 +272,10 @@
               <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
               <item name="Event" type="24d0babc:SolutionExplorerModelNode" />
             </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="PlayBoardGame" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="PlayBoardGame" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Game" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
-            <path>
-              <item name="Project" type="784c90a0:SolutionExplorerRootNode" />
-              <item name="PlayBoardGame" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="PlayBoardGame" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Views" type="24d0babc:SolutionExplorerModelNode" />
-              <item name="Shared" type="24d0babc:SolutionExplorerModelNode" />
-            </path>
           </expand>
           <select />
         </subPane>
-        <option name="show-all-files" value="false" />
+        <option name="show-all-files" value="true" />
       </pane>
     </panes>
   </component>
@@ -325,12 +325,12 @@
       <workItem from="1555019305192" duration="8517000" />
       <workItem from="1555034185226" duration="4930000" />
       <workItem from="1555042762523" duration="4469000" />
-      <workItem from="1555284326120" duration="17702000" />
+      <workItem from="1555284326120" duration="29220000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="35618000" />
+    <option name="totallyTimeSpent" value="47136000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -343,15 +343,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1035" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.499385" visible="true" weight="0.20330843" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.499385" visible="true" weight="0.1456777" />
       <window_info id="Structure" order="1" sideWeight="0.500615" side_tool="true" weight="0.17395945" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.112458654" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.112458654" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -656,19 +657,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PlayBoardGame/wwwroot/lib/fullcalendar/fullcalendar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-            <element signature="e#58#64#1" expanded="true" />
-            <element signature="e#58#64#1" expanded="true" />
-            <element signature="n#style#0;n#hr#0;n#!!top" expanded="true" />
-            <element signature="e#4#10#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PlayBoardGame/Controllers/GameController.cs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-176">
@@ -772,13 +760,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://cc8784e0-1ef5-47f9-950e-cbe2b935150e/database/PlayBoardGame/schema/dbo/table/Events">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Game/Edit.cshtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -792,30 +773,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml">
+    <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Shared/_HangingTreeLayout.cshtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="20" column="40" lean-forward="true" selection-start-line="20" selection-start-column="40" selection-end-line="20" selection-end-column="40" />
+        <state relative-caret-position="416">
+          <caret line="26" column="57" lean-forward="true" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
           <folding>
-            <marker date="1555303310637" expanded="true" signature="0:36" ph="@..." />
-            <marker date="1555303310637" expanded="true" signature="226:1781" ph="@{...}" />
-            <marker date="1555303310637" expanded="true" signature="416:1779" ph="&lt;script.../&gt;" />
-            <marker date="1555303310637" expanded="true" signature="462:1764" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="512:1147" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="624:1035" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="698:970" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="740:942" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="1076:1132" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="1202:1754" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="1304:1739" ph="{...}" />
-            <marker date="1555303310637" expanded="true" signature="1462:1640" ph="{...}" />
+            <marker date="1555303539308" expanded="true" signature="17:4003" ph="&lt;html.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="24:914" ph="&lt;head.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="915:3995" ph="&lt;body.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="926:3393" ph="&lt;header.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="990:3379" ph="&lt;nav.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1132:1406" ph="&lt;button.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1419:3364" ph="&lt;div.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1488:3345" ph="&lt;ul.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1545:1657" ph="&lt;li.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1678:2531" ph="&lt;li.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1733:1900" ph="&lt;a.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="1926:2505" ph="&lt;div.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="2552:2809" ph="@..." />
+            <marker date="1555303539308" expanded="true" signature="2589:2809" ph="{...}" />
+            <marker date="1555303539308" expanded="true" signature="2636:2787" ph="&lt;li.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="2830:2977" ph="&lt;li.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="2998:3154" ph="&lt;li.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3175:3323" ph="&lt;li.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3398:3793" ph="&lt;main.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3413:3781" ph="&lt;section.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3435:3762" ph="&lt;div.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3475:3743" ph="&lt;div.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3513:3720" ph="&lt;div.../&gt;" />
+            <marker date="1555303539308" expanded="true" signature="3561:3655" ph="&lt;header.../&gt;" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Shared/_Layout.cshtml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="554">
+        <state relative-caret-position="362">
           <caret line="58" column="21" selection-start-line="56" selection-start-column="16" selection-end-line="58" selection-end-column="21" />
           <folding>
             <marker date="1555303488235" expanded="true" signature="17:4096" ph="&lt;html.../&gt;" />
@@ -852,35 +845,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Shared/_HangingTreeLayout.cshtml">
+    <entry file="file://$PROJECT_DIR$/PlayBoardGame/wwwroot/lib/fullcalendar/fullcalendar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
+        <state relative-caret-position="-5">
+          <caret line="14426" column="7" lean-forward="true" selection-start-line="14426" selection-start-column="7" selection-end-line="14426" selection-end-column="7" />
           <folding>
-            <marker date="1555303539308" expanded="true" signature="17:4003" ph="&lt;html.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="24:914" ph="&lt;head.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="915:3995" ph="&lt;body.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="926:3393" ph="&lt;header.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="990:3379" ph="&lt;nav.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1132:1406" ph="&lt;button.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1419:3364" ph="&lt;div.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1488:3345" ph="&lt;ul.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1545:1657" ph="&lt;li.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1678:2531" ph="&lt;li.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1733:1900" ph="&lt;a.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="1926:2505" ph="&lt;div.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="2552:2809" ph="@..." />
-            <marker date="1555303539308" expanded="true" signature="2589:2809" ph="{...}" />
-            <marker date="1555303539308" expanded="true" signature="2636:2787" ph="&lt;li.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="2830:2977" ph="&lt;li.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="2998:3154" ph="&lt;li.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3175:3323" ph="&lt;li.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3398:3793" ph="&lt;main.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3413:3781" ph="&lt;section.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3435:3762" ph="&lt;div.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3475:3743" ph="&lt;div.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3513:3720" ph="&lt;div.../&gt;" />
-            <marker date="1555303539308" expanded="true" signature="3561:3655" ph="&lt;header.../&gt;" />
+            <element signature="n#!!doc" expanded="true" />
+            <element signature="e#58#64#1" expanded="true" />
+            <element signature="e#58#64#1" expanded="true" />
+            <element signature="n#style#0;n#hr#0;n#!!top" expanded="true" />
+            <element signature="e#4#10#1" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://cc8784e0-1ef5-47f9-950e-cbe2b935150e/database/PlayBoardGame/schema/dbo/table/Events">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PlayBoardGame/Views/Event/Calendar.cshtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-162">
+          <caret line="34" column="38" lean-forward="true" selection-start-line="34" selection-start-column="38" selection-end-line="34" selection-end-column="38" />
+          <folding>
+            <marker date="1555478578268" expanded="true" signature="0:36" ph="@..." />
+            <marker date="1555478578268" expanded="true" signature="64:726" ph="&lt;div.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="120:719" ph="&lt;div.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="155:708" ph="&lt;div.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="195:443" ph="&lt;div.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="328:424" ph="&lt;h4.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="456:537" ph="&lt;div.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="550:693" ph="&lt;div.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="889:3023" ph="@{...}" />
+            <marker date="1555478578268" expanded="true" signature="1079:3021" ph="&lt;script.../&gt;" />
+            <marker date="1555478578268" expanded="true" signature="1125:3006" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1175:1810" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1287:1698" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1361:1633" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1403:1605" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1739:1795" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1865:2996" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="1967:2981" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="2125:2303" ph="{...}" />
+            <marker date="1555478578268" expanded="true" signature="2451:2963" ph="{...}" />
           </folding>
         </state>
       </provider>
