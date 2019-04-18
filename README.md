@@ -1,5 +1,5 @@
 ## RFC for the application "Let's play board game"
-The main goal of the application is be a tool to organize the meeting with board games and add the information about this meetup: scores and results of the games.
+The main goal of the application is being a tool for organizing the meeting with board games and for adding the information about this meetup via messages and after the meeting: scores and results of the games.
 
 ### Roles
 There are two roles in the application: administrator and non administrator.
@@ -37,9 +37,9 @@ User can select which board games posses. Each user can see his/her shelf.
 
 ### Meeting
 User can organize the meeting with the goard games. In order to add the meeting the user has to provide:
-* When (date and time) - mandatory
-* Where
-* Who - mandatory
+* When: start and end (date and time) - mandatory
+* Where (address: Street, City, Code, Country)
+* Who - mandatory (users from the application or email addresses)
 * Which games
 * Notes
 * Is cancelled
@@ -54,6 +54,7 @@ Each user added as "Who" can send the message about the meeting to all the invit
 * Message - mandatory  
 All messages are visible with the date of sending and who sent the message. There is mail sent to all invited people about the message as well.  
 Each user can see only the meeting to which he/she is invited.
+Each user can can confirm the invitation.
 
 ### Results, scores
 It is possible to add the results of the game:
