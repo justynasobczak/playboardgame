@@ -36,7 +36,7 @@ It is possible to add/edit board game by entering the title. Only administrator 
 User can select which board games posses. Each user can see his/her shelf.
 
 ### Meeting
-User can organize the meeting with the goard games. In order to add the meeting the user has to provide:
+User can organize the meeting with the board games. In order to add the meeting the user has to provide:
 * When: start and end (date and time) - mandatory
 * Where (address: Street, City, Code, Country)
 * Who - mandatory (users from the application or email addresses)

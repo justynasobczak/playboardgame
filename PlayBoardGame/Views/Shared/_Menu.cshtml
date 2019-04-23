@@ -1,0 +1,43 @@
+<nav class="navbar bg-menu navbar-dark navbar-expand-lg">
+    <a class="navbar-brand" href="#">Let's play board games</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
+            aria-controls="mainmenu" aria-expanded="false" aria-label="switch for navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainmenu">
+        <ul class="navbar-nav ml-5 mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#"> Start </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
+                   aria-expanded="false" id="submenu" aria-haspopup="true">
+                    Profile
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="submenu">
+                    <a asp-controller="User" asp-action="UserProfileAsync" class="dropdown-item"> User profile </a>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="User" asp-action="ChangePassword" class="dropdown-item"> Change password </a>
+                    <div class="dropdown-divider"></div>
+                    <a asp-controller="Account" asp-action="LogoutAsync" class="dropdown-item"> Logout </a>
+                </div>
+            </li>
+            @if (User?.Identity?.Name == "Admin")
+            {
+                <li class="nav-item">
+                    <a asp-controller="Game" asp-action="List" class="nav-link"> Games </a>
+                </li>
+            }
+            <li class="nav-item">
+                <a asp-controller="Shelf" asp-action="List" class="nav-link"> My shelf </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Hanging tree </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Event" asp-action="Index" class="nav-link"> Calendar </a>
+            </li>
+        </ul>
+    </div>
+</nav>

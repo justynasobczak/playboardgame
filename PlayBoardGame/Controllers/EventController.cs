@@ -13,12 +13,6 @@ namespace PlayBoardGame.Controllers
             _eventRepository = eventRepository;
         }
         public ViewResult Index() => View("Calendar");
-
-        public JsonResult GetEvents()
-        {
-            var events = _eventRepository.Events.ToList();
-            return new JsonResult(events);
-        }
         
     }
 }

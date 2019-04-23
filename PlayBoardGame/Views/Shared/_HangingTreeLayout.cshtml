@@ -6,79 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewBag.Title</title>
     <meta name="description" content="Let's play board games">
-    <meta name="keywords" content="boardgame">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="keywords" content="board game">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="~/lib/custom/style-main.css">
     <!--[if lt IE 9]>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <![endif]-->
-    <link rel="stylesheet" href="~/hanging-tree/style.css" type="text/css" />
+    <![endif]-->
+    <link rel="stylesheet" href="~/hanging-tree/style.css" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
     <script src="~/hanging-tree/hangingTree.js"></script>
 </head>
 <body>
-    <header>
-        <div class="col-12" id="banner"></div>
-        <nav class="navbar bg-menu navbar-dark navbar-expand-lg">
-            <a class="navbar-brand" href="#">Let's play board games</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
-                    aria-controls="mainmenu" aria-expanded="false" aria-label="switch for navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainmenu">
-                <ul class="navbar-nav ml-5 mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"> Start </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
-                           aria-expanded="false" id="submenu" aria-haspopup="true">Profile</a>
+<header>
+    <!--<div class="col-12" id="banner"></div>-->
+    @await Html.PartialAsync("_Menu")
 
-                        <div class="dropdown-menu" aria-labelledby="submenu">
-                            <a asp-controller="User" asp-action="UserProfileAsync" class="dropdown-item"> User profile </a>
-                            <div class="dropdown-divider"></div>
-                            <a asp-controller="User" asp-action="ChangePassword" class="dropdown-item"> Change password </a>
-                            <div class="dropdown-divider"></div>
-                            <a asp-controller="Account" asp-action="LogoutAsync" class="dropdown-item"> Logout </a>
-                        </div>
-                    </li>
-                    @if (User?.Identity?.Name == "Admin")
-                    {
-                        <li class="nav-item">
-                            <a asp-controller="Game" asp-action="List" class="nav-link"> Games </a>
-                        </li>
-                    }
-                    <li class="nav-item">
-                        <a asp-controller="Shelf" asp-action="List" class="nav-link"> My shelf </a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Game </a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-controller="Event" asp-action="Index" class="nav-link"> Calendar </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <header>
-                            <h1>@ViewBag.Title</h1>
-                        </header>
-                        @RenderBody()
-                    </div>
+</header>
+<main>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <header>
+                        <h1>@ViewBag.Title</h1>
+                    </header>
+                    @RenderBody()
                 </div>
             </div>
-        </section>
-    </main>
-    <script src="~/lib/jquery/jquery.slim.min.js"></script>
-    <script src="~/lib/popper.js/umd/popper.min.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+        </div>
+    </section>
+</main>
+<script src="~/lib/jquery/jquery.slim.min.js"></script>
+<script src="~/lib/popper.js/umd/popper.min.js"></script>
+<script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
-

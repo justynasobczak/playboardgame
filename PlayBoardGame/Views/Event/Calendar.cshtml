@@ -35,8 +35,10 @@
         $(document).ready(function() {
             var events = [];
             $.ajax({
-                type: "GET",
-                url: "/event/GetEvents",
+                url: "/api/FullCalendar",
+                contentType: "application/json",
+                method: "GET",
+                dataType: "json",
                 success: function(data) {
                     $.each(data,
                         function(i, v) {
@@ -71,7 +73,7 @@
                         $('#myModal #eventTitle').text(calEvent.title);
                         var $description = $('<div/>');
                         $description.append($('<p/>').html('<b>Start:' + calEvent.start.format("DD-MM--YYYY HH:mm")));
-                        $description.append($('<p/>').html('<b>End:' + calEvent.end.format("DD-MM--YYYY HH:mm")));    
+                        $description.append($('<p/>').html('<b>End:' + calEvent.end.format("DD-MM--YYYY HH:mm")));
                         $('#myModal #pDetails').empty().html($description);
                         $('#myModal').modal();
                     }
