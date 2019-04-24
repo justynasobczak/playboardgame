@@ -2,15 +2,16 @@ using System;
 
 namespace PlayBoardGame.Models
 {
-    public class Event
+    public class Meeting
     {
         
-        public int EventID { get; set; }
+        public int MeetingID { get; set; }
 
         public string Title { get; set; }
         
         public DateTime StartDateTime { get; set; }
         
         public DateTime EndDateTime { get; set; }
+        
     }
 }

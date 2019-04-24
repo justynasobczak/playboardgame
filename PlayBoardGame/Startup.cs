@@ -27,7 +27,7 @@ namespace PlayBoardGame
             options.UseSqlServer(_configuration["PlayBoardGame:ConnectionString"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
             services.AddTransient<IShelfRepository, EFShelfRepository>();
-            services.AddTransient<IEventRepository, EFEventRepository>();
+            services.AddTransient<IMeetingRepository, EFMeetingRepository>();
             services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<IEmailTemplateSender, EmailTemplateSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -2,15 +2,15 @@ using System.Linq;
 
 namespace PlayBoardGame.Models
 {
-    public class EFEventRepository : IEventRepository
+    public class EFMeetingRepository : IMeetingRepository
     {
         private readonly ApplicationDBContext _applicationDBContext;
 
-        public EFEventRepository(ApplicationDBContext applicationDBContext)
+        public EFMeetingRepository(ApplicationDBContext applicationDBContext)
         {
             _applicationDBContext = applicationDBContext;
         }
 
-        public IQueryable<Event> Events => _applicationDBContext.Events;
+        public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
     }
 }

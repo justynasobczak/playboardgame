@@ -7,16 +7,16 @@ namespace PlayBoardGame.Controllers
     [Route("api/[controller]")]
     public class FullCalendarController : Controller
     {
-        private readonly IEventRepository _eventRepository;
-        public FullCalendarController(IEventRepository eventRepository)
+        private readonly IMeetingRepository _meetingRepository;
+        public FullCalendarController(IMeetingRepository meetingRepository)
         {
-            _eventRepository = eventRepository;
+            _meetingRepository = meetingRepository;
         }
 
         [HttpGet]
-        public IEnumerable<Event> Get()
+        public IEnumerable<Meeting> Get()
         {
-           return _eventRepository.Events;  
+           return _meetingRepository.Meetings;  
         }
     }
 }
