@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace PlayBoardGame.Models
+﻿namespace PlayBoardGame.Models
 {
     public class GameAppUser
     {

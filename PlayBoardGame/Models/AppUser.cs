@@ -18,6 +18,6 @@ namespace PlayBoardGame.Models
 
         public string Country { get; set; }
 
-        public ICollection<GameAppUser> GameAppUser { get; set; } = new List<GameAppUser>();
+        public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
     }
 }

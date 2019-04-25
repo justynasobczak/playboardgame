@@ -9,14 +9,14 @@ namespace PlayBoardGame.Controllers
     [Authorize(Roles = "Admins")]
     public class GameController : Controller
     {
-        private IGameRepository _gameRepository;
+        private readonly IGameRepository _gameRepository;
 
         public GameController(IGameRepository gameRepository)
         {
             _gameRepository = gameRepository;
         }
 
-        public ViewResult List() => View(new GamesListViewModel { Games = _gameRepository.Games });
+        public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games});
 
         public IActionResult Edit(int GameID)
         {
@@ -29,7 +29,9 @@ namespace PlayBoardGame.Controllers
                     GameID = game.GameID
                 };
                 return View(vm);
-            };
+            }
+
+            ;
             return RedirectToAction("Error", "Error");
         }
 
@@ -38,7 +40,7 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                _gameRepository.SaveGame(new Game { Title = game.Title, GameID = game.GameID });
+                _gameRepository.SaveGame(new Game {Title = game.Title, GameID = game.GameID});
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("List");
             }
@@ -54,7 +56,11 @@ namespace PlayBoardGame.Controllers
         public IActionResult Delete(int gameID)
         {
             Game deletedGame = _gameRepository.DeleteGame(gameID);
-            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            if (deletedGame != null)
+            {
+                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            }
+
             return RedirectToAction("List");
         }
     }
