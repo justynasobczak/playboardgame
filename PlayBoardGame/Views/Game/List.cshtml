@@ -20,8 +20,8 @@
                 <td>@game.Title</td>
                 <td>
                     <form asp-action="Delete" method="post">
-                        <a asp-action="Edit" class="btn btn-sm btn-success" asp-route-gameID="@game.GameID">Edit</a>
-                        <input type="hidden" name="GameID" value="@game.GameID" />
+                        <a asp-action="Edit" class="btn btn-sm btn-success" asp-route-id="@game.GameID">Edit</a>
+                        <input type="hidden" name="id" value="@game.GameID" />
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
                 </td>

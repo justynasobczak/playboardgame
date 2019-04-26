@@ -18,9 +18,9 @@ namespace PlayBoardGame.Controllers
 
         public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games});
 
-        public IActionResult Edit(int GameID)
+        public IActionResult Edit(int id)
         {
-            Game game = _gameRepository.Games.FirstOrDefault(g => g.GameID == GameID);
+            var game = _gameRepository.Games.FirstOrDefault(g => g.GameID == id);
             if (game != null)
             {
                 var vm = new CreateEditGameViewModel
@@ -30,8 +30,6 @@ namespace PlayBoardGame.Controllers
                 };
                 return View(vm);
             }
-
-            ;
             return RedirectToAction("Error", "Error");
         }
 
@@ -44,23 +42,19 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("List");
             }
-            else
-            {
-                return View(game);
-            }
+            return View(game);
         }
 
         public ViewResult Create() => View("Edit", new CreateEditGameViewModel());
 
         [HttpPost]
-        public IActionResult Delete(int gameID)
+        public IActionResult Delete(int id)
         {
-            Game deletedGame = _gameRepository.DeleteGame(gameID);
+            var deletedGame = _gameRepository.DeleteGame(id);
             if (deletedGame != null)
             {
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
-
             return RedirectToAction("List");
         }
     }

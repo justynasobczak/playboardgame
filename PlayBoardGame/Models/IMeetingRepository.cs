@@ -6,6 +6,6 @@ namespace PlayBoardGame.Models
     {
         IQueryable<Meeting> Meetings { get; }
         
-        //void SaveMeeting(Meeting meeting);
+        void SaveMeeting(Meeting meeting);
     }
 }

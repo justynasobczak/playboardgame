@@ -6,37 +6,37 @@
 <form asp-action="UserProfileAsync" method="post">
     <div class="form-group">
         <label asp-for="FirstName">First name</label>
-        <div class="custom-danger"><span asp-validation-for="FirstName" class="text-danger"></span></div>
+        <span asp-validation-for="FirstName" class="text-danger"></span>
         <input asp-for="FirstName" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="LastName">Last name</label>
-        <div class="custom-danger"><span asp-validation-for="LastName" class="text-danger"></span></div>
+        <span asp-validation-for="LastName" class="text-danger"></span>
         <input asp-for="LastName" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Address.Street">Street</label>
-        <div class="custom-danger"><span asp-validation-for="Address.Street" class="text-danger"></span></div>
+        <span asp-validation-for="Address.Street" class="text-danger"></span>
         <input asp-for="Address.Street" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Address.City">City</label>
-        <div class="custom-danger"><span asp-validation-for="Address.City" class="text-danger"></span></div>
+        <span asp-validation-for="Address.City" class="text-danger"></span>
         <input asp-for="Address.City" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Address.PostalCode">Postal code</label>
-        <div class="custom-danger"><span asp-validation-for="Address.PostalCode" class="text-danger"></span></div>
+        <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
         <input asp-for="Address.PostalCode" class="form-control" />
     </div>
     <div class="form-group">
         <label asp-for="Address.EnumCountry">Country</label>
-        <div class="custom-danger"><span asp-validation-for="Address.EnumCountry" class="text-danger"></span></div>
+        <span asp-validation-for="Address.EnumCountry" class="text-danger"></span>
         <select asp-for="Address.EnumCountry" asp-items="Html.GetEnumSelectList<CountryEnum>()" class="form-control"></select>
     </div>
     <div class="form-group">
         <label asp-for="PhoneNumber">Phone number</label>
-        <div class="custom-danger"><span asp-validation-for="PhoneNumber" class="text-danger"></span></div>
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         <input asp-for="PhoneNumber" class="form-control" />
     </div>
     <button class="btn btn-info btn-block submit-bigsave" type="submit">Save</button>
