@@ -21,6 +21,10 @@ namespace PlayBoardGame.Models
                 .HasOne(bc => bc.AppUser)
                 .WithMany(c => c.GameAppUser)
                 .HasForeignKey(bc => bc.UserId);
+            
+            builder.Entity<AppUser>()
+                .HasMany(u => u.OrganizedMeetings)
+                .WithOne(m => m.Organizer);
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }

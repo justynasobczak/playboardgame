@@ -19,5 +19,7 @@ namespace PlayBoardGame.Models
         public string Country { get; set; }
 
         public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
+        
+        public ICollection<Meeting> OrganizedMeetings { get; set; }
     }
 }

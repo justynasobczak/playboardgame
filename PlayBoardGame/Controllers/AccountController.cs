@@ -12,9 +12,9 @@ namespace PlayBoardGame.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private UserManager<AppUser> _userManager;
-        private SignInManager<AppUser> _signInManager;
-        private IEmailTemplateSender _templateSender;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private readonly IEmailTemplateSender _templateSender;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
             IEmailTemplateSender templateSender)

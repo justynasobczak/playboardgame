@@ -26,6 +26,7 @@ namespace PlayBoardGame.Models
                     dbEntry.Title = meeting.Title;
                     dbEntry.StartDateTime = meeting.StartDateTime;
                     dbEntry.EndDateTime = meeting.EndDateTime;
+                    dbEntry.Organizer = meeting.Organizer;
                 }
             }
             _applicationDBContext.SaveChanges();

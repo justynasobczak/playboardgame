@@ -13,5 +13,7 @@ namespace PlayBoardGame.Models
         
         public DateTime EndDateTime { get; set; }
         
+        public AppUser Organizer { get; set; }
+        
     }
 }
