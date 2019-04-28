@@ -27,6 +27,10 @@ namespace PlayBoardGame.Models
                     dbEntry.StartDateTime = meeting.StartDateTime;
                     dbEntry.EndDateTime = meeting.EndDateTime;
                     dbEntry.Organizer = meeting.Organizer;
+                    dbEntry.City = meeting.City;
+                    dbEntry.Street = meeting.Street;
+                    dbEntry.PostalCode = meeting.PostalCode;
+                    dbEntry.Country = meeting.Country;
                 }
             }
             _applicationDBContext.SaveChanges();

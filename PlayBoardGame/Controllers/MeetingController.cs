@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using System.Linq;
@@ -25,15 +26,33 @@ namespace PlayBoardGame.Controllers
             var meeting = _meetingRepository.Meetings.FirstOrDefault(m => m.MeetingID == id);
             if (meeting != null)
             {
-                return View(new MeetingViewModels.CreateEditMeetingViewModel
+                var vm = new MeetingViewModels.CreateEditMeetingViewModel
                 {
                     Organizers = _userManager.Users.ToList(),
                     Organizer = meeting.Organizer.Id,
                     Title = meeting.Title,
                     MeetingID = meeting.MeetingID,
                     StartDateTime = meeting.StartDateTime,
-                    EndDateTime = meeting.EndDateTime
-                });
+                    EndDateTime = meeting.EndDateTime,
+                    Address = new AddressViewModels
+                    {
+                        Street = meeting.Street,
+                        City = meeting.City,
+                        PostalCode = meeting.PostalCode,
+                    }
+                };
+                if (meeting.Country != null)
+                {
+                    if (Enum.TryParse(meeting.Country, out CountryEnum myCountry))
+                    {
+                        vm.Address.EnumCountry = myCountry;
+                    }
+                    //TODO: Add log if failed
+                } else
+                {
+                    vm.Address.EnumCountry = CountryEnum.None;
+                }
+                return View(vm);
             }
             return RedirectToAction("Error", "Error");
         }
@@ -51,7 +70,11 @@ namespace PlayBoardGame.Controllers
                     Title = vm.Title,
                     StartDateTime = vm.StartDateTime,
                     EndDateTime = vm.EndDateTime,
-                    Organizer = user
+                    Organizer = user,
+                    Street = vm.Address.Street,
+                    PostalCode = vm.Address.PostalCode,
+                    City = vm.Address.City,
+                    Country = vm.Address.EnumCountry.ToString()
                 };
                 _meetingRepository.SaveMeeting(meeting);
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;

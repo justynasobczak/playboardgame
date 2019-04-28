@@ -22,6 +22,8 @@ namespace PlayBoardGame.Models.ViewModels
             public string Organizer { get; set; }
             
             public List<AppUser> Organizers { get; set; }
+            
+            public AddressViewModels Address { get; set; }
         }
     }
 }

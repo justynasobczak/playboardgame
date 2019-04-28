@@ -49,7 +49,7 @@ namespace PlayBoardGame.Controllers
                     vm.Address.EnumCountry = CountryEnum.None;
                 }
                 return View("UserProfile", vm);
-            };
+            }
             return RedirectToAction("Error", "Error");
         }
 
