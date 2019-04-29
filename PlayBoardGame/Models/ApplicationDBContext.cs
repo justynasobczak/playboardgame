@@ -25,10 +25,20 @@ namespace PlayBoardGame.Models
             builder.Entity<AppUser>()
                 .HasMany(u => u.OrganizedMeetings)
                 .WithOne(m => m.Organizer);
+            
+            builder.Entity<MeetingInvitedUser>()
+                .HasKey(mu => new { mu.MeetingID, mu.UserId });
+            builder.Entity<MeetingInvitedUser>()
+                .HasOne(mu => mu.Meeting)
+                .WithMany(m => m.MeetingInvitedUser)
+                .HasForeignKey(mu => mu.MeetingID);
+            builder.Entity<MeetingInvitedUser>()
+                .HasOne(mu => mu.AppUser)
+                .WithMany(u => u.MeetingInvitedUser)
+                .HasForeignKey(mu => mu.UserId);
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }
-        
         public  DbSet<Meeting> Meetings { get; set; }
     }
 }

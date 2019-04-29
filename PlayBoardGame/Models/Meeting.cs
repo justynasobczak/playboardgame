@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace PlayBoardGame.Models
 {
@@ -22,6 +23,8 @@ namespace PlayBoardGame.Models
         public string PostalCode { get; set; }
 
         public string Country { get; set; }
+        
+        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; }
         
     }
 }

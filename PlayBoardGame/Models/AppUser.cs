@@ -21,5 +21,7 @@ namespace PlayBoardGame.Models
         public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
         
         public ICollection<Meeting> OrganizedMeetings { get; set; }
+        
+        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; }
     }
 }
