@@ -39,6 +39,7 @@ namespace PlayBoardGame.Models
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }
-        public  DbSet<Meeting> Meetings { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<MeetingInvitedUser> MeetingInvitedUser { get; set; }
     }
 }

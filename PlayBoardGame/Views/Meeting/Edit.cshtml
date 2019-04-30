@@ -1,55 +1,66 @@
 @model MeetingViewModels.CreateEditMeetingViewModel
 
-@{ 
+@{
     ViewBag.Title = "Create/edit meeting";
 }
+
+<div>
+    <ul class="nav nav-pills">
+        <li class="active">
+            <a href="#"> Home </a>
+        </li>
+        <li>
+            <a asp-controller="InvitedUser" asp-action="List" asp-route-meetingId="@Model.MeetingID"> Users </a>
+        </li>
+    </ul>
+</div>
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="MeetingID" />
+    <input type="hidden" asp-for="MeetingID"/>
     <div class="form-group">
         <label asp-for="Title">Title</label>
         <span asp-validation-for="Title" class="text-danger"></span>
-        <input asp-for="Title" class="form-control" />
+        <input asp-for="Title" class="form-control"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="StartDateTime">Start date and time</label>
         <span asp-validation-for="StartDateTime" class="text-danger"></span>
         <input type="datetime-local" asp-for="StartDateTime" class="form-control"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="EndDateTime">End date and time</label>
         <span asp-validation-for="EndDateTime" class="text-danger"></span>
-        <input type="datetime-local" asp-for="EndDateTime" class="form-control" />
+        <input type="datetime-local" asp-for="EndDateTime" class="form-control"/>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="Organizer">Organizer</label>
         <span asp-validation-for="Organizer" class="text-danger"></span>
         <select asp-for="Organizer" asp-items="@(new SelectList(Model.Organizers, "Id", "UserName"))" class="form-control"></select>
     </div>
-    
+
     <div class="form-group">
         <label asp-for="Address.Street">Street</label>
         <span asp-validation-for="Address.Street" class="text-danger"></span>
-        <input asp-for="Address.Street" class="form-control" />
+        <input asp-for="Address.Street" class="form-control"/>
     </div>
     <div class="form-group">
         <label asp-for="Address.City">City</label>
         <span asp-validation-for="Address.City" class="text-danger"></span>
-        <input asp-for="Address.City" class="form-control" />
+        <input asp-for="Address.City" class="form-control"/>
     </div>
     <div class="form-group">
         <label asp-for="Address.PostalCode">Postal code</label>
         <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
-        <input asp-for="Address.PostalCode" class="form-control" />
+        <input asp-for="Address.PostalCode" class="form-control"/>
     </div>
     <div class="form-group">
         <label asp-for="Address.EnumCountry">Country</label>
         <span asp-validation-for="Address.EnumCountry" class="text-danger"></span>
         <select asp-for="Address.EnumCountry" asp-items="Html.GetEnumSelectList<CountryEnum>()" class="form-control"></select>
     </div>
-    
+
     <div class="text-left">
         <button class="btn btn-info" type="submit">Save</button>
         <a asp-action="List" class="btn btn-secondary">Cancel</a>

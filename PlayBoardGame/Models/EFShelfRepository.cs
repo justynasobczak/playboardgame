@@ -6,15 +6,13 @@ namespace PlayBoardGame.Models
 {
     public class EFShelfRepository : IShelfRepository
     {
-        private ApplicationDBContext _applicationDBContext;
-        private UserManager<AppUser> _userManager;
-        private ContextProvider _contextProvider;
+        private readonly ApplicationDBContext _applicationDBContext;
+        private readonly ContextProvider _contextProvider;
 
 
-        public EFShelfRepository(ApplicationDBContext applicationDBContext, UserManager<AppUser> userManager, ContextProvider contextProvider)
+        public EFShelfRepository(ApplicationDBContext applicationDBContext, ContextProvider contextProvider)
         {
             _applicationDBContext = applicationDBContext;
-            _userManager = userManager;
             _contextProvider = contextProvider;
         }
 
@@ -25,9 +23,9 @@ namespace PlayBoardGame.Models
 
         public void AddToShelf(int GameId)
         {
-            Game game = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameId);
+            var game = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameId);
 
-            AppUser user = _contextProvider.GetCurrentUser().Result;
+            var user = _contextProvider.GetCurrentUser().Result;
 
             _applicationDBContext.Set<GameAppUser>().Add(new GameAppUser
             {
@@ -40,11 +38,11 @@ namespace PlayBoardGame.Models
 
         public GameAppUser RemoveFromShelf(int GameId)
         {
-            Game game = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameId);
+            var game = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameId);
 
-            AppUser user = _contextProvider.GetCurrentUser().Result;
+            var user = _contextProvider.GetCurrentUser().Result;
 
-            GameAppUser dbEntry = _applicationDBContext.GameAppUser.FirstOrDefault
+            var dbEntry = _applicationDBContext.GameAppUser.FirstOrDefault
                 (gu => gu.GameID == game.GameID && gu.UserId == user.Id);
             if (dbEntry != null)
             {

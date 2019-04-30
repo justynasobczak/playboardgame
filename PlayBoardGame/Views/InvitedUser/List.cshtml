@@ -1,0 +1,23 @@
+@model InvitedUserViewModel.InvitedUserListViewModel
+@{
+    ViewBag.Title = "Invited users";
+}
+<table class="table table-striped">
+    <tr>
+        <th class="text-left">Title</th>
+    </tr>
+
+    @if (Model.InvitedUsers.Count() == 0)
+    {
+        <tr><td colspan="1" class="text-center">No invited users</td></tr>
+    }
+    else
+    {
+        foreach (AppUser user in Model.InvitedUsers)
+        {
+            <tr>
+                <td>@user.UserName</td>
+            </tr>
+        }
+    }
+</table>
