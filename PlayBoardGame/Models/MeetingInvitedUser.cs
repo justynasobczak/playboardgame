@@ -9,5 +9,7 @@ namespace PlayBoardGame.Models
         public string UserId { get; set; }
 
         public AppUser AppUser { get; set; }
+        
+        public bool IsAccepted { get; set; }
     }
 }

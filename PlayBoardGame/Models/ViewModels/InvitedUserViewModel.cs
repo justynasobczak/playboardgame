@@ -7,6 +7,8 @@ namespace PlayBoardGame.Models.ViewModels
         public class InvitedUserListViewModel
         {
             public IEnumerable<AppUser> InvitedUsers { get; set; }
+            
+            public int MeetingId { get; set; }
         }
     }
 }

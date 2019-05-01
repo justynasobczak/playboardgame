@@ -5,11 +5,12 @@
 <table class="table table-striped">
     <tr>
         <th class="text-left">Title</th>
+        <th class="text-left">Actions</th>
     </tr>
 
     @if (Model.InvitedUsers.Count() == 0)
     {
-        <tr><td colspan="1" class="text-center">No invited users</td></tr>
+        <tr><td colspan="2" class="text-center">No invited users</td></tr>
     }
     else
     {
@@ -17,6 +18,13 @@
         {
             <tr>
                 <td>@user.UserName</td>
+                <td>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="userId" value="@user.Id"/>
+                        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     }

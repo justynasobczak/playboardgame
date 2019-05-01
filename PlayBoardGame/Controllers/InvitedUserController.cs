@@ -13,13 +13,30 @@ namespace PlayBoardGame.Controllers
             _invitedUserRepository = invitedUserRepository;
         }
 
-        public ViewResult List(int meetingId)
+        public IActionResult List(int meetingId)
         {
+            if (meetingId == 0)
+            {
+                return RedirectToAction("List", "Meeting");
+            }
             var invitedUsers = _invitedUserRepository.GetInvitedUsers(meetingId);
             return View(new InvitedUserViewModel.InvitedUserListViewModel
             {
-                InvitedUsers = invitedUsers
+                InvitedUsers = invitedUsers,
+                MeetingId = meetingId
             });
+        }
+
+        [HttpPost]
+        public IActionResult Delete(string userId, int meetingId)
+        {
+            var deletedEntry = _invitedUserRepository.RemoveUserFromMeeting(userId, meetingId);
+            if (deletedEntry != null)
+            {
+                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            }
+
+            return RedirectToAction("List", new { meetingId = meetingId });
         }
     }
 }
