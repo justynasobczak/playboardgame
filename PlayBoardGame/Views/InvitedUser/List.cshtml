@@ -2,6 +2,16 @@
 @{
     ViewBag.Title = "Invited users";
 }
+<div>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link tab-active" asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId"> Details </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link tab-links" asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> Users </a>
+        </li>
+    </ul>
+</div>
 <table class="table table-striped">
     <tr>
         <th class="text-left">Title</th>

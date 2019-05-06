@@ -13,17 +13,17 @@ namespace PlayBoardGame.Controllers
             _invitedUserRepository = invitedUserRepository;
         }
 
-        public IActionResult List(int meetingId)
+        public IActionResult List(int id)
         {
-            if (meetingId == 0)
+            if (id == 0)
             {
                 return RedirectToAction("List", "Meeting");
             }
-            var invitedUsers = _invitedUserRepository.GetInvitedUsers(meetingId);
+            var invitedUsers = _invitedUserRepository.GetInvitedUsers(id);
             return View(new InvitedUserViewModel.InvitedUserListViewModel
             {
                 InvitedUsers = invitedUsers,
-                MeetingId = meetingId
+                MeetingId = id
             });
         }
 
@@ -36,7 +36,7 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
-            return RedirectToAction("List", new { meetingId = meetingId });
+            return RedirectToAction("List", new { id = meetingId });
         }
     }
 }

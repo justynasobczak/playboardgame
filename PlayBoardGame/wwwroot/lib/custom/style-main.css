@@ -31,3 +31,14 @@ h1 {
 .submit-bigsave {
     margin-top: 30px;
 }
+
+.tab-links {
+    color: #3a87ad;
+    font-weight: 700;
+}
+
+.tab-active {
+    background-color: #138496;
+    border-color: #117a8b;
+    color: white;
+}
