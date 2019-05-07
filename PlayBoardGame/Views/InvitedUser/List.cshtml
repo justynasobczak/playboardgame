@@ -20,7 +20,9 @@
 
     @if (Model.InvitedUsers.Count() == 0)
     {
-        <tr><td colspan="2" class="text-center">No invited users</td></tr>
+        <tr>
+            <td colspan="2" class="text-center">No invited users</td>
+        </tr>
     }
     else
     {
@@ -39,3 +41,9 @@
         }
     }
 </table>
+
+<form asp-action="Add" method="post">
+    <select asp-for="SelectedToInviteUserId" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))"></select>
+    <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
+    <button type="submit" class="btn bg-primary btn-sm">Add</button>
+</form>

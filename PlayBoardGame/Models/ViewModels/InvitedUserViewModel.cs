@@ -9,6 +9,10 @@ namespace PlayBoardGame.Models.ViewModels
             public IEnumerable<AppUser> InvitedUsers { get; set; }
             
             public int MeetingId { get; set; }
+            
+            public List<AppUser> AvailableUsers { get; set; }
+            
+            public string SelectedToInviteUserId { get; set; }
         }
     }
 }

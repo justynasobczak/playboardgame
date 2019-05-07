@@ -8,7 +8,7 @@ namespace PlayBoardGame.Models
         
         IQueryable<AppUser> GetInvitedUsers(int meetingId);
 
-        void AddUserToMeeting(string UserId, int MeetingId);
+        void AddUserToMeeting(string UserId, int MeetingId, bool IsAccepted);
 
         MeetingInvitedUser RemoveUserFromMeeting(string UserId, int MeetingId);
     }
