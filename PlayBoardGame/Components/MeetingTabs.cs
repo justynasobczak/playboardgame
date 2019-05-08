@@ -1,15 +1,14 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
+using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Components
 {
     public class MeetingTabs : ViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(int meetingId, TabName tabName)
         {
-            var id = RouteData.Values["id"] as string;
-            var meetingId = Int32.Parse(id);
-            return View(meetingId);
-        }  
+            var vm = new MeetingTabsViewModel { MeetingId = meetingId, SelectedTab = tabName};
+            return View(vm);
+        }
     }
 }

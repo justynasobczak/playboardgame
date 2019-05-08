@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Invited users";
 }
-@await Component.InvokeAsync("MeetingTabs")
+@await Component.InvokeAsync("MeetingTabs", new {meetingId = @Model.MeetingId, tabName = TabName.Users})
 
 <table class="table table-striped">
     <tr>

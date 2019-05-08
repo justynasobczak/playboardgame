@@ -4,7 +4,8 @@
     ViewBag.Title = "Create/edit meeting";
 }
 
-@await Component.InvokeAsync("MeetingTabs")
+@await Component.InvokeAsync("MeetingTabs", new {meetingId = @Model.MeetingID, tabName = TabName.Details})
+
 <div>
     <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="MeetingID"/>

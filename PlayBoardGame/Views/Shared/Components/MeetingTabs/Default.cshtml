@@ -1,12 +1,12 @@
-@model int
+@model MeetingTabsViewModel
 
 <div class="tabs">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="nav-link active" asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model"> Details </a>
+            <a class="@(Model.SelectedTab == TabName.Details ? "nav-link active":"nav-link tab-links")" asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId"> Details </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link tab-links" asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model"> Users </a>
+            <a class="@(Model.SelectedTab == TabName.Users ? "nav-link active":"nav-link tab-links")" asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> Users </a>
         </li>
     </ul>
 </div>
