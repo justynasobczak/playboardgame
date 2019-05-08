@@ -33,12 +33,9 @@ h1 {
 }
 
 .tab-links {
-    color: #3a87ad;
-    font-weight: 700;
+    color: black;
 }
 
-.tab-active {
-    background-color: #138496;
-    border-color: #117a8b;
-    color: white;
+.tabs {
+    margin-bottom: 20px;
 }

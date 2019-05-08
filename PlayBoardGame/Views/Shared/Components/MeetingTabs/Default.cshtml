@@ -1,0 +1,12 @@
+@model int
+
+<div class="tabs">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model"> Details </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link tab-links" asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model"> Users </a>
+        </li>
+    </ul>
+</div>

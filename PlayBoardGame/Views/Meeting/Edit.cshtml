@@ -4,16 +4,7 @@
     ViewBag.Title = "Create/edit meeting";
 }
 
-<div>
-    <ul class="nav nav-pills">
-        <li class="nav-item">
-            <a class="nav-link tab-active" asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingID"> Details </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link tab-links" asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingID"> Users </a>
-        </li>
-    </ul>
-</div>
+@await Component.InvokeAsync("MeetingTabs")
 <div>
     <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="MeetingID"/>
