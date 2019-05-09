@@ -1,8 +1,10 @@
+@using System.Linq
 @model InvitedUserViewModel.InvitedUserListViewModel
 @{
     ViewBag.Title = "Invited users";
 }
-@await Component.InvokeAsync("MeetingTabs", new {meetingId = @Model.MeetingId, tabName = TabName.Users})
+@await Component.InvokeAsync("MeetingTabs", new {meetingId = @Model.MeetingId, tabName = TabName.Users, 
+    isCreateMode = false})
 
 <table class="table table-striped">
     <tr>
@@ -34,8 +36,11 @@
     }
 </table>
 
-<form asp-action="Add" method="post">
-    <select asp-for="SelectedToInviteUserId" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))"></select>
-    <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-    <button type="submit" class="btn bg-primary btn-sm">Add</button>
-</form>
+@if (Model.AvailableUsers.Any())
+{
+    <form asp-action="Add" method="post">
+        <select asp-for="SelectedToInviteUserId" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))"></select>
+        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
+        <button type="submit" class="btn bg-primary btn-sm">Add</button>
+    </form>
+}

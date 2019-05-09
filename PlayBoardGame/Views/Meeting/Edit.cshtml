@@ -1,10 +1,12 @@
+@using PlayBoardGame.Controllers
 @model MeetingViewModels.CreateEditMeetingViewModel
 
 @{
     ViewBag.Title = "Create/edit meeting";
 }
 
-@await Component.InvokeAsync("MeetingTabs", new {meetingId = @Model.MeetingID, tabName = TabName.Details})
+@await Component.InvokeAsync("MeetingTabs", new { meetingId = Model.MeetingID, tabName = TabName.Details, 
+    isCreateMode = ViewContext.RouteData.Values["action"] as string == nameof(MeetingController.Create)})
 
 <div>
     <form asp-action="Edit" method="post">

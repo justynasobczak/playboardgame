@@ -3,10 +3,12 @@
 <div class="tabs">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="@(Model.SelectedTab == TabName.Details ? "nav-link active":"nav-link tab-links")" asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId"> Details </a>
+            <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == TabName.Details ? "active" : "tab-links"))" 
+               asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId"> Details </a>
         </li>
         <li class="nav-item">
-            <a class="@(Model.SelectedTab == TabName.Users ? "nav-link active":"nav-link tab-links")" asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> Users </a>
+            <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == TabName.Users ? "active" : "tab-links"))" 
+               asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> Users </a>
         </li>
     </ul>
 </div>

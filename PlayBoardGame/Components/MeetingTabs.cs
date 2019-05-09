@@ -5,9 +5,9 @@ namespace PlayBoardGame.Components
 {
     public class MeetingTabs : ViewComponent
     {
-        public IViewComponentResult Invoke(int meetingId, TabName tabName)
+        public IViewComponentResult Invoke(int meetingId, TabName tabName, bool isCreateMode)
         {
-            var vm = new MeetingTabsViewModel { MeetingId = meetingId, SelectedTab = tabName};
+            var vm = new MeetingTabsViewModel { MeetingId = meetingId, SelectedTab = tabName, IsCreateMode = isCreateMode};
             return View(vm);
         }
     }

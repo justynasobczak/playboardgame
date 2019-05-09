@@ -78,7 +78,7 @@ namespace PlayBoardGame.Controllers
                 };
                 _meetingRepository.SaveMeeting(meeting);
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                return RedirectToAction("List");
+                return RedirectToAction("Edit", new {id = meeting.MeetingID});
             }
             return View(vm);
         }
