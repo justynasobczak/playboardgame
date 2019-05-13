@@ -13,6 +13,17 @@ namespace PlayBoardGame.Models.ViewModels
             public List<AppUser> AvailableUsers { get; set; }
             
             public string SelectedToInviteUserId { get; set; }
+            
+            public List<InvitedUsersList> InvitedUsersList { get; set; }
+        }
+        
+        public class InvitedUsersList
+        {
+            public string UserName { get; set; }
+            
+            public bool IsAccepted { get; set; }
+            
+            public string Id { get; set; }
         }
     }
 }

@@ -22,6 +22,6 @@ namespace PlayBoardGame.Models
         
         public ICollection<Meeting> OrganizedMeetings { get; set; }
         
-        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; }
+        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace PlayBoardGame.Models
 
         public string Country { get; set; }
         
-        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; }
+        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; set; }
         
     }
 }

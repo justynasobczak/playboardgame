@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlayBoardGame.Models
 {
@@ -19,6 +21,20 @@ namespace PlayBoardGame.Models
         {
             var invitedUsers = _userManager.Users.Where(u => u.MeetingInvitedUser.Any(mu => mu.MeetingID == meetingId));
             return invitedUsers;
+        }
+
+        public Dictionary<string, bool> GetInvitedUsersList(int meetingId)
+        {
+            Dictionary<string, bool> invitedUsersList = new Dictionary<string, bool>();
+            var entry = new List<MeetingInvitedUser>();
+            entry = _applicationDbContext.MeetingInvitedUser.Where(mu => mu.MeetingID == meetingId).ToList();
+
+            foreach (var item in entry)
+            {
+                invitedUsersList.Add(item.UserId, item.IsAccepted);
+            }
+
+            return invitedUsersList;
         }
 
         public IQueryable<AppUser> GetAvailableUsers(int meetingId)
@@ -50,6 +66,7 @@ namespace PlayBoardGame.Models
 
                 _applicationDbContext.SaveChanges();
             }
+
             return dbEntry;
         }
     }

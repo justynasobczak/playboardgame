@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +24,30 @@ namespace PlayBoardGame.Controllers
             {
                 return RedirectToAction("List", "Meeting");
             }
-            var invitedUsers = _invitedUserRepository.GetInvitedUsers(id);
-            var availableUsers = _invitedUserRepository.GetAvailableUsers(id);
-            return View(new InvitedUserViewModel.InvitedUserListViewModel
+            
+            Dictionary<string, bool> invitedUsersList = new Dictionary<string, bool>();
+            invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id);
+            
+            var vm = new InvitedUserViewModel.InvitedUserListViewModel();
+            vm.InvitedUsers = _invitedUserRepository.GetInvitedUsers(id);
+            vm.MeetingId = id;
+            vm.AvailableUsers = _invitedUserRepository.GetAvailableUsers(id).ToList();
+            
+            List<InvitedUserViewModel.InvitedUsersList> list = new List<InvitedUserViewModel.InvitedUsersList>();
+            
+            foreach (var kvp in invitedUsersList)
             {
-                InvitedUsers = invitedUsers,
-                MeetingId = id,
-                AvailableUsers = availableUsers.ToList()
-            });
+                var user = _userManager.FindByIdAsync(kvp.Key).Result;
+                list.Add(new InvitedUserViewModel.InvitedUsersList
+                {
+                    UserName = user.UserName + " " + user.FirstName + " " + user.LastName,
+                    IsAccepted = kvp.Value,
+                    Id = kvp.Key
+                });
+            }
+
+            vm.InvitedUsersList = list;
+            return View(vm);
         }
 
         [HttpPost]
