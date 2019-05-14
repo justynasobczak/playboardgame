@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 
 namespace PlayBoardGame.Models
 {
@@ -25,7 +26,7 @@ namespace PlayBoardGame.Models
 
         public Dictionary<string, bool> GetInvitedUsersList(int meetingId)
         {
-            Dictionary<string, bool> invitedUsersList = new Dictionary<string, bool>();
+            var invitedUsersList = new Dictionary<string, bool>();
             var entry = new List<MeetingInvitedUser>();
             entry = _applicationDbContext.MeetingInvitedUser.Where(mu => mu.MeetingID == meetingId).ToList();
 
@@ -60,14 +61,23 @@ namespace PlayBoardGame.Models
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
                 (mu => mu.MeetingID == meetingId && mu.UserId == userId);
-            if (dbEntry != null)
-            {
-                _applicationDbContext.Set<MeetingInvitedUser>().Remove(dbEntry);
+            if (dbEntry == null) return dbEntry;
+            _applicationDbContext.Set<MeetingInvitedUser>().Remove(dbEntry);
 
-                _applicationDbContext.SaveChanges();
-            }
+            _applicationDbContext.SaveChanges();
 
             return dbEntry;
+        }
+
+        public void ChangeIsAccepted(string userId, int meetingId)
+        {
+            var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
+                (mu => mu.MeetingID == meetingId && mu.UserId == userId);
+            if (dbEntry == null) return;
+            dbEntry.IsAccepted = dbEntry.IsAccepted == false;
+                
+            _applicationDbContext.Set<MeetingInvitedUser>().Update(dbEntry);
+            _applicationDbContext.SaveChanges();
         }
     }
 }

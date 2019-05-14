@@ -24,17 +24,12 @@ namespace PlayBoardGame.Controllers
             {
                 return RedirectToAction("List", "Meeting");
             }
-            
-            Dictionary<string, bool> invitedUsersList = new Dictionary<string, bool>();
+
+            var invitedUsersList = new Dictionary<string, bool>();
             invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id);
-            
-            var vm = new InvitedUserViewModel.InvitedUserListViewModel();
-            vm.InvitedUsers = _invitedUserRepository.GetInvitedUsers(id);
-            vm.MeetingId = id;
-            vm.AvailableUsers = _invitedUserRepository.GetAvailableUsers(id).ToList();
-            
-            List<InvitedUserViewModel.InvitedUsersList> list = new List<InvitedUserViewModel.InvitedUsersList>();
-            
+
+            var list = new List<InvitedUserViewModel.InvitedUsersList>();
+
             foreach (var kvp in invitedUsersList)
             {
                 var user = _userManager.FindByIdAsync(kvp.Key).Result;
@@ -46,7 +41,13 @@ namespace PlayBoardGame.Controllers
                 });
             }
 
-            vm.InvitedUsersList = list;
+            var vm = new InvitedUserViewModel.InvitedUserListViewModel
+            {
+                InvitedUsers = _invitedUserRepository.GetInvitedUsers(id),
+                MeetingId = id,
+                AvailableUsers = _invitedUserRepository.GetAvailableUsers(id).ToList(),
+                InvitedUsersList = list
+            };
             return View(vm);
         }
 
@@ -59,7 +60,7 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
-            return RedirectToAction("List", new { id = meetingId });
+            return RedirectToAction("List", new {id = meetingId});
         }
 
         [HttpPost]
@@ -68,6 +69,14 @@ namespace PlayBoardGame.Controllers
             var userId = vm.SelectedToInviteUserId;
             var meetingId = vm.MeetingId;
             _invitedUserRepository.AddUserToMeeting(userId, meetingId, false);
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            return RedirectToAction("List", new {id = meetingId});
+        }
+
+        [HttpPost]
+        public IActionResult SetIsAccepted(string userId, int meetingId)
+        {
+            _invitedUserRepository.ChangeIsAccepted(userId, meetingId);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction("List", new {id = meetingId});
         }

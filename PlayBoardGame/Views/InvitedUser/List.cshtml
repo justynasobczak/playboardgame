@@ -2,8 +2,11 @@
 @{
     ViewBag.Title = "Invited users";
 }
-@await Component.InvokeAsync("MeetingTabs", new {meetingId = @Model.MeetingId, tabName = TabName.Users, 
-    isCreateMode = false})
+@await Component.InvokeAsync("MeetingTabs", new
+{
+    meetingId = @Model.MeetingId, tabName = TabName.Users,
+    isCreateMode = false
+})
 
 <table class="table table-striped">
     <tr>
@@ -26,11 +29,13 @@
                 <td>@item.UserName</td>
                 <td>@item.IsAccepted</td>
                 <td>
-                    <form asp-action="Delete" method="post">
+                    <form method="post">
                         <input type="hidden" name="userId" value="@item.Id"/>
                         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        <button class="btn btn-secondary btn-sm">Accept</button>
+                        <button asp-action="Delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        <button asp-action="SetIsAccepted" type="submit" class="btn-secondary btn-sm">
+                            @(item.IsAccepted == false ? "Accept" : "Cancel")
+                        </button>
                     </form>
                 </td>
             </tr>

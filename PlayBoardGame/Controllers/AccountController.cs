@@ -36,6 +36,7 @@ namespace PlayBoardGame.Controllers
             {
                 return View();
             }
+
             return RedirectToAction("List", "Shelf");
         }
 
@@ -77,6 +78,7 @@ namespace PlayBoardGame.Controllers
                     }
                 }
             }
+
             return View("Register", vm);
         }
 
@@ -86,6 +88,7 @@ namespace PlayBoardGame.Controllers
             {
                 return View();
             }
+
             return RedirectToAction("List", "Shelf");
         }
 
@@ -106,8 +109,10 @@ namespace PlayBoardGame.Controllers
                         return RedirectToAction("List", "Shelf");
                     }
                 }
+
                 ModelState.AddModelError(nameof(LoginViewModel.Email), Constants.UserOrPasswordErrorMessage);
             }
+
             return View("Login", vm);
         }
 
@@ -124,6 +129,7 @@ namespace PlayBoardGame.Controllers
             {
                 return View();
             }
+
             return RedirectToAction("List", "Shelf");
         }
 
@@ -136,7 +142,7 @@ namespace PlayBoardGame.Controllers
                 if (user != null)
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var resetLink = Url.Action("ResetPassword", "Account", new { emailToken = token },
+                    var resetLink = Url.Action("ResetPassword", "Account", new {emailToken = token},
                         protocol: HttpContext.Request.Scheme);
                     SendEmailResponse response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
@@ -156,9 +162,11 @@ namespace PlayBoardGame.Controllers
                             Constants.GeneralSendEmailErrorMessage);
                     }
                 }
+
                 ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
                     Constants.LackOfEmailMatchMessage);
             }
+
             return View("SendResetPasswordLink", vm);
         }
 
@@ -175,10 +183,11 @@ namespace PlayBoardGame.Controllers
                 AppUser user = await _userManager.FindByEmailAsync(vm.Email);
                 if (user != null)
                 {
-                    if (!await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.EmailToken))
+                    if (!await _userManager.VerifyUserTokenAsync(user,
+                        _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.EmailToken))
                     {
                         ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                    Constants.NotValidTokenMessage);
+                            Constants.NotValidTokenMessage);
                     }
                     else
                     {
@@ -190,17 +199,18 @@ namespace PlayBoardGame.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email), Constants.GeneralResetPasswordErrorMessage);
+                            ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                                Constants.GeneralResetPasswordErrorMessage);
                         }
-
                     }
                 }
                 else
                 {
                     ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                    Constants.LackOfEmailMatchMessage);
+                        Constants.LackOfEmailMatchMessage);
                 }
             }
+
             return View("ResetPassword", vm);
         }
     }
