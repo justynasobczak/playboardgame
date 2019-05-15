@@ -45,17 +45,17 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = new AppUser
+                var user = new AppUser
                 {
                     UserName = vm.Email,
                     Email = vm.Email
                 };
-                IdentityResult result = await _userManager.CreateAsync(user, vm.Password);
+                var result = await _userManager.CreateAsync(user, vm.Password);
 
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);
-                    SendEmailResponse response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                    var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
                         IsHTML = true,
                         //ToEmail = user.Email,
@@ -72,7 +72,7 @@ namespace PlayBoardGame.Controllers
                 }
                 else
                 {
-                    foreach (IdentityError error in result.Errors)
+                    foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(nameof(RegisterViewModel.Email), error.Description);
                     }
@@ -98,7 +98,7 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await _userManager.FindByEmailAsync(vm.Email);
+                var user = await _userManager.FindByEmailAsync(vm.Email);
                 if (user != null)
                 {
                     await _signInManager.SignOutAsync();
@@ -138,13 +138,13 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await _userManager.FindByEmailAsync(vm.Email);
+                var user = await _userManager.FindByEmailAsync(vm.Email);
                 if (user != null)
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     var resetLink = Url.Action("ResetPassword", "Account", new {emailToken = token},
                         protocol: HttpContext.Request.Scheme);
-                    SendEmailResponse response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                    var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
                         IsHTML = true,
                         //ToEmail = user.Email,
@@ -180,7 +180,7 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await _userManager.FindByEmailAsync(vm.Email);
+                var user = await _userManager.FindByEmailAsync(vm.Email);
                 if (user != null)
                 {
                     if (!await _userManager.VerifyUserTokenAsync(user,

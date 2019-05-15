@@ -11,7 +11,7 @@
 <table class="table table-striped">
     <tr>
         <th class="text-left">Name</th>
-        <th class="text-left">Is accepted</th>
+        <th class="text-left">Confirmed?</th>
         <th class="text-left">Actions</th>
     </tr>
 
@@ -33,7 +33,7 @@
                         <input type="hidden" name="userId" value="@item.Id"/>
                         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
                         <button asp-action="Delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        <button asp-action="SetIsAccepted" type="submit" class="btn-secondary btn-sm">
+                        <button asp-action="SetIsAccepted" type="submit" class="btn btn-secondary btn-sm">
                             @(item.IsAccepted == false ? "Accept" : "Cancel")
                         </button>
                     </form>
@@ -45,9 +45,10 @@
 
 @if (Model.AvailableUsers.Any())
 {
-    <form asp-action="Add" method="post">
-        <select asp-for="SelectedToInviteUserId" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))"></select>
+    <form class="form-inline" asp-action="Add" method="post">
+        <label class="mr-sm-2">Select user:</label>
+        <select class="form-control mb-2 mr-sm-2" asp-for="SelectedToInviteUserId" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))"></select>
         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+        <button type="submit" class="btn btn-primary mb-2">Invite</button>
     </form>
 }
