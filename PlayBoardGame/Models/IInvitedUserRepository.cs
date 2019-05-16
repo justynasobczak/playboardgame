@@ -9,12 +9,12 @@ namespace PlayBoardGame.Models
         
         IQueryable<AppUser> GetInvitedUsers(int meetingId);
 
-        Dictionary<string, bool> GetInvitedUsersList(int meetingId);
+        Dictionary<string, InvitationStatus> GetInvitedUsersList(int meetingId);
 
-        void AddUserToMeeting(string userId, int meetingId, bool isAccepted);
+        void AddUserToMeeting(string userId, int meetingId, bool isAccepted, InvitationStatus status);
 
         MeetingInvitedUser RemoveUserFromMeeting(string userId, int meetingId);
 
-        void ChangeIsAccepted(string userId, int meetingId);
+        void ChangeStatus(string userId, int meetingId, InvitationStatus status);
     }
 }

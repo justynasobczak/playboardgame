@@ -24,15 +24,15 @@ namespace PlayBoardGame.Models
             return invitedUsers;
         }
 
-        public Dictionary<string, bool> GetInvitedUsersList(int meetingId)
+        public Dictionary<string, InvitationStatus> GetInvitedUsersList(int meetingId)
         {
-            var invitedUsersList = new Dictionary<string, bool>();
+            var invitedUsersList = new Dictionary<string, InvitationStatus>();
             var entry = new List<MeetingInvitedUser>();
             entry = _applicationDbContext.MeetingInvitedUser.Where(mu => mu.MeetingID == meetingId).ToList();
 
             foreach (var item in entry)
             {
-                invitedUsersList.Add(item.UserId, item.IsAccepted);
+                invitedUsersList.Add(item.UserId, item.Status);
             }
 
             return invitedUsersList;
@@ -45,13 +45,14 @@ namespace PlayBoardGame.Models
             return availableUsers;
         }
 
-        public void AddUserToMeeting(string userId, int meetingId, bool IsAccepted)
+        public void AddUserToMeeting(string userId, int meetingId, bool IsAccepted, InvitationStatus status)
         {
             _applicationDbContext.Set<MeetingInvitedUser>().Add(new MeetingInvitedUser
             {
                 MeetingID = meetingId,
                 UserId = userId,
-                IsAccepted = IsAccepted
+                IsAccepted = IsAccepted,
+                Status = status
             });
 
             _applicationDbContext.SaveChanges();
@@ -69,12 +70,12 @@ namespace PlayBoardGame.Models
             return dbEntry;
         }
 
-        public void ChangeIsAccepted(string userId, int meetingId)
+        public void ChangeStatus(string userId, int meetingId, InvitationStatus status)
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
                 (mu => mu.MeetingID == meetingId && mu.UserId == userId);
             if (dbEntry == null) return;
-            dbEntry.IsAccepted = dbEntry.IsAccepted == false;
+            dbEntry.Status = status;
                 
             _applicationDbContext.Set<MeetingInvitedUser>().Update(dbEntry);
             _applicationDbContext.SaveChanges();

@@ -11,7 +11,7 @@
 <table class="table table-striped">
     <tr>
         <th class="text-left">Name</th>
-        <th class="text-left">Confirmed?</th>
+        <th class="text-left">Status</th>
         <th class="text-left">Actions</th>
     </tr>
 
@@ -27,15 +27,31 @@
         {
             <tr>
                 <td>@item.UserName</td>
-                <td>@item.IsAccepted</td>
+                <td>@item.Status</td>
                 <td>
                     <form method="post">
                         <input type="hidden" name="userId" value="@item.Id"/>
                         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
                         <button asp-action="Delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        <button asp-action="SetIsAccepted" type="submit" class="btn btn-secondary btn-sm">
-                            @(item.IsAccepted == false ? "Accept" : "Cancel")
-                        </button>
+                        @if (item.Status == InvitationStatus.Pending || item.Status == InvitationStatus.Rejected
+                            || item.Status == InvitationStatus.Cancelled)
+                        {
+                            <button asp-action="ChangeStatus" type="submit" class="btn btn-success btn-sm" asp-route-status="Accepted">
+                                Accept
+                            </button>
+                        }
+                        @if (item.Status == InvitationStatus.Pending)
+                        {
+                            <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Rejected">
+                                Reject
+                            </button>
+                        }
+                        @if (item.Status == InvitationStatus.Accepted)
+                        {
+                            <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Cancelled">
+                                Cancel
+                            </button>
+                        }
                     </form>
                 </td>
             </tr>

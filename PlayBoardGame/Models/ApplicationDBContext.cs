@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace PlayBoardGame.Models
@@ -36,6 +37,12 @@ namespace PlayBoardGame.Models
                 .HasOne(mu => mu.AppUser)
                 .WithMany(u => u.MeetingInvitedUser)
                 .HasForeignKey(mu => mu.UserId);
+            
+            builder.Entity<MeetingInvitedUser>()
+                .Property(e => e.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (InvitationStatus)Enum.Parse(typeof(InvitationStatus), v));
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }

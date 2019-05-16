@@ -11,5 +11,15 @@ namespace PlayBoardGame.Models
         public AppUser AppUser { get; set; }
         
         public bool IsAccepted { get; set; }
+        
+        public InvitationStatus Status { get; set; }
+    }
+    
+    public enum InvitationStatus
+    {
+        Pending,
+        Accepted,
+        Rejected,
+        Cancelled
     }
 }

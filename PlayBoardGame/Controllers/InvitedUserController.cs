@@ -25,7 +25,7 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction("List", "Meeting");
             }
 
-            var invitedUsersList = new Dictionary<string, bool>();
+            var invitedUsersList = new Dictionary<string, InvitationStatus>();
             invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id);
 
             var list = new List<InvitedUserViewModel.InvitedUsersList>();
@@ -36,7 +36,7 @@ namespace PlayBoardGame.Controllers
                 list.Add(new InvitedUserViewModel.InvitedUsersList
                 {
                     UserName = user.UserName + " " + user.FirstName + " " + user.LastName,
-                    IsAccepted = kvp.Value,
+                    Status = kvp.Value,
                     Id = kvp.Key
                 });
             }
@@ -68,15 +68,15 @@ namespace PlayBoardGame.Controllers
         {
             var userId = vm.SelectedToInviteUserId;
             var meetingId = vm.MeetingId;
-            _invitedUserRepository.AddUserToMeeting(userId, meetingId, false);
+            _invitedUserRepository.AddUserToMeeting(userId, meetingId, false, InvitationStatus.Pending);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction("List", new {id = meetingId});
         }
 
         [HttpPost]
-        public IActionResult SetIsAccepted(string userId, int meetingId)
+        public IActionResult ChangeStatus(string userId, int meetingId, InvitationStatus status)
         {
-            _invitedUserRepository.ChangeIsAccepted(userId, meetingId);
+            _invitedUserRepository.ChangeStatus(userId, meetingId, status);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction("List", new {id = meetingId});
         }

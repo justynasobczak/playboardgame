@@ -21,7 +21,7 @@ namespace PlayBoardGame.Models.ViewModels
         {
             public string UserName { get; set; }
             
-            public bool IsAccepted { get; set; }
+            public InvitationStatus Status { get; set; }
             
             public string Id { get; set; }
         }
