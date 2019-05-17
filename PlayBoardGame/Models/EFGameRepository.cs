@@ -4,7 +4,7 @@ namespace PlayBoardGame.Models
 {
     public class EFGameRepository : IGameRepository
     {
-        private ApplicationDBContext _applicationDBContext;
+        private readonly ApplicationDBContext _applicationDBContext;
 
         public EFGameRepository(ApplicationDBContext applicationDBContext)
         {
@@ -19,7 +19,7 @@ namespace PlayBoardGame.Models
                 _applicationDBContext.Games.Add(game);
             } else
             {
-                Game dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == game.GameID);
+                var dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == game.GameID);
                 if (dbEntry != null)
                 {
                     dbEntry.Title = game.Title;
@@ -31,12 +31,10 @@ namespace PlayBoardGame.Models
 
         public Game DeleteGame(int GameID)
         {
-            Game dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameID);
-            if (dbEntry != null)
-            {
-                _applicationDBContext.Games.Remove(dbEntry);
-                _applicationDBContext.SaveChanges();
-            }
+            var dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameID);
+            if (dbEntry == null) return dbEntry;
+            _applicationDBContext.Games.Remove(dbEntry);
+            _applicationDBContext.SaveChanges();
             return dbEntry;
 
         }

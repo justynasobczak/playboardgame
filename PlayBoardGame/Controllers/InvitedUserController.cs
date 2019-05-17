@@ -68,7 +68,7 @@ namespace PlayBoardGame.Controllers
         {
             var userId = vm.SelectedToInviteUserId;
             var meetingId = vm.MeetingId;
-            _invitedUserRepository.AddUserToMeeting(userId, meetingId, false, InvitationStatus.Pending);
+            _invitedUserRepository.AddUserToMeeting(userId, meetingId, InvitationStatus.Pending);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction("List", new {id = meetingId});
         }

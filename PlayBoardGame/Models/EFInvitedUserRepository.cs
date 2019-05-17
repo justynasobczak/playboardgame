@@ -45,13 +45,12 @@ namespace PlayBoardGame.Models
             return availableUsers;
         }
 
-        public void AddUserToMeeting(string userId, int meetingId, bool IsAccepted, InvitationStatus status)
+        public void AddUserToMeeting(string userId, int meetingId, InvitationStatus status)
         {
             _applicationDbContext.Set<MeetingInvitedUser>().Add(new MeetingInvitedUser
             {
                 MeetingID = meetingId,
                 UserId = userId,
-                IsAccepted = IsAccepted,
                 Status = status
             });
 

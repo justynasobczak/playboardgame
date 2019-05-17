@@ -11,7 +11,7 @@ namespace PlayBoardGame.Models
 
         Dictionary<string, InvitationStatus> GetInvitedUsersList(int meetingId);
 
-        void AddUserToMeeting(string userId, int meetingId, bool isAccepted, InvitationStatus status);
+        void AddUserToMeeting(string userId, int meetingId, InvitationStatus status);
 
         MeetingInvitedUser RemoveUserFromMeeting(string userId, int meetingId);
 
