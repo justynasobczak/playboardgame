@@ -39,21 +39,12 @@ namespace PlayBoardGame.Controllers
                         Street = meeting.Street,
                         City = meeting.City,
                         PostalCode = meeting.PostalCode,
+                        Country = meeting.Country
                     }
                 };
-                if (meeting.Country != null)
-                {
-                    if (Enum.TryParse(meeting.Country, out CountryEnum myCountry))
-                    {
-                        vm.Address.EnumCountry = myCountry;
-                    }
-                    //TODO: Add log if failed
-                } else
-                {
-                    vm.Address.EnumCountry = CountryEnum.None;
-                }
                 return View(vm);
             }
+
             return RedirectToAction("Error", "Error");
         }
 
@@ -74,18 +65,23 @@ namespace PlayBoardGame.Controllers
                     Street = vm.Address.Street,
                     PostalCode = vm.Address.PostalCode,
                     City = vm.Address.City,
-                    Country = vm.Address.EnumCountry.ToString()
+                    Country = vm.Address.Country
                 };
                 _meetingRepository.SaveMeeting(meeting);
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("Edit", new {id = meeting.MeetingID});
             }
+
             return View(vm);
         }
 
         public ViewResult Create()
         {
-            return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel {Organizers = _userManager.Users.ToList()});
+            return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
+            {
+                Organizers = _userManager.Users.ToList(),
+                Address = new AddressViewModels {Country = Country.None}
+            });
         }
     }
 }

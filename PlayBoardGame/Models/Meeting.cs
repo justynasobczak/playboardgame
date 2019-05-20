@@ -5,7 +5,6 @@ namespace PlayBoardGame.Models
 {
     public class Meeting
     {
-        
         public int MeetingID { get; set; }
 
         public string Title { get; set; }
@@ -22,7 +21,7 @@ namespace PlayBoardGame.Models
 
         public string PostalCode { get; set; }
 
-        public string Country { get; set; }
+        public Country Country { get; set; }
         
         public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; set; }
         

@@ -32,7 +32,9 @@ namespace PlayBoardGame.Models
                 AppUser user = new AppUser
                 {
                     UserName = username,
-                    Email = email
+                    Email = email,
+                    Country = Country.None
+                    
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, password);

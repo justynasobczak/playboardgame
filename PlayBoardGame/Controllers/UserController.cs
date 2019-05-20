@@ -11,8 +11,8 @@ namespace PlayBoardGame.Controllers
     [Authorize]
     public class UserController : Controller
     {
-        private UserManager<AppUser> _userManager;
-        private SignInManager<AppUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
         public UserController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
@@ -22,7 +22,7 @@ namespace PlayBoardGame.Controllers
 
         public async Task<IActionResult> UserProfileAsync()
         {
-            AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
             if (user != null)
             {
                 var vm = new UserProfileViewModel
@@ -34,20 +34,10 @@ namespace PlayBoardGame.Controllers
                     {
                         Street = user.Street,
                         City = user.City,
-                        PostalCode = user.PostalCode,
+                        Country = user.Country,
+                        PostalCode = user.PostalCode
                     }
                 };
-                if (user.Country != null)
-                {
-                    if (Enum.TryParse(user.Country, out CountryEnum myCountry))
-                    {
-                        vm.Address.EnumCountry = myCountry;
-                    }
-                    //TODO: Add log if failed
-                } else
-                {
-                    vm.Address.EnumCountry = CountryEnum.None;
-                }
                 return View("UserProfile", vm);
             }
             return RedirectToAction("Error", "Error");
@@ -58,14 +48,14 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 if (user != null)
                 {
                     user.FirstName = vm.FirstName;
                     user.LastName = vm.LastName;
                     user.Street = vm.Address.Street;
                     user.City = vm.Address.City;
-                    user.Country = vm.Address.EnumCountry.ToString();
+                    user.Country = vm.Address.Country;
                     user.PostalCode = vm.Address.PostalCode;
                     user.PhoneNumber = vm.PhoneNumber;
 
@@ -96,7 +86,7 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
                 if (user != null)
                 {
                     var isCorrectOld = await _userManager.CheckPasswordAsync(user, vm.OldPassword);

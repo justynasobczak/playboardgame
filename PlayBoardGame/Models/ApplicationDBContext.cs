@@ -43,6 +43,18 @@ namespace PlayBoardGame.Models
                 .HasConversion(
                     v => v.ToString(),
                     v => (InvitationStatus)Enum.Parse(typeof(InvitationStatus), v));
+            
+            builder.Entity<AppUser>()
+                .Property(e => e.Country)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (Country)Enum.Parse(typeof(Country), v));
+            
+            builder.Entity<Meeting>()
+                .Property(e => e.Country)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (Country)Enum.Parse(typeof(Country), v));
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }
