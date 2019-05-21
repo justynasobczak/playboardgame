@@ -1,17 +1,30 @@
 using System.Linq;
+using PlayBoardGame.Infrastructure;
 
 namespace PlayBoardGame.Models
 {
     public class EFMeetingRepository : IMeetingRepository
     {
         private readonly ApplicationDBContext _applicationDBContext;
+        private readonly ContextProvider _contextProvider;
 
-        public EFMeetingRepository(ApplicationDBContext applicationDBContext)
+        public EFMeetingRepository(ApplicationDBContext applicationDBContext, ContextProvider contextProvider)
         {
             _applicationDBContext = applicationDBContext;
+            _contextProvider = contextProvider;
         }
 
         public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
+
+        public IQueryable<Meeting> GetMeetingsOfCurrentUser()
+        {
+            var currentUser = _contextProvider.GetCurrentUserId().Result;
+            var meetingsByOwner = _applicationDBContext.Meetings.Where(m => m.Organizer.Id == currentUser);
+            var meetingsByInvitedUsers =
+                _applicationDBContext.Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == currentUser));
+            var myMeetings = meetingsByOwner.Union(meetingsByInvitedUsers);
+            return myMeetings;
+        }
         
         public void SaveMeeting(Meeting meeting)
         {

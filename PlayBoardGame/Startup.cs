@@ -8,6 +8,8 @@ using PlayBoardGame.Models;
 using PlayBoardGame.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
 
@@ -22,9 +24,12 @@ namespace PlayBoardGame
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
-            services.AddDbContext<ApplicationDBContext>(options => 
-            options.UseSqlServer(_configuration["PlayBoardGame:ConnectionString"]));
+            services.AddMvc()
+                .AddJsonOptions(
+                    options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                );
+            services.AddDbContext<ApplicationDBContext>(options =>
+                options.UseSqlServer(_configuration["PlayBoardGame:ConnectionString"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
             services.AddTransient<IShelfRepository, EFShelfRepository>();
             services.AddTransient<IMeetingRepository, EFMeetingRepository>();
@@ -33,14 +38,15 @@ namespace PlayBoardGame
             services.AddTransient<IEmailTemplateSender, EmailTemplateSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ContextProvider>();
-            services.AddIdentity<AppUser, IdentityRole>(opts => {
-                opts.User.RequireUniqueEmail = true;
-                opts.Password.RequiredLength = 6;
-                opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequireLowercase = false;
-                opts.Password.RequireUppercase = false;
-                opts.Password.RequireDigit = false;
-            })
+            services.AddIdentity<AppUser, IdentityRole>(opts =>
+                {
+                    opts.User.RequireUniqueEmail = true;
+                    opts.Password.RequiredLength = 6;
+                    opts.Password.RequireNonAlphanumeric = false;
+                    opts.Password.RequireLowercase = false;
+                    opts.Password.RequireUppercase = false;
+                    opts.Password.RequireDigit = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDBContext>()
                 .AddDefaultTokenProviders();
         }
@@ -53,9 +59,11 @@ namespace PlayBoardGame
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
             }
+
             app.UseAuthentication();
             app.UseStaticFiles();
-            app.UseMvc(routes => {
+            app.UseMvc(routes =>
+            {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Account}/{action=Login}/{id?}");

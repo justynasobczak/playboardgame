@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using System.Linq;
@@ -79,8 +78,7 @@ namespace PlayBoardGame.Controllers
         {
             return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
             {
-                Organizers = _userManager.Users.ToList(),
-                Address = new AddressViewModels {Country = Country.None}
+                Organizers = _userManager.Users.ToList()
             });
         }
     }

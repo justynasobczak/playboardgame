@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
-using  System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace PlayBoardGame.Controllers
 {
@@ -8,6 +8,7 @@ namespace PlayBoardGame.Controllers
     public class FullCalendarController : Controller
     {
         private readonly IMeetingRepository _meetingRepository;
+
         public FullCalendarController(IMeetingRepository meetingRepository)
         {
             _meetingRepository = meetingRepository;
@@ -16,7 +17,7 @@ namespace PlayBoardGame.Controllers
         [HttpGet]
         public IEnumerable<Meeting> Get()
         {
-           return _meetingRepository.Meetings;  
+            return _meetingRepository.GetMeetingsOfCurrentUser();
         }
     }
 }

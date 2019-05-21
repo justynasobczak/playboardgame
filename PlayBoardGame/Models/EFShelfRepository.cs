@@ -9,7 +9,6 @@ namespace PlayBoardGame.Models
         private readonly ApplicationDBContext _applicationDBContext;
         private readonly ContextProvider _contextProvider;
 
-
         public EFShelfRepository(ApplicationDBContext applicationDBContext, ContextProvider contextProvider)
         {
             _applicationDBContext = applicationDBContext;

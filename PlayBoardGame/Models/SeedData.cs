@@ -10,17 +10,17 @@ namespace PlayBoardGame.Models
     {
         public static async void EnsurePopulatedAsync(IApplicationBuilder app, IConfiguration configuration)
         {
-            ApplicationDBContext context = app.ApplicationServices
+            var context = app.ApplicationServices
                 .GetRequiredService<ApplicationDBContext>();
             context.Database.Migrate();
            
             UserManager<AppUser> userManager = app.ApplicationServices.GetRequiredService<UserManager<AppUser>>();
             RoleManager<IdentityRole> roleManager = app.ApplicationServices.GetRequiredService<RoleManager<IdentityRole>>();
 
-            string username = configuration["Data:AdminUser:Name"];
-            string email = configuration["Data:AdminUser:Email"];
-            string password = configuration["Data:AdminUser:Password"];
-            string role = configuration["Data:AdminUser:Role"];
+            var username = configuration["Data:AdminUser:Name"];
+            var email = configuration["Data:AdminUser:Email"];
+            var password = configuration["Data:AdminUser:Password"];
+            var role = configuration["Data:AdminUser:Role"];
 
             if (await userManager.FindByNameAsync(username) == null)
             {
@@ -29,15 +29,13 @@ namespace PlayBoardGame.Models
                     await roleManager.CreateAsync(new IdentityRole(role));
                 }
 
-                AppUser user = new AppUser
+                var user = new AppUser
                 {
                     UserName = username,
-                    Email = email,
-                    Country = Country.None
-                    
+                    Email = email
                 };
 
-                IdentityResult result = await userManager.CreateAsync(user, password);
+                var result = await userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, role);
