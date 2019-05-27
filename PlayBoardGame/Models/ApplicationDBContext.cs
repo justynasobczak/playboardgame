@@ -11,7 +11,7 @@ namespace PlayBoardGame.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            
             builder.Entity<GameAppUser>()
                 .HasKey(bc => new { bc.GameID, bc.UserId });
             builder.Entity<GameAppUser>()
@@ -22,10 +22,11 @@ namespace PlayBoardGame.Models
                 .HasOne(bc => bc.AppUser)
                 .WithMany(c => c.GameAppUser)
                 .HasForeignKey(bc => bc.UserId);
-            
-            builder.Entity<AppUser>()
-                .HasMany(u => u.OrganizedMeetings)
-                .WithOne(m => m.Organizer);
+
+            builder.Entity<Meeting>()
+                .HasOne(m => m.Organizer)
+                .WithMany(u => u.OrganizedMeetings)
+                .HasForeignKey(m => m.OrganizerId);
             
             builder.Entity<MeetingInvitedUser>()
                 .HasKey(mu => new { mu.MeetingID, mu.UserId });

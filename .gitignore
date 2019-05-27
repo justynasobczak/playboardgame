@@ -6,3 +6,4 @@
 .directory
 launchSettings.json
 *.user
+**/Logs/*

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 
 namespace PlayBoardGame.Models
 {
@@ -13,6 +14,8 @@ namespace PlayBoardGame.Models
         
         public DateTime EndDateTime { get; set; }
         
+        public string OrganizerId { get; set; }
+        
         public AppUser Organizer { get; set; }
         
         public string Street { get; set; }
@@ -24,6 +27,8 @@ namespace PlayBoardGame.Models
         public Country Country { get; set; }
         
         public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; set; }
+        
+        public string Notes { get; set; }
         
     }
 }

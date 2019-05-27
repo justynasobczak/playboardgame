@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
@@ -24,6 +25,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PlayBoardGame\PlayBoardGame.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="MeetingRepositoryTests.cs" />
   </ItemGroup>
 
 </Project>

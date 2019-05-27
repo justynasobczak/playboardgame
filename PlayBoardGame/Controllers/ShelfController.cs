@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -15,9 +16,10 @@ namespace PlayBoardGame.Controllers
             _shelfRepository = shelfRepository;
         }
 
-        public ViewResult List() => View(new
-            ShelfListViewModel
-        { Shelf = _shelfRepository.Shelf });
+        public ViewResult List()
+        {
+            return View(new ShelfListViewModel {Shelf = _shelfRepository.Shelf});
+        }
 
         public ViewResult Edit()
         {
@@ -44,6 +46,7 @@ namespace PlayBoardGame.Controllers
                     _shelfRepository.RemoveFromShelf(gameId);
                 }
             }
+
             if (ModelState.IsValid)
             {
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;

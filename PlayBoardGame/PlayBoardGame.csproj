@@ -21,11 +21,28 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+        <PackageReference Include="NLog" Version="4.6.3" />
+        <PackageReference Include="NLog.Schema" Version="4.6.3" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.2" />
         <PackageReference Include="Sendgrid" Version="9.10.0" />
     </ItemGroup>
 
     <ItemGroup>
         <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Logs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="nlog.config.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="nlog.config.xml">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
