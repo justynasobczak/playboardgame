@@ -6,7 +6,7 @@ namespace PlayBoardGame.Models
     {
         IQueryable<Meeting> Meetings { get; }
 
-        IQueryable<Meeting> GetMeetingsOfCurrentUser();
+        IQueryable<Meeting> GetMeetingsForUser(string userId);
         
         void SaveMeeting(Meeting meeting);
     }

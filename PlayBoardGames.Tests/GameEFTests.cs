@@ -1,6 +1,4 @@
 using System.Linq;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using PlayBoardGame.Models;
 using Xunit;
 

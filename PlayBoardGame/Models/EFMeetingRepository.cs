@@ -6,22 +6,19 @@ namespace PlayBoardGame.Models
     public class EFMeetingRepository : IMeetingRepository
     {
         private readonly ApplicationDBContext _applicationDBContext;
-        private readonly ContextProvider _contextProvider;
 
-        public EFMeetingRepository(ApplicationDBContext applicationDBContext, ContextProvider contextProvider)
+        public EFMeetingRepository(ApplicationDBContext applicationDBContext)
         {
             _applicationDBContext = applicationDBContext;
-            _contextProvider = contextProvider;
         }
 
         public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
 
-        public IQueryable<Meeting> GetMeetingsOfCurrentUser()
+        public IQueryable<Meeting> GetMeetingsForUser(string userId)
         {
-            var currentUser = _contextProvider.GetCurrentUserId().Result;
-            var meetingsByOwner = _applicationDBContext.Meetings.Where(m => m.Organizer.Id == currentUser);
+            var meetingsByOwner = _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId);
             var meetingsByInvitedUsers =
-                _applicationDBContext.Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == currentUser));
+                _applicationDBContext.Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId));
             var myMeetings = meetingsByOwner.Union(meetingsByInvitedUsers);
             return myMeetings;
         }
