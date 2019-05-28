@@ -41,6 +41,7 @@ namespace PlayBoardGame.Models
                     dbEntry.Street = meeting.Street;
                     dbEntry.PostalCode = meeting.PostalCode;
                     dbEntry.Country = meeting.Country;
+                    dbEntry.Notes = meeting.Notes;
                 }
             }
             _applicationDBContext.SaveChanges();

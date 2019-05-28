@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting.Internal;
 using PlayBoardGame.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
@@ -33,6 +34,7 @@ namespace PlayBoardGame.Controllers
                     MeetingID = meeting.MeetingID,
                     StartDateTime = meeting.StartDateTime,
                     EndDateTime = meeting.EndDateTime,
+                    Notes = meeting.Notes,
                     Address = new AddressViewModels
                     {
                         Street = meeting.Street,
@@ -64,7 +66,8 @@ namespace PlayBoardGame.Controllers
                     Street = vm.Address.Street,
                     PostalCode = vm.Address.PostalCode,
                     City = vm.Address.City,
-                    Country = vm.Address.Country
+                    Country = vm.Address.Country,
+                    Notes = vm.Notes
                 };
                 _meetingRepository.SaveMeeting(meeting);
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
@@ -76,10 +79,18 @@ namespace PlayBoardGame.Controllers
 
         public ViewResult Create()
         {
+            var currentUserId = GetCurrentUserId().Result;
             return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
             {
-                Organizers = _userManager.Users.ToList()
+                Organizers = _userManager.Users.ToList(),
+                Organizer = currentUserId
             });
+        }
+        
+        private async Task<string> GetCurrentUserId()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            return user.Id;
         }
     }
 }

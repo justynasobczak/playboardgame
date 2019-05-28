@@ -42,7 +42,8 @@ namespace PlayBoardGames.Tests
                         City = "City",
                         Street = "Street",
                         PostalCode = "PostalCode",
-                        Country = Country.Togo
+                        Country = Country.Togo,
+                        Notes = "notest test notest test notest test notest test ..."
                     });
 
                     Assert.Equal(1, context.Meetings.Count());
@@ -56,6 +57,7 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(Country.Togo, context.Meetings.Single().Country);
                     Assert.Equal(organizer, context.Meetings.Single().Organizer);
                     Assert.Equal(organizer.Id, context.Meetings.Single().Organizer.Id);
+                    Assert.Equal("notest test notest test notest test notest test ...", context.Meetings.Single().Notes);
                 }
             }
             finally
@@ -74,14 +76,12 @@ namespace PlayBoardGames.Tests
             {
                 var options = TestBase.CreateDbContextOptions(connection);
 
-                // Create the schema in the database
                 using (var context = new ApplicationDBContext(options))
                 {
                     context.Database.EnsureCreated();
                 }
 
                 //Act
-                // Run the test against one instance of the context
                 using (var context = new ApplicationDBContext(options))
                 {
                     var organizer1 = new AppUser
@@ -102,7 +102,8 @@ namespace PlayBoardGames.Tests
                         City = "City",
                         Street = "Street",
                         PostalCode = "PostalCode",
-                        Country = Country.Togo
+                        Country = Country.Togo,
+                        Notes = "Notes"
                     });
                     context.SaveChanges();
                     
@@ -117,7 +118,8 @@ namespace PlayBoardGames.Tests
                         City = "City2",
                         Street = "Street2",
                         PostalCode = "PostalCode2",
-                        Country = Country.None
+                        Country = Country.None,
+                        Notes = "Notes2"
                     });
                     
                     //Assert
@@ -132,6 +134,7 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(Country.None, context.Meetings.Single().Country);
                     Assert.Equal(organizer2, context.Meetings.Single().Organizer);
                     Assert.Equal(organizer2.Id, context.Meetings.Single().Organizer.Id);
+                    Assert.Equal("Notes2", context.Meetings.Single().Notes);
                 }
             }
             finally
