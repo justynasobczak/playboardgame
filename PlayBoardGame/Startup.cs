@@ -8,7 +8,6 @@ using PlayBoardGame.Models;
 using PlayBoardGame.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
@@ -38,6 +37,8 @@ namespace PlayBoardGame
             services.AddTransient<IEmailTemplateSender, EmailTemplateSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<ContextProvider>();
+            services.AddMiniProfiler()
+                .AddEntityFramework();
             services.AddIdentity<AppUser, IdentityRole>(opts =>
                 {
                     opts.User.RequireUniqueEmail = true;
@@ -60,6 +61,7 @@ namespace PlayBoardGame
                 app.UseStatusCodePages();
             }
 
+            app.UseMiniProfiler();
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseMvc(routes =>

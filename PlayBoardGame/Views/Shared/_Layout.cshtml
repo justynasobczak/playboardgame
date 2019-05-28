@@ -18,7 +18,7 @@
 <header>
     <!--<div class="col-12" id="banner"></div>-->
     @await Html.PartialAsync("_Menu")
-    
+
 </header>
 <main>
     <section>
@@ -45,6 +45,10 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
+                    }
+                    @if (User?.Identity?.Name == "Admin")
+                    {
+                        <mini-profiler/>
                     }
                     @RenderBody()
                 </div>
