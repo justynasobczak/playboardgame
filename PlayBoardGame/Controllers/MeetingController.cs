@@ -1,8 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting.Internal;
 using PlayBoardGame.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
@@ -83,7 +83,9 @@ namespace PlayBoardGame.Controllers
             return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
-                Organizer = currentUserId
+                Organizer = currentUserId,
+                StartDateTime = DateTime.Now,
+                EndDateTime = DateTime.Now.AddHours(1)
             });
         }
         
