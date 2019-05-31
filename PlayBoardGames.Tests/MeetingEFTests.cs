@@ -17,7 +17,7 @@ namespace PlayBoardGames.Tests
             {
                 //Arrange
                 var organizer = new AppUser
-                    {Id = "id1", UserName = "organizer", Email = "organizer@example.com"};
+                    { Id = "id1", UserName = "organizer", Email = "organizer@example.com" };
                 var meetingToAdd = new Meeting
                 {
                     Title = "TestToAdd",
