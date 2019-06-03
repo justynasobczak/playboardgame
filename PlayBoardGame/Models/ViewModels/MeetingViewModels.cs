@@ -19,7 +19,9 @@ namespace PlayBoardGame.Models.ViewModels
             [Display(Name = "End date and time")]
             public DateTime EndDateTime { get; set; }
             
-            public string Organizer { get; set; }
+            public string OrganizerId { get; set; }
+            
+            public string OrganizerName { get; set; }
             
             public string Notes { get; set; }
             

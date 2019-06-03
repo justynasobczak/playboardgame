@@ -29,7 +29,8 @@ namespace PlayBoardGame.Controllers
                 var vm = new MeetingViewModels.CreateEditMeetingViewModel
                 {
                     Organizers = _userManager.Users.ToList(),
-                    Organizer = meeting.Organizer.Id,
+                    OrganizerId = meeting.Organizer.Id,
+                    OrganizerName = meeting.Organizer.UserName,
                     Title = meeting.Title,
                     MeetingID = meeting.MeetingID,
                     StartDateTime = meeting.StartDateTime,
@@ -55,7 +56,7 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByIdAsync(vm.Organizer);
+                var user = await _userManager.FindByIdAsync(vm.OrganizerId);
                 var meeting = new Meeting
                 {
                     MeetingID = vm.MeetingID,
@@ -74,6 +75,7 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction("Edit", new {id = meeting.MeetingID});
             }
 
+            vm.Organizers = _userManager.Users.ToList();
             return View(vm);
         }
 
@@ -83,12 +85,13 @@ namespace PlayBoardGame.Controllers
             return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
-                Organizer = currentUserId,
+                OrganizerId = currentUserId,
+                OrganizerName = User.Identity.Name,
                 StartDateTime = DateTime.Now,
                 EndDateTime = DateTime.Now.AddHours(1)
             });
         }
-        
+
         private async Task<string> GetCurrentUserId()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
