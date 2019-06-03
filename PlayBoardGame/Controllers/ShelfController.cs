@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
@@ -9,23 +11,27 @@ namespace PlayBoardGame.Controllers
     public class ShelfController : Controller
     {
         private readonly IShelfRepository _shelfRepository;
+        private readonly UserManager<AppUser> _userManager;
 
-        public ShelfController(IShelfRepository shelfRepository)
-        {   
+        public ShelfController(IShelfRepository shelfRepository, UserManager<AppUser> userManager)
+        {
             _shelfRepository = shelfRepository;
+            _userManager = userManager;
         }
 
         public ViewResult List()
         {
-            return View(new ShelfListViewModel {Shelf = _shelfRepository.Shelf});
+            var currentUserId = GetCurrentUserId().Result;
+            return View(new ShelfListViewModel {Shelf = _shelfRepository.GetShelfForUser(currentUserId)});
         }
 
         public ViewResult Edit()
         {
+            var currentUserId = GetCurrentUserId().Result;
             var mv = new ShelfEditViewModel
             {
-                Shelf = _shelfRepository.Shelf,
-                AvailableGames = _shelfRepository.AvailableGames
+                Shelf = _shelfRepository.GetShelfForUser(currentUserId),
+                AvailableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId)
             };
             return View(mv);
         }
@@ -33,23 +39,28 @@ namespace PlayBoardGame.Controllers
         [HttpPost]
         public IActionResult Edit(ShelfModificationViewModel model)
         {
-            if (ModelState.IsValid)
+            var currentUserId = GetCurrentUserId().Result;
+            if (!ModelState.IsValid) return Edit();
+            foreach (var gameId in model.IdsToAdd)
             {
-                foreach (var gameId in model.IdsToAdd)
-                {
-                    _shelfRepository.AddToShelf(gameId);
-                }
-
-                foreach (var gameId in model.IdsToDelete)
-                {
-                    _shelfRepository.RemoveFromShelf(gameId);
-                }
-                
-                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                return RedirectToAction(nameof(List));
-                
+                var gameAppUser = new GameAppUser {UserId = currentUserId, GameID = gameId};
+                _shelfRepository.AddToShelf(gameAppUser);
             }
-            return Edit();
+
+            foreach (var gameId in model.IdsToDelete)
+            {
+                var gameAppUser = new GameAppUser {UserId = currentUserId, GameID = gameId};
+                _shelfRepository.RemoveFromShelf(gameAppUser);
+            }
+
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            return RedirectToAction(nameof(List));
+        }
+
+        private async Task<string> GetCurrentUserId()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            return user.Id;
         }
     }
 }

@@ -4,12 +4,12 @@ namespace PlayBoardGame.Models
 {
     public interface IShelfRepository
     {
-        IQueryable<Game> Shelf { get; }
+        IQueryable<Game> GetShelfForUser(string userId);
 
-        IQueryable<Game> AvailableGames { get; }
+        IQueryable<Game> GetAvailableGamesForUser(string userId);
 
-        void AddToShelf(int GameId);
+        void AddToShelf(GameAppUser gameAppUser);
 
-        GameAppUser RemoveFromShelf(int GameId);
+        GameAppUser RemoveFromShelf(GameAppUser gameAppUser);
     }
 }
