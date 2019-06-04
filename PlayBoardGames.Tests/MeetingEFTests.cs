@@ -47,8 +47,8 @@ namespace PlayBoardGames.Tests
                         .Include(m => m.Organizer)
                         .ToList();
                     var users = context.Users.ToList();
-                    Assert.Equal(1, users.Count);
-                    Assert.Equal(1, meetings.Count);
+                    Assert.Single(users);
+                    Assert.Single(meetings);
 
                     Assert.Equal(meetingToAdd.Title, meetings.Single().Title);
                     Assert.Equal(meetingToAdd.StartDateTime, meetings.Single().StartDateTime);
@@ -123,7 +123,7 @@ namespace PlayBoardGames.Tests
                         .ToList();
                     var users = context.Users.ToList();
                     Assert.Equal(2, users.Count);
-                    Assert.Equal(1, meetings.Count);
+                    Assert.Single(meetings);
 
                     Assert.Equal(meetingToEdit.Title, meetings.Single().Title);
                     Assert.Equal(meetingToEdit.StartDateTime, meetings.Single().StartDateTime);

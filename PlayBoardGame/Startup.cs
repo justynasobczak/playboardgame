@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PlayBoardGame.Models;
-using PlayBoardGame.Infrastructure;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -36,7 +35,6 @@ namespace PlayBoardGame
             services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<IEmailTemplateSender, EmailTemplateSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddTransient<ContextProvider>();
             services.AddMiniProfiler()
                 .AddEntityFramework();
             services.AddIdentity<AppUser, IdentityRole>(opts =>
