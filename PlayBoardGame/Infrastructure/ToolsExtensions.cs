@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlayBoardGame.Infrastructure
 {
@@ -18,6 +19,16 @@ namespace PlayBoardGame.Infrastructure
             var r = new Random();
             var list = enumerable as IList<T> ?? enumerable.ToList();
             return list.Count == 0 ? default(T) : list[r.Next(0, list.Count)];
+        }
+        
+        public static SelectListItem[] GetTimeZones()
+        {
+            var tzs = TimeZoneInfo.GetSystemTimeZones();
+            return tzs.Select(tz => new SelectListItem
+            {
+                Text = tz.DisplayName,
+                Value = tz.Id
+            }).ToArray();
         }
     }
 }

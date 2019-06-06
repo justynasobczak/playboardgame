@@ -4,6 +4,5 @@
 .vs
 .idea
 .directory
-launchSettings.json
 *.user
 **/Logs/*

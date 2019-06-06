@@ -23,6 +23,7 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult Edit(int id)
         {
+            var currentUserId = GetCurrentUserId().Result;
             var meeting = _meetingRepository.Meetings.FirstOrDefault(m => m.MeetingID == id);
             if (meeting != null)
             {
@@ -30,12 +31,12 @@ namespace PlayBoardGame.Controllers
                 {
                     Organizers = _userManager.Users.ToList(),
                     OrganizerId = meeting.Organizer.Id,
-                    OrganizerName = meeting.Organizer.UserName,
                     Title = meeting.Title,
                     MeetingID = meeting.MeetingID,
                     StartDateTime = meeting.StartDateTime,
                     EndDateTime = meeting.EndDateTime,
                     Notes = meeting.Notes,
+                    IsEditable = meeting.OrganizerId == currentUserId,
                     Address = new AddressViewModels
                     {
                         Street = meeting.Street,
@@ -86,9 +87,9 @@ namespace PlayBoardGame.Controllers
             {
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,
-                OrganizerName = User.Identity.Name,
                 StartDateTime = DateTime.Now,
-                EndDateTime = DateTime.Now.AddHours(1)
+                EndDateTime = DateTime.Now.AddHours(1),
+                IsEditable = true
             });
         }
 

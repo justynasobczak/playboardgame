@@ -21,9 +21,9 @@ namespace PlayBoardGame.Models.ViewModels
             
             public string OrganizerId { get; set; }
             
-            public string OrganizerName { get; set; }
-            
             public string Notes { get; set; }
+            
+            public bool IsEditable { get; set; }
             
             public List<AppUser> Organizers { get; set; }
             

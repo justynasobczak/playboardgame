@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
+using PlayBoardGame.Infrastructure;
 
 namespace PlayBoardGame.Controllers
 {
@@ -27,6 +28,8 @@ namespace PlayBoardGame.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
+                    TimeZoneList = ToolsExtensions.GetTimeZones(),
+                    TimeZone = user.TimeZone,
                     Address = new AddressViewModels
                     {
                         Street = user.Street,
@@ -55,6 +58,7 @@ namespace PlayBoardGame.Controllers
                     user.Country = vm.Address.Country;
                     user.PostalCode = vm.Address.PostalCode;
                     user.PhoneNumber = vm.PhoneNumber;
+                    user.TimeZone = vm.TimeZone;
 
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
@@ -67,6 +71,7 @@ namespace PlayBoardGame.Controllers
             }
             else
             {
+                vm.TimeZoneList = ToolsExtensions.GetTimeZones();
                 return View("UserProfile", vm);
             }
         }

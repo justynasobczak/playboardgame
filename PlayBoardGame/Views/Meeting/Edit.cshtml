@@ -15,12 +15,11 @@
     <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="MeetingID"/>
         <input type="hidden" asp-for="Organizers"/>
-        <input type="hidden" asp-for="OrganizerName"/>
+        <input type="hidden" asp-for="IsEditable"/>
 
         <fieldset
             @{
-                if (ViewContext.RouteData.Values["action"] as string != nameof(MeetingController.Create)
-                    && Model.OrganizerName != User.Identity.Name)
+                if (!Model.IsEditable)
                 {
                     <text>disabled="disabled"</text>
                 }
@@ -80,12 +79,21 @@
                 <span asp-validation-for="Notes" class="text-danger"></span>
                 <textarea asp-for="Notes" class="form-control"></textarea>
             </div>
-
-            <div class="text-left">
-                <button class="btn btn-info" type="submit">Save</button>
-                <a asp-action="List" class="btn btn-secondary">Cancel</a>
-            </div>
         </fieldset>
+
+        <div class="text-left">
+            <button
+                @{
+                    if (!Model.IsEditable)
+                    {
+                        <text>disabled="disabled"</text>
+                    }
+                }
+                class="btn btn-info" type="submit">
+                Save
+            </button>
+            <a asp-action="List" class="btn btn-secondary">Cancel</a>
+        </div>
 
     </form>
 </div>

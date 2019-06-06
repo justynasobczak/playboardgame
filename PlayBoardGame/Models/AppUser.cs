@@ -18,6 +18,8 @@ namespace PlayBoardGame.Models
         public string PostalCode { get; set; }
 
         public Country Country { get; set; }
+        
+        public string TimeZone { get; set; }
 
         public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
         

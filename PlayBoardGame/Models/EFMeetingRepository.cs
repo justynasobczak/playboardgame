@@ -1,5 +1,6 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using PlayBoardGame.Infrastructure;
 
 namespace PlayBoardGame.Models
 {
@@ -46,6 +47,19 @@ namespace PlayBoardGame.Models
             }
             _applicationDBContext.SaveChanges();
 
+        }
+        
+        public List<Meeting> GetConflictedMeetings(List<Meeting> meetings, DateTime startDate, DateTime endDate)
+        {
+            var conflictedMeetings = new List<Meeting>();
+            foreach (var meeting in meetings)
+            {
+                if (startDate <= meeting.EndDateTime && endDate >= meeting.StartDateTime)
+                {
+                    conflictedMeetings.Add(meeting);
+                }
+            }
+            return conflictedMeetings;
         }
     }
 }

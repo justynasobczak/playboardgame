@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -15,6 +16,11 @@ namespace PlayBoardGame.Models.ViewModels
         public AddressViewModels Address { get; set; }
 
         public string PhoneNumber { get; set; }
+        
+        public string TimeZone { get; set; }
+        
+        public SelectListItem[] TimeZoneList { get; set; }
+        
     }
 
     public class ChangePasswordViewModel

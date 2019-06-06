@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Internal;
 using PlayBoardGame.Models;
 using Xunit;
 
@@ -228,6 +229,42 @@ namespace PlayBoardGames.Tests
                     Assert.Single(result3);
                     Assert.Equal(result3, list3);
                 }
+            }
+        }
+        
+        [Fact]
+        public void Can_Get_Conflicted_Meetings()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                var meeting1 = new Meeting
+                    {MeetingID = 1, Title = "Meeting1", 
+                        StartDateTime = DateTime.Now.ToUniversalTime(), EndDateTime = DateTime.Now.AddHours(2).ToUniversalTime()};
+                var meeting2 = new Meeting
+                {MeetingID = 2, Title = "Meeting2", 
+                    StartDateTime = DateTime.Now.ToUniversalTime().AddDays(2), EndDateTime = DateTime.Now.AddDays(3).ToUniversalTime()};
+                
+                var list = new List<Meeting>
+                {
+                    meeting1,
+                    meeting2
+                };
+                var result = new List<Meeting>();
+
+                using (var context = factory.CreateContext())
+                {
+                    context.Meetings.Add(meeting1);
+                    context.Meetings.Add(meeting2);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    result = meetingRepository.GetConflictedMeetings(list, DateTime.Now.ToUniversalTime(), DateTime.Now.AddHours(1).ToUniversalTime());
+                }
+
+                //Assert
+                Assert.Equal(1, result.Count);
             }
         }
     }
