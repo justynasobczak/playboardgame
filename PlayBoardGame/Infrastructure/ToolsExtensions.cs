@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 
 namespace PlayBoardGame.Infrastructure
 {
@@ -28,7 +29,29 @@ namespace PlayBoardGame.Infrastructure
             {
                 Text = tz.DisplayName,
                 Value = tz.Id
-            }).ToArray();
+            }).OrderBy(tz => tz.Value).ToArray();
+        }
+        
+        public static TimeZoneInfo ConvertTimeZone(string userTimeZone, ILogger logger)
+        {
+            TimeZoneInfo timeZone;
+            try
+            {
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(userTimeZone);
+
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                logger.LogError("Unable to find the {0} zone in the registry.", userTimeZone);
+                timeZone = null;
+            }
+            
+            catch (InvalidTimeZoneException)
+            {
+                logger.LogError("Registry data on the {0} zone has been corrupted.", userTimeZone);
+                timeZone = null;
+            }
+            return timeZone;
         }
     }
 }
