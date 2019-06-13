@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "My shelf";
 }
-<div>@TempData["EmailErrorMessage"]</div>
 <table class="table table-striped">
     <tr>
         <th class="text-left">Title</th>
@@ -14,7 +13,7 @@
     }
     else
     {
-        foreach (Game game in Model.Shelf)
+        foreach (var game in Model.Shelf)
         {
             <tr>
                 <td>@game.Title</td>

@@ -11,6 +11,5 @@
         public const string GeneralResetPasswordErrorMessage = "Please contact support because of unknown error during resetting the password";
         public const string WrongOldPasswordMessage = "Invalid old password";
         public const string NotValidTokenMessage = "Invalid token";
-
     }
 }

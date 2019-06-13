@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -11,6 +13,11 @@ namespace PlayBoardGame.Models.ViewModels
         [Required, MinLength(6)]
         [UIHint("password")]
         public string Password { get; set; }
+        
+        [Required]
+        public string TimeZone { get; set; }
+        
+        public SelectListItem[] TimeZoneList { get; set; }
     }
 
     public class LoginViewModel

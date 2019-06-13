@@ -26,8 +26,6 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult List()
         {
-            var timeZone = GetTimeZoneOfCurrentUser();
-            if (timeZone == null) return RedirectToAction("Error", "Error");
             return View("Calendar");
         }
 
@@ -36,7 +34,7 @@ namespace PlayBoardGame.Controllers
             var timeZone = GetTimeZoneOfCurrentUser();
             var currentUserId = GetCurrentUserId().Result;
             var meeting = _meetingRepository.Meetings.FirstOrDefault(m => m.MeetingID == id);
-            if (meeting == null || timeZone == null) return RedirectToAction("Error", "Error");
+            if (meeting == null) return RedirectToAction("Error", "Error");
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
@@ -65,7 +63,6 @@ namespace PlayBoardGame.Controllers
             {
                 var user = await _userManager.FindByIdAsync(vm.OrganizerId);
                 var timeZone = GetTimeZoneOfCurrentUser();
-                if (timeZone == null) return RedirectToAction("Error", "Error");
                 var meeting = new Meeting
                 {
                     MeetingID = vm.MeetingID,
@@ -91,8 +88,6 @@ namespace PlayBoardGame.Controllers
         public IActionResult Create()
         {
             var timeZone = GetTimeZoneOfCurrentUser();
-            if (timeZone == null) return RedirectToAction("Error", "Error");
-            
             var currentUserId = GetCurrentUserId().Result;
             return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
             {

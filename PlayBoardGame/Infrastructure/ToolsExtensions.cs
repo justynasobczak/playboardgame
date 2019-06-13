@@ -35,6 +35,7 @@ namespace PlayBoardGame.Infrastructure
         public static TimeZoneInfo ConvertTimeZone(string userTimeZone, ILogger logger)
         {
             TimeZoneInfo timeZone;
+            var tzs = TimeZoneInfo.GetSystemTimeZones();
             try
             {
                 timeZone = TimeZoneInfo.FindSystemTimeZoneById(userTimeZone);
@@ -43,13 +44,13 @@ namespace PlayBoardGame.Infrastructure
             catch (TimeZoneNotFoundException)
             {
                 logger.LogError("Unable to find the {0} zone in the registry.", userTimeZone);
-                timeZone = null;
+                timeZone = tzs.First();
             }
             
             catch (InvalidTimeZoneException)
             {
                 logger.LogError("Registry data on the {0} zone has been corrupted.", userTimeZone);
-                timeZone = null;
+                timeZone = tzs.First();
             }
             return timeZone;
         }

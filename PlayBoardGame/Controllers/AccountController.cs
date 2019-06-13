@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
+using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -34,7 +35,7 @@ namespace PlayBoardGame.Controllers
         {
             if (!User?.Identity?.IsAuthenticated ?? false)
             {
-                return View();
+                return View(new RegisterViewModel {TimeZoneList = ToolsExtensions.GetTimeZones()});
             }
 
             return RedirectToAction("List", "Shelf");
@@ -48,7 +49,8 @@ namespace PlayBoardGame.Controllers
                 var user = new AppUser
                 {
                     UserName = vm.Email,
-                    Email = vm.Email
+                    Email = vm.Email,
+                    TimeZone = vm.TimeZone
                 };
                 var result = await _userManager.CreateAsync(user, vm.Password);
 
@@ -78,7 +80,8 @@ namespace PlayBoardGame.Controllers
                     }
                 }
             }
-
+            
+            vm.TimeZoneList = ToolsExtensions.GetTimeZones();
             return View("Register", vm);
         }
 
@@ -197,11 +200,9 @@ namespace PlayBoardGame.Controllers
                             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                             return RedirectToAction("Login");
                         }
-                        else
-                        {
-                            ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                                Constants.GeneralResetPasswordErrorMessage);
-                        }
+
+                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                            Constants.GeneralResetPasswordErrorMessage);
                     }
                 }
                 else
