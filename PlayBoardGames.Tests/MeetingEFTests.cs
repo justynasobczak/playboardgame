@@ -249,7 +249,8 @@ namespace PlayBoardGames.Tests
                 {
                     meeting1,
                     meeting2
-                };
+                }.AsQueryable();
+                
                 var result = new List<Meeting>();
 
                 using (var context = factory.CreateContext())
@@ -260,7 +261,7 @@ namespace PlayBoardGames.Tests
 
                     //Act
                     var meetingRepository = new EFMeetingRepository(context);
-                    result = meetingRepository.GetConflictedMeetings(list, DateTime.Now.ToUniversalTime(), DateTime.Now.AddHours(1).ToUniversalTime());
+                    result = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.ToUniversalTime(), DateTime.Now.AddHours(1).ToUniversalTime()).ToList();
                 }
 
                 //Assert

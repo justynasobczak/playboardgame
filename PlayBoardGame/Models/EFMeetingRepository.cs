@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace PlayBoardGame.Models
 {
@@ -17,11 +18,11 @@ namespace PlayBoardGame.Models
 
         public IQueryable<Meeting> GetMeetingsForUser(string userId)
         {
-            var meetingsByOwner = _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId);
+            var meetingsByOwner = _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId).ToList();
             var meetingsByInvitedUsers =
-                _applicationDBContext.Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId));
+                _applicationDBContext.Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId)).ToList();
             var myMeetings = meetingsByOwner.Union(meetingsByInvitedUsers);
-            return myMeetings;
+            return myMeetings.AsQueryable();
         }
         
         public void SaveMeeting(Meeting meeting)
@@ -49,17 +50,42 @@ namespace PlayBoardGame.Models
 
         }
         
-        public List<Meeting> GetConflictedMeetings(List<Meeting> meetings, DateTime startDate, DateTime endDate)
+        public IQueryable<Meeting> GetOverlappingMeetings(IQueryable<Meeting> meetings, DateTime startDate, DateTime endDate)
         {
-            var conflictedMeetings = new List<Meeting>();
-            foreach (var meeting in meetings)
+            var overlappingMeetings = new List<Meeting>();
+            foreach (var meeting in meetings.ToList())
             {
                 if (startDate <= meeting.EndDateTime && endDate >= meeting.StartDateTime)
                 {
-                    conflictedMeetings.Add(meeting);
+                    overlappingMeetings.Add(meeting);
                 }
             }
-            return conflictedMeetings;
+            return overlappingMeetings.AsQueryable();
+        }
+        
+        public IQueryable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId)
+        {
+            var meetings = GetMeetingsForUser(userId);
+            return GetOverlappingMeetings(meetings, startDate, endDate);
+        }
+        
+        public IQueryable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId)
+        {
+            var meeting = _applicationDBContext.Meetings.Single(m => m.MeetingID == meetingId);
+            var invitedUsers = _applicationDBContext.Users.Where(m => m.MeetingInvitedUser.Any(mu => mu.MeetingID == meetingId)).ToList();
+
+            var meetingsforOrganizer = GetMeetingsForUser(meeting.OrganizerId);
+            var meetingsforInvitedUsers = new List<Meeting>();
+            foreach (var user in invitedUsers)
+            {
+                var meetingsForUser = GetMeetingsForUser(user.Id).ToList();
+                foreach (var m in meetingsForUser)
+                {
+                    meetingsforInvitedUsers.Add(m);
+                }
+            }
+            var allMeetings = meetingsforOrganizer.Union(meetingsforInvitedUsers);
+            return GetOverlappingMeetings(allMeetings, startDate, endDate);
         }
     }
 }

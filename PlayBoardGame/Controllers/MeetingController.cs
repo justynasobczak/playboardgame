@@ -61,9 +61,11 @@ namespace PlayBoardGame.Controllers
         public async Task<IActionResult> Edit(MeetingViewModels.CreateEditMeetingViewModel vm)
         {
             var timeZone = GetTimeZoneOfCurrentUser();
-            var currentUserId = GetCurrentUserId().Result;
             var startDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.StartDateTime, timeZone);
             var endDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone);
+            var currentUser = GetCurrentUserId().Result;
+            var overlappingMeetings =
+                _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUser).ToList();
 
             if (!ToolsExtensions.IsDateInFuture(startDateUTC))
             {
@@ -77,10 +79,16 @@ namespace PlayBoardGame.Controllers
                     Constants.EndDateBeforeStartMessage);
             }
 
-            if (AreConflictedMeetings(startDateUTC, endDateUTC, currentUserId).Count > 0)
+            if (overlappingMeetings.Count > 0)
             {
+                var overlappingMeetingsTitle = ": ";
+                foreach (var meeting in overlappingMeetings)
+                {
+                    overlappingMeetingsTitle = overlappingMeetingsTitle + " " + meeting.Title + " ";
+                }
+                
                 ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
-                    Constants.OverlappingMeetingsMessage);
+                    Constants.OverlappingMeetingsMessage + overlappingMeetingsTitle);
             }
 
             if (ModelState.IsValid)
@@ -133,12 +141,6 @@ namespace PlayBoardGame.Controllers
             var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
             var currentUserTimeZone = currentUser.TimeZone;
             return ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
-        }
-
-        private List<Meeting> AreConflictedMeetings(DateTime startDateUTC, DateTime endDateUTC, string userId)
-        {
-            List<Meeting> meetings = _meetingRepository.GetMeetingsForUser(userId).ToList();
-            return _meetingRepository.GetConflictedMeetings(meetings, startDateUTC, endDateUTC);
         }
     }
 }

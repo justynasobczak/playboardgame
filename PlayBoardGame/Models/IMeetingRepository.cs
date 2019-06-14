@@ -12,6 +12,8 @@ namespace PlayBoardGame.Models
         
         void SaveMeeting(Meeting meeting);
 
-        List<Meeting> GetConflictedMeetings(List<Meeting> meetings, DateTime startDate, DateTime endDate);
+        IQueryable<Meeting> GetOverlappingMeetings(IQueryable<Meeting> meetings, DateTime startDate, DateTime endDate);
+
+        IQueryable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId);
     }
 }
