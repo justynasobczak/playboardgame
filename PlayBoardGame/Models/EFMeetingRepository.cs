@@ -71,7 +71,7 @@ namespace PlayBoardGame.Models
         
         public IQueryable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId)
         {
-            var meeting = _applicationDBContext.Meetings.Single(m => m.MeetingID == meetingId);
+            var meeting = _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingID == meetingId);
             var invitedUsers = _applicationDBContext.Users.Where(m => m.MeetingInvitedUser.Any(mu => mu.MeetingID == meetingId)).ToList();
 
             var meetingsforOrganizer = GetMeetingsForUser(meeting.OrganizerId);
