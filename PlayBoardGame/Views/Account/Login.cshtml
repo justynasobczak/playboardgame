@@ -3,7 +3,7 @@
     ViewBag.Title = "Login";
 }
 <form asp-action="LoginAsync" method="post" class="form-container">
-    <h1><img src="lib/custom/img/smallLogo.png" alt="logo"/>Let's play board games</h1>
+    <img src="~/lib/custom/img/logoSmall.png" alt="logo" />
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success beforeLoginAlert">

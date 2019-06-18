@@ -14,12 +14,6 @@
     box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
 }
 
-h1 {
-    font-size: 23px;
-    letter-spacing: 2px;
-    font-weight: 700;
-}
-
 .custom-danger {
     font-size: 17px;
     padding: 5px 0px;
