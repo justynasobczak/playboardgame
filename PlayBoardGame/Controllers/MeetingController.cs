@@ -34,7 +34,7 @@ namespace PlayBoardGame.Controllers
         {
             var timeZone = GetTimeZoneOfCurrentUser();
             var currentUserId = GetCurrentUserId().Result;
-            var meeting = _meetingRepository.Meetings.FirstOrDefault(m => m.MeetingID == id);
+            var meeting = _meetingRepository.GetMeeting(id);
             if (meeting == null) return RedirectToAction("Error", "Error");
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
@@ -64,8 +64,9 @@ namespace PlayBoardGame.Controllers
             var startDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.StartDateTime, timeZone);
             var endDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone);
             var currentUser = GetCurrentUserId().Result;
-            var overlappingMeetings =
-                _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUser).ToList();
+            var overlappingMeetings = new List<Meeting>();
+            overlappingMeetings = vm.MeetingID == 0 ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUser).ToList() 
+                : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingID).ToList();
 
             if (!ToolsExtensions.IsDateInFuture(startDateUTC))
             {
