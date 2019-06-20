@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
@@ -7,6 +8,7 @@ using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize]
     public class InvitedUserController : Controller
     {
         private readonly IInvitedUserRepository _invitedUserRepository;

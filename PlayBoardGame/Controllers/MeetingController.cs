@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using PlayBoardGame.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ using PlayBoardGame.Infrastructure;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize]
     public class MeetingController : Controller
     {
         private readonly IMeetingRepository _meetingRepository;

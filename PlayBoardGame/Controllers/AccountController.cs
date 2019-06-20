@@ -70,7 +70,7 @@ namespace PlayBoardGame.Controllers
                         TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
                     }
 
-                    return RedirectToAction("List", "Shelf");
+                    return RedirectToAction("Index", "Start");
                 }
                 else
                 {

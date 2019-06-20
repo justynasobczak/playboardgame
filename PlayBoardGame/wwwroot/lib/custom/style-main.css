@@ -10,9 +10,9 @@
 }
 
 h1 {
-    font-size: 36px;
+    font-size: 34px;
     font-weight: 400;
-    color: #090909;
+    color: #FE6847;
     margin: 20px;
 }
 
@@ -23,9 +23,9 @@ h1 {
 
 .bg-menu {
     background-color: #322D27;
-    -webkit-box-shadow: -2px -1px 23px 2px rgba(0,0,0,0.81);
-    -moz-box-shadow: -2px -1px 23px 2px rgba(0,0,0,0.81);
-    box-shadow: -2px -1px 23px 2px rgba(0,0,0,0.81);
+    -webkit-box-shadow: -2px -1px 23px 2px rgba(0, 0, 0, 0.81);
+    -moz-box-shadow: -2px -1px 23px 2px rgba(0, 0, 0, 0.81);
+    box-shadow: -2px -1px 23px 2px rgba(0, 0, 0, 0.81);
 }
 
 .tab-links {
@@ -34,4 +34,21 @@ h1 {
 
 .tabs {
     margin-bottom: 20px;
+}
+
+.plainText {
+    margin-top: 15px;
+}
+
+.plainText a:link,
+.plainText a:visited
+{
+    color: #138496;
+    text-decoration: none;
+}
+
+.plainText a:hover
+{
+    color: #2176AE;
+    text-decoration: underline;
 }

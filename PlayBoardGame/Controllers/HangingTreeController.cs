@@ -1,10 +1,12 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize]
     public class HangingTreeController : Controller
     {
         private readonly IGameRepository _gameRepository;

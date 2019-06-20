@@ -1,0 +1,20 @@
+@{
+    ViewBag.Title = "Let's play board games";
+}
+<div>
+    <h4>Do you want to arrange the meeting with board games?</h4>
+</div>
+<div class="plainText">
+    <a asp-controller="Shelf" asp-action="List">Organize your shelf</a>, put your games on your virtual shelf, it will be
+    easier to select the games for the meeting.
+</div >
+<div class="plainText">
+    <a asp-controller="User" asp-action="UserProfileAsync">Fill in your data</a>, it's easier to invite you for the meeting
+    when you can be found in the application.
+</div>
+<div class="plainText">
+    <a asp-controller="Meeting" asp-action="Create">Add the meeting</a>, provide the dates, invite the people,
+    they will be informed about your invitation by email.
+</div>
+<div class="plainText">Check your meetings in the <a asp-controller="Meeting" asp-action="List">calendar</a>.</div>
+<div class="plainText">Do you know <a asp-controller="HangingTree" asp-action="HangingTree">hanged man</a> game?</div>

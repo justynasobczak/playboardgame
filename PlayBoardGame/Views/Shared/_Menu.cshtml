@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="mainmenu">
         <ul class="navbar-nav ml-5 mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#"> Start </a>
+                <a class="nav-link" asp-controller="Start" asp-action="Index"> Start </a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button"
@@ -33,10 +33,10 @@
                 <a asp-controller="Shelf" asp-action="List" class="nav-link"> My shelf </a>
             </li>
             <li class="nav-item">
-                <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Hanging tree </a>
+                <a asp-controller="Meeting" asp-action="List" class="nav-link"> Calendar </a>
             </li>
             <li class="nav-item">
-                <a asp-controller="Meeting" asp-action="List" class="nav-link"> Calendar </a>
+                <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Hanging tree </a>
             </li>
         </ul>
     </div>
