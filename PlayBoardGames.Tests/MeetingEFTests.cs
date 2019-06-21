@@ -18,7 +18,7 @@ namespace PlayBoardGames.Tests
             {
                 //Arrange
                 var organizer = new AppUser
-                    { Id = "id1", UserName = "organizer", Email = "organizer@example.com" };
+                    {Id = "id1", UserName = "organizer", Email = "organizer@example.com"};
                 var meetingToAdd = new Meeting
                 {
                     Title = "TestToAdd",
@@ -149,22 +149,22 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var user1 = new AppUser
-                        { Id = "1", UserName = "user1", Email = "user1@example.com" };
+                        {Id = "1", UserName = "user1", Email = "user1@example.com"};
                     var user2 = new AppUser
-                        { Id = "2", UserName = "user2", Email = "user2@example.com" };
+                        {Id = "2", UserName = "user2", Email = "user2@example.com"};
                     var user3 = new AppUser
-                        { Id = "3", UserName = "user3", Email = "user3@example.com" };
+                        {Id = "3", UserName = "user3", Email = "user3@example.com"};
                     context.Users.Add(user1);
                     context.Users.Add(user2);
                     context.Users.Add(user3);
                     context.SaveChanges();
 
                     var meeting1 = new Meeting
-                        { Title = "Meeting1", Organizer = user1 };
+                        {Title = "Meeting1", Organizer = user1};
                     var meeting2 = new Meeting
-                        { Title = "Meeting2", Organizer = user1 };
+                        {Title = "Meeting2", Organizer = user1};
                     var meeting3 = new Meeting
-                        { Title = "Meeting3", Organizer = user2 };
+                        {Title = "Meeting3", Organizer = user2};
                     context.Meetings.Add(meeting1);
                     context.Meetings.Add(meeting2);
                     context.Meetings.Add(meeting3);
@@ -191,7 +191,7 @@ namespace PlayBoardGames.Tests
                     context.MeetingInvitedUser.Add(invitedUsers2);
                     context.MeetingInvitedUser.Add(invitedUsers3);
                     context.SaveChanges();
-                    
+
                     //Act
                     var meetingRepository = new EFMeetingRepository(context);
                     var result1 = meetingRepository.GetMeetingsForUser(user1.Id).ToList();
@@ -231,7 +231,7 @@ namespace PlayBoardGames.Tests
                 }
             }
         }
-        
+
         [Fact]
         public void Can_Get_Conflicted_Meetings()
         {
@@ -239,33 +239,101 @@ namespace PlayBoardGames.Tests
             using (var factory = new SQLiteDbContextFactory())
             {
                 var meeting1 = new Meeting
-                    {MeetingID = 1, Title = "Meeting1", 
-                        StartDateTime = DateTime.Now.ToUniversalTime(), EndDateTime = DateTime.Now.AddHours(2).ToUniversalTime()};
+                {
+                    MeetingID = 1, Title = "Meeting1",
+                    StartDateTime = DateTime.Now.AddDays(-2).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddDays(-1).ToUniversalTime()
+                };
                 var meeting2 = new Meeting
-                {MeetingID = 2, Title = "Meeting2", 
-                    StartDateTime = DateTime.Now.ToUniversalTime().AddDays(2), EndDateTime = DateTime.Now.AddDays(3).ToUniversalTime()};
-                
+                {
+                    MeetingID = 2, Title = "Meeting2",
+                    StartDateTime = DateTime.Now.AddHours(-6).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddHours(-1).AddMinutes(1).ToUniversalTime()
+                };
+                var meeting3 = new Meeting
+                {
+                    MeetingID = 3, Title = "Meeting3",
+                    StartDateTime = DateTime.Now.AddHours(-5).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddMinutes(1).ToUniversalTime()
+                };
+                var meeting4 = new Meeting
+                {
+                    MeetingID = 4, Title = "Meeting4",
+                    StartDateTime = DateTime.Now.AddHours(-1).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddHours(2).ToUniversalTime()
+                };
+                var meeting5 = new Meeting
+                {
+                    MeetingID = 5, Title = "Meeting5",
+                    StartDateTime = DateTime.Now.ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddHours(2).ToUniversalTime()
+                };
+                var meeting6 = new Meeting
+                {
+                    MeetingID = 6, Title = "Meeting6",
+                    StartDateTime = DateTime.Now.AddHours(1).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddHours(3).ToUniversalTime()
+                };
+                var meeting7 = new Meeting
+                {
+                    MeetingID = 7, Title = "Meeting7",
+                    StartDateTime = DateTime.Now.AddHours(6).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddHours(23).ToUniversalTime()
+                };
+                var meeting8 = new Meeting
+                {
+                    MeetingID = 8, Title = "Meeting8",
+                    StartDateTime = DateTime.Now.AddHours(24).ToUniversalTime(),
+                    EndDateTime = DateTime.Now.AddHours(30).ToUniversalTime()
+                };     
+
                 var list = new List<Meeting>
                 {
                     meeting1,
-                    meeting2
+                    meeting2,
+                    meeting3,
+                    meeting4,
+                    meeting5,
+                    meeting6,
+                    meeting7,
+                    meeting8
                 }.AsQueryable();
-                
-                var result = new List<Meeting>();
 
+                var result1 = new List<Meeting>();
+                var resultList1 = new List<Meeting> {meeting3, meeting4, meeting5, meeting6};
+                var result2 = new List<Meeting>();
+                var resultList2 = new List<Meeting> {meeting2, meeting3, meeting4, meeting5, meeting6};
+                var result3 = new List<Meeting>();
+                var result4 = new List<Meeting>();
+                var resultList4 = new List<Meeting> {meeting6, meeting7, meeting8};
+                var result5 = new List<Meeting>();
+
+                //Act
                 using (var context = factory.CreateContext())
                 {
-                    context.Meetings.Add(meeting1);
-                    context.Meetings.Add(meeting2);
-                    context.SaveChanges();
-
-                    //Act
                     var meetingRepository = new EFMeetingRepository(context);
-                    result = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.ToUniversalTime(), DateTime.Now.AddHours(1).ToUniversalTime()).ToList();
+                    result1 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.ToUniversalTime(),
+                        DateTime.Now.AddHours(1).ToUniversalTime()).ToList();
+                    result2 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddHours(-1).ToUniversalTime(),
+                        DateTime.Now.AddHours(3).ToUniversalTime()).ToList();
+                    result3 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddHours(-4).ToUniversalTime(),
+                        DateTime.Now.AddHours(4).ToUniversalTime()).ToList();
+                    result4 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddHours(2).ToUniversalTime(),
+                        DateTime.Now.AddDays(1).ToUniversalTime()).ToList();
+                    result5 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddDays(2).ToUniversalTime(),
+                        DateTime.Now.AddDays(3).ToUniversalTime()).ToList();
                 }
 
                 //Assert
-                Assert.Equal(1, result.Count);
+                Assert.Equal(4, result1.Count);
+                Assert.Equal(resultList1.OrderBy(m => m.MeetingID), result1.OrderBy(m => m.MeetingID));
+                Assert.Equal(5, result2.Count);
+                Assert.Equal(resultList2.OrderBy(m => m.MeetingID), result2.OrderBy(m => m.MeetingID));
+                Assert.Equal(5, result3.Count);
+                Assert.Equal(resultList2.OrderBy(m => m.MeetingID), result3.OrderBy(m => m.MeetingID));
+                Assert.Equal(3, result4.Count);
+                Assert.Equal(resultList4.OrderBy(m => m.MeetingID), result4.OrderBy(m => m.MeetingID));
+                Assert.Empty(result5);
             }
         }
     }

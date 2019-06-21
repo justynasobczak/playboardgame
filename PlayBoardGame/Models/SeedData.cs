@@ -14,8 +14,8 @@ namespace PlayBoardGame.Models
                 .GetRequiredService<ApplicationDBContext>();
             context.Database.Migrate();
            
-            UserManager<AppUser> userManager = app.ApplicationServices.GetRequiredService<UserManager<AppUser>>();
-            RoleManager<IdentityRole> roleManager = app.ApplicationServices.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = app.ApplicationServices.GetRequiredService<UserManager<AppUser>>();
+            var roleManager = app.ApplicationServices.GetRequiredService<RoleManager<IdentityRole>>();
 
             var username = configuration["Data:AdminUser:Name"];
             var email = configuration["Data:AdminUser:Email"];

@@ -13,7 +13,7 @@ namespace PlayBoardGame.Email.SendGrid
     public class SendGridEmailSender : IEmailSender
     {
 
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public SendGridEmailSender(IConfiguration configuration)
         {

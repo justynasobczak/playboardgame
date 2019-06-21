@@ -18,14 +18,13 @@ namespace PlayBoardGame.Models
 
         public Meeting GetMeeting(int meetingId)
         {
-            return _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingID == meetingId);
+            return Meetings.FirstOrDefault(m => m.MeetingID == meetingId);
         }
 
         public IQueryable<Meeting> GetMeetingsForUser(string userId)
         {
-            var meetingsByOwner = _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId).ToList();
-            var meetingsByInvitedUsers =
-                _applicationDBContext.Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId)).ToList();
+            var meetingsByOwner = Meetings.Where(m => m.Organizer.Id == userId).ToList();
+            var meetingsByInvitedUsers = Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId)).ToList();
             var myMeetings = meetingsByOwner.Union(meetingsByInvitedUsers);
             return myMeetings.AsQueryable();
         }
@@ -38,7 +37,7 @@ namespace PlayBoardGame.Models
             }
             else
             {
-                var dbEntry = _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingID == meeting.MeetingID);
+                var dbEntry = Meetings.FirstOrDefault(m => m.MeetingID == meeting.MeetingID);
                 if (dbEntry != null)
                 {
                     dbEntry.Title = meeting.Title;

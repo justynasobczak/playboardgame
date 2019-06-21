@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
+using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -13,11 +17,16 @@ namespace PlayBoardGame.Controllers
     {
         private readonly IInvitedUserRepository _invitedUserRepository;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IMeetingRepository _meetingRepository;
+        private readonly ILogger<InvitedUserController> _logger;
 
-        public InvitedUserController(IInvitedUserRepository invitedUserRepository, UserManager<AppUser> userManager)
+        public InvitedUserController(IInvitedUserRepository invitedUserRepository, UserManager<AppUser> userManager,
+            IMeetingRepository meetingRepository, ILogger<InvitedUserController> logger)
         {
             _invitedUserRepository = invitedUserRepository;
             _userManager = userManager;
+            _meetingRepository = meetingRepository;
+            _logger = logger;
         }
 
         public IActionResult List(int id)
@@ -70,8 +79,24 @@ namespace PlayBoardGame.Controllers
         {
             var userId = vm.SelectedToInviteUserId;
             var meetingId = vm.MeetingId;
+            var meeting = _meetingRepository.GetMeeting(meetingId);
+            var overlappingMeetings = new List<Meeting>();
+            overlappingMeetings = _meetingRepository.GetOverlappingMeetingsForUser(meeting.StartDateTime, meeting.EndDateTime, userId)
+                .ToList();
+            var overlappingMeetingsTitle = " ";
+
+            if (overlappingMeetings.Count > 0)
+            {
+                foreach (var m in overlappingMeetings)
+                {
+                    overlappingMeetingsTitle += m.Title + " ";
+                }
+                TempData["ErrorMessage"] = Constants.OverlappingMeetingsMessage + overlappingMeetingsTitle;
+                return RedirectToAction("List", new {id = meetingId});
+            }
             _invitedUserRepository.AddUserToMeeting(userId, meetingId, InvitationStatus.Pending);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+
             return RedirectToAction("List", new {id = meetingId});
         }
 

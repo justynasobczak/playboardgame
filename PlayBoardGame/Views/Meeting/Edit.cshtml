@@ -46,7 +46,8 @@
             <div class="form-group">
                 <label asp-for="OrganizerId">Organizer</label>
                 <span asp-validation-for="OrganizerId" class="text-danger"></span>
-                <select asp-for="OrganizerId" asp-items="@(new SelectList(Model.Organizers, "Id", "UserName"))" class="form-control">
+                <select asp-for="OrganizerId" asp-items="@(new SelectList(Model.Organizers, "Id", "UserName"))" 
+                        class="form-control" disabled="disabled">
                 </select>
             </div>
 

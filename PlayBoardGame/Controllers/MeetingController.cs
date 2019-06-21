@@ -65,9 +65,10 @@ namespace PlayBoardGame.Controllers
             var timeZone = GetTimeZoneOfCurrentUser();
             var startDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.StartDateTime, timeZone);
             var endDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone);
-            var currentUser = GetCurrentUserId().Result;
+            var currentUserId = GetCurrentUserId().Result;
             var overlappingMeetings = new List<Meeting>();
-            overlappingMeetings = vm.MeetingID == 0 ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUser).ToList() 
+            
+            overlappingMeetings = vm.MeetingID == 0 ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId).ToList() 
                 : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingID).ToList();
 
             if (!ToolsExtensions.IsDateInFuture(startDateUTC))
@@ -87,7 +88,7 @@ namespace PlayBoardGame.Controllers
                 var overlappingMeetingsTitle = ": ";
                 foreach (var meeting in overlappingMeetings)
                 {
-                    overlappingMeetingsTitle = overlappingMeetingsTitle + " " + meeting.Title + " ";
+                    overlappingMeetingsTitle += meeting.Title + " ";
                 }
                 
                 ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
@@ -96,14 +97,14 @@ namespace PlayBoardGame.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByIdAsync(vm.OrganizerId);
+                var organizer = await _userManager.FindByIdAsync(currentUserId);
                 var meeting = new Meeting
                 {
                     MeetingID = vm.MeetingID,
                     Title = vm.Title,
-                    StartDateTime = TimeZoneInfo.ConvertTimeToUtc(vm.StartDateTime, timeZone),
-                    EndDateTime = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone),
-                    Organizer = user,
+                    StartDateTime = startDateUTC,
+                    EndDateTime = endDateUTC,
+                    Organizer = organizer,
                     Street = vm.Address.Street,
                     PostalCode = vm.Address.PostalCode,
                     City = vm.Address.City,
@@ -127,8 +128,8 @@ namespace PlayBoardGame.Controllers
             {
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,
-                StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone),
-                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone),
+                StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone),
+                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone),
                 IsEditable = true
             });
         }
