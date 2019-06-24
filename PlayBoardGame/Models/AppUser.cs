@@ -25,7 +25,7 @@ namespace PlayBoardGame.Models
         
         public ICollection<Meeting> OrganizedMeetings { get; set; }
         
-        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; set; }
+        public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
     }
     
     public enum Country

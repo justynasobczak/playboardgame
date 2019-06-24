@@ -56,10 +56,22 @@ namespace PlayBoardGame.Models
                 .HasConversion(
                     v => v.ToString(),
                     v => (Country)Enum.Parse(typeof(Country), v));
+            
+            builder.Entity<MeetingGame>()
+                .HasKey(mg => new { mg.GameID, mg.MeetingID });
+            builder.Entity<MeetingGame>()
+                .HasOne(mg => mg.Game)
+                .WithMany(g => g.MeetingGame)
+                .HasForeignKey(mg => mg.GameID);
+            builder.Entity<MeetingGame>()
+                .HasOne(mg => mg.Meeting)
+                .WithMany(m => m.MeetingGame)
+                .HasForeignKey(mg => mg.MeetingID);
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<MeetingInvitedUser> MeetingInvitedUser { get; set; }
+        public DbSet<MeetingGame> MeetingGame { get; set; } 
     }
 }

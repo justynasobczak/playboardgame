@@ -26,9 +26,11 @@ namespace PlayBoardGame.Models
 
         public Country Country { get; set; }
         
-        public ICollection<MeetingInvitedUser> MeetingInvitedUser { get; set; }
+        public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
         
         public string Notes { get; set; }
+        
+        public IEnumerable<MeetingGame> MeetingGame { get; set; }
         
     }
 }

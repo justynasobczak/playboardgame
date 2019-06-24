@@ -9,5 +9,7 @@ namespace PlayBoardGame.Models
         public string Title { get; set; }
 
         public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
+        
+        public IEnumerable<MeetingGame> MeetingGame { get; set; }
     }
 }
