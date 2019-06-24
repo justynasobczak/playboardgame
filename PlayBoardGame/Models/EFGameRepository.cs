@@ -12,6 +12,8 @@ namespace PlayBoardGame.Models
         }
         public IQueryable<Game> Games => _applicationDBContext.Games;
 
+        public Game GetGame(int gameId) => Games.FirstOrDefault(g => g.GameID == gameId);
+
         public void SaveGame(Game game)
         {
             if (game.GameID == 0)

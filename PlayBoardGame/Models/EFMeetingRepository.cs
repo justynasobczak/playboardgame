@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Remotion.Linq.Parsing.Structure.IntermediateModel;
@@ -16,6 +17,14 @@ namespace PlayBoardGame.Models
 
         public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
 
+        public IEnumerable<MeetingGame> GamesInMeeting => _applicationDBContext.MeetingGame;
+        
+        public IQueryable<Game> GetGamesFromMeeting(int meetingId)
+        {
+            var games = _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingID == meetingId));
+            return games;
+        }
+
         public Meeting GetMeeting(int meetingId)
         {
             return Meetings.FirstOrDefault(m => m.MeetingID == meetingId);
@@ -24,7 +33,8 @@ namespace PlayBoardGame.Models
         public IQueryable<Meeting> GetMeetingsForUser(string userId)
         {
             var meetingsByOwner = Meetings.Where(m => m.Organizer.Id == userId).ToList();
-            var meetingsByInvitedUsers = Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId)).ToList();
+            var meetingsByInvitedUsers =
+                Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId)).ToList();
             var myMeetings = meetingsByOwner.Union(meetingsByInvitedUsers);
             return myMeetings.AsQueryable();
         }
@@ -52,6 +62,20 @@ namespace PlayBoardGame.Models
                 }
             }
 
+            _applicationDBContext.SaveChanges();
+        }
+
+        public void AddGameToMeeting(MeetingGame gameInMeeting)
+        {
+            _applicationDBContext.MeetingGame.Add(gameInMeeting);
+            _applicationDBContext.SaveChanges();
+        }
+
+        public void RemoveGameFromMeeting(int gameId, int meetingId)
+        {
+            var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameID == gameId
+                                                                                 && mg.MeetingID == meetingId);
+            _applicationDBContext.MeetingGame.Remove(dbEntry);
             _applicationDBContext.SaveChanges();
         }
 
@@ -91,10 +115,11 @@ namespace PlayBoardGame.Models
                 {
                     if (m.MeetingID != meetingId)
                     {
-                        meetingsForInvitedUsers.Add(m);    
+                        meetingsForInvitedUsers.Add(m);
                     }
                 }
             }
+
             var allMeetings = meetingsForOrganizer.Union(meetingsForInvitedUsers);
             return GetOverlappingMeetings(allMeetings, startDate, endDate);
         }

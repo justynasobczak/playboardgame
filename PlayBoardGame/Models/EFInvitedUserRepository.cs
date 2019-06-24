@@ -59,9 +59,7 @@ namespace PlayBoardGame.Models
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
                 (mu => mu.MeetingID == meetingId && mu.UserId == userId);
-            if (dbEntry == null) return dbEntry;
             _applicationDbContext.Set<MeetingInvitedUser>().Remove(dbEntry);
-
             _applicationDbContext.SaveChanges();
 
             return dbEntry;

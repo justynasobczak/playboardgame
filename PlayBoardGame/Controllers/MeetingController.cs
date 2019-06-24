@@ -18,13 +18,15 @@ namespace PlayBoardGame.Controllers
         private readonly IMeetingRepository _meetingRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<MeetingController> _logger;
+        private readonly IGameRepository _gameRepository;
 
         public MeetingController(IMeetingRepository meetingRepository, UserManager<AppUser> userManager,
-            ILogger<MeetingController> logger)
+            ILogger<MeetingController> logger, IGameRepository gameRepository)
         {
             _meetingRepository = meetingRepository;
             _userManager = userManager;
             _logger = logger;
+            _gameRepository = gameRepository;
         }
 
         public IActionResult List()
@@ -47,6 +49,8 @@ namespace PlayBoardGame.Controllers
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone),
                 Notes = meeting.Notes,
+                Games = _gameRepository.Games.ToList(),
+                SelectedGames = GetSelectedGames(id),
                 IsEditable = meeting.OrganizerId == currentUserId,
                 Address = new AddressViewModels
                 {
@@ -112,11 +116,20 @@ namespace PlayBoardGame.Controllers
                     Notes = vm.Notes
                 };
                 _meetingRepository.SaveMeeting(meeting);
+                if (vm.SelectedGames?.Count() > 0)
+                {
+                    foreach (var game in vm.SelectedGames)
+                    {
+                        var selectedGame = new MeetingGame {GameID = game, MeetingID = vm.MeetingID};
+                        _meetingRepository.AddGameToMeeting(selectedGame);
+                    }                  
+                }
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("Edit", new {id = meeting.MeetingID});
             }
 
             vm.Organizers = _userManager.Users.ToList();
+            vm.Games = _gameRepository.Games.ToList();
             return View(vm);
         }
 
@@ -128,6 +141,7 @@ namespace PlayBoardGame.Controllers
             {
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,
+                Games = _gameRepository.Games.ToList(),
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone),
                 IsEditable = true
@@ -145,6 +159,18 @@ namespace PlayBoardGame.Controllers
             var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
             var currentUserTimeZone = currentUser.TimeZone;
             return ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
+        }
+
+        private int[] GetSelectedGames(int meetingId)
+        {
+            var games = _meetingRepository.GetGamesFromMeeting(meetingId).ToList();
+            var list = new List<int>();
+            foreach (var game in games)
+            {
+                list.Add(game.GameID);
+            }
+
+            return list.ToArray();
         }
     }
 }

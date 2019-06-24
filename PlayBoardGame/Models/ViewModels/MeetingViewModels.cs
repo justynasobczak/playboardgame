@@ -30,6 +30,10 @@ namespace PlayBoardGame.Models.ViewModels
             public List<AppUser> Organizers { get; set; }
             
             public AddressViewModels Address { get; set; }
+            
+            public int[] SelectedGames { get; set; }
+            
+            public List<Game> Games { get; set; }
         }
     }
 }

@@ -13,6 +13,12 @@ namespace PlayBoardGame.Models
         IQueryable<Meeting> GetMeetingsForUser(string userId);
         
         void SaveMeeting(Meeting meeting);
+        
+        void AddGameToMeeting(MeetingGame gameInMeeting);
+
+        void RemoveGameFromMeeting(int gameId, int meetingId);
+
+        IQueryable<Game> GetGamesFromMeeting(int meetingId);
 
         IQueryable<Meeting> GetOverlappingMeetings(IQueryable<Meeting> meetings, DateTime startDate, DateTime endDate);
 
