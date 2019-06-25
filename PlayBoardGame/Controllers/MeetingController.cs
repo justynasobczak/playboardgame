@@ -50,7 +50,7 @@ namespace PlayBoardGame.Controllers
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone),
                 Notes = meeting.Notes,
                 Games = _gameRepository.Games.ToList(),
-                SelectedGames = GetSelectedGames(id),
+                SelectedGames = GetGameIdsFromMeeting(id),
                 IsEditable = meeting.OrganizerId == currentUserId,
                 Address = new AddressViewModels
                 {
@@ -71,8 +71,9 @@ namespace PlayBoardGame.Controllers
             var endDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone);
             var currentUserId = GetCurrentUserId().Result;
             var overlappingMeetings = new List<Meeting>();
-            
-            overlappingMeetings = vm.MeetingID == 0 ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId).ToList() 
+
+            overlappingMeetings = vm.MeetingID == 0
+                ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId).ToList()
                 : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingID).ToList();
 
             if (!ToolsExtensions.IsDateInFuture(startDateUTC))
@@ -94,7 +95,7 @@ namespace PlayBoardGame.Controllers
                 {
                     overlappingMeetingsTitle += meeting.Title + " ";
                 }
-                
+
                 ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
                     Constants.OverlappingMeetingsMessage + overlappingMeetingsTitle);
             }
@@ -116,14 +117,28 @@ namespace PlayBoardGame.Controllers
                     Notes = vm.Notes
                 };
                 _meetingRepository.SaveMeeting(meeting);
-                if (vm.SelectedGames?.Count() > 0)
+                var savedGames = GetGameIdsFromMeeting(meeting.MeetingID);
+                var selectedGames = vm.SelectedGames ?? new int[0];
+                var gamesToAdd = selectedGames.Except(savedGames).ToList();
+                var gamesToRemove = savedGames.Except(selectedGames).ToList();
+
+                if (gamesToAdd.Count > 0)
                 {
-                    foreach (var game in vm.SelectedGames)
+                    foreach (var game in gamesToAdd)
                     {
-                        var selectedGame = new MeetingGame {GameID = game, MeetingID = vm.MeetingID};
-                        _meetingRepository.AddGameToMeeting(selectedGame);
-                    }                  
+                        var gameToAdd = new MeetingGame {GameID = game, MeetingID = meeting.MeetingID};
+                        _meetingRepository.AddGameToMeeting(gameToAdd);
+                    }
                 }
+
+                if (gamesToRemove.Count > 0)
+                {
+                    foreach (var game in gamesToRemove)
+                    {
+                        _meetingRepository.RemoveGameFromMeeting(game, meeting.MeetingID);
+                    }
+                }
+
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("Edit", new {id = meeting.MeetingID});
             }
@@ -161,16 +176,16 @@ namespace PlayBoardGame.Controllers
             return ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
         }
 
-        private int[] GetSelectedGames(int meetingId)
+        private int[] GetGameIdsFromMeeting(int meetingId)
         {
             var games = _meetingRepository.GetGamesFromMeeting(meetingId).ToList();
-            var list = new List<int>();
+            var listOfIds = new List<int>();
             foreach (var game in games)
             {
-                list.Add(game.GameID);
+                listOfIds.Add(game.GameID);
             }
 
-            return list.ToArray();
+            return listOfIds.ToArray();
         }
     }
 }
