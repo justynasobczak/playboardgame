@@ -45,7 +45,7 @@ namespace PlayBoardGame.Controllers
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = meeting.Organizer.Id,
                 Title = meeting.Title,
-                MeetingID = meeting.MeetingID,
+                MeetingID = meeting.MeetingId,
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone),
                 Notes = meeting.Notes,
@@ -105,7 +105,7 @@ namespace PlayBoardGame.Controllers
                 var organizer = await _userManager.FindByIdAsync(currentUserId);
                 var meeting = new Meeting
                 {
-                    MeetingID = vm.MeetingID,
+                    MeetingId = vm.MeetingID,
                     Title = vm.Title,
                     StartDateTime = startDateUTC,
                     EndDateTime = endDateUTC,
@@ -117,7 +117,7 @@ namespace PlayBoardGame.Controllers
                     Notes = vm.Notes
                 };
                 _meetingRepository.SaveMeeting(meeting);
-                var savedGames = GetGameIdsFromMeeting(meeting.MeetingID);
+                var savedGames = GetGameIdsFromMeeting(meeting.MeetingId);
                 var selectedGames = vm.SelectedGames ?? new int[0];
                 var gamesToAdd = selectedGames.Except(savedGames).ToList();
                 var gamesToRemove = savedGames.Except(selectedGames).ToList();
@@ -126,7 +126,7 @@ namespace PlayBoardGame.Controllers
                 {
                     foreach (var game in gamesToAdd)
                     {
-                        var gameToAdd = new MeetingGame {GameID = game, MeetingID = meeting.MeetingID};
+                        var gameToAdd = new MeetingGame {GameId = game, MeetingId = meeting.MeetingId};
                         _meetingRepository.AddGameToMeeting(gameToAdd);
                     }
                 }
@@ -135,12 +135,12 @@ namespace PlayBoardGame.Controllers
                 {
                     foreach (var game in gamesToRemove)
                     {
-                        _meetingRepository.RemoveGameFromMeeting(game, meeting.MeetingID);
+                        _meetingRepository.RemoveGameFromMeeting(game, meeting.MeetingId);
                     }
                 }
 
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                return RedirectToAction("Edit", new {id = meeting.MeetingID});
+                return RedirectToAction("Edit", new {id = meeting.MeetingId});
             }
 
             vm.Organizers = _userManager.Users.ToList();
@@ -182,7 +182,7 @@ namespace PlayBoardGame.Controllers
             var listOfIds = new List<int>();
             foreach (var game in games)
             {
-                listOfIds.Add(game.GameID);
+                listOfIds.Add(game.GameId);
             }
 
             return listOfIds.ToArray();

@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 
 namespace PlayBoardGame.Models
 {
     public class Meeting
     {
-        public int MeetingID { get; set; }
+        public int MeetingId { get; set; }
 
         public string Title { get; set; }
         
@@ -31,6 +32,5 @@ namespace PlayBoardGame.Models
         public string Notes { get; set; }
         
         public IEnumerable<MeetingGame> MeetingGame { get; set; }
-        
     }
 }

@@ -20,13 +20,13 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult Edit(int id)
         {
-            var game = _gameRepository.Games.FirstOrDefault(g => g.GameID == id);
+            var game = _gameRepository.Games.FirstOrDefault(g => g.GameId == id);
             if (game != null)
             {
                 var vm = new CreateEditGameViewModel
                 {
                     Title = game.Title,
-                    GameID = game.GameID
+                    GameID = game.GameId
                 };
                 return View(vm);
             }
@@ -38,7 +38,7 @@ namespace PlayBoardGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                _gameRepository.SaveGame(new Game {Title = game.Title, GameID = game.GameID});
+                _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameID});
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 return RedirectToAction("List");
             }

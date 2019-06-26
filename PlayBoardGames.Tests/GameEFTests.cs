@@ -38,7 +38,7 @@ namespace PlayBoardGames.Tests
             {
                 using (var context = factory.CreateContext())
                 {
-                    context.Games.Add(new Game {GameID = 1, Title = "TestToModify"});
+                    context.Games.Add(new Game {GameId = 1, Title = "TestToModify"});
                     context.SaveChanges();
                 }
 
@@ -46,7 +46,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var gameRepository = new EFGameRepository(context);
-                    gameRepository.SaveGame(new Game {GameID = 1, Title = "TestAfterModification"});
+                    gameRepository.SaveGame(new Game {GameId = 1, Title = "TestAfterModification"});
                 }
 
                 //Assert
@@ -54,7 +54,7 @@ namespace PlayBoardGames.Tests
                 {
                     Assert.Equal(1, context.Games.Count());
                     Assert.Equal("TestAfterModification", context.Games.Single().Title);
-                    Assert.Equal(1, context.Games.Single().GameID);
+                    Assert.Equal(1, context.Games.Single().GameId);
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace PlayBoardGames.Tests
             {
                 using (var context = factory.CreateContext())
                 {
-                    context.Games.Add(new Game {GameID = 1, Title = "TestToDelete"});
+                    context.Games.Add(new Game {GameId = 1, Title = "TestToDelete"});
                     context.SaveChanges();
                 }
 

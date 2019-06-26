@@ -15,16 +15,16 @@ namespace PlayBoardGames.Tests
             var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
             var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
             var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
-            var game1 = new Game {GameID = 1, Title = "game1"};
-            var game2 = new Game {GameID = 2, Title = "game2"};
-            var game3 = new Game {GameID = 3, Title = "game3"};
-            var game4 = new Game {GameID = 4, Title = "game4"};
-            var shelfItem1 = new GameAppUser {UserId = "id1", GameID = 1};
-            var shelfItem2 = new GameAppUser {UserId = "id1", GameID = 2};
-            var shelfItem3 = new GameAppUser {UserId = "id1", GameID = 3};
-            var shelfItem4 = new GameAppUser {UserId = "id1", GameID = 4};
-            var shelfItem5 = new GameAppUser {UserId = "id2", GameID = 1};
-            var shelfItem6 = new GameAppUser {UserId = "id2", GameID = 4};
+            var game1 = new Game {GameId = 1, Title = "game1"};
+            var game2 = new Game {GameId = 2, Title = "game2"};
+            var game3 = new Game {GameId = 3, Title = "game3"};
+            var game4 = new Game {GameId = 4, Title = "game4"};
+            var shelfItem1 = new GameAppUser {UserId = "id1", GameId = 1};
+            var shelfItem2 = new GameAppUser {UserId = "id1", GameId = 2};
+            var shelfItem3 = new GameAppUser {UserId = "id1", GameId = 3};
+            var shelfItem4 = new GameAppUser {UserId = "id1", GameId = 4};
+            var shelfItem5 = new GameAppUser {UserId = "id2", GameId = 1};
+            var shelfItem6 = new GameAppUser {UserId = "id2", GameId = 4};
             
             var result1 = new List<Game>();
             var result2 = new List<Game>();
@@ -67,13 +67,13 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(4, context.Games.Count());
                     Assert.Equal(6, shelf.Count);
                     Assert.Equal(4, result1.Count);
-                    Assert.Equal(1, result1[0].GameID);
-                    Assert.Equal(2, result1[1].GameID);
-                    Assert.Equal(3, result1[2].GameID);
-                    Assert.Equal(4, result1[3].GameID);
+                    Assert.Equal(1, result1[0].GameId);
+                    Assert.Equal(2, result1[1].GameId);
+                    Assert.Equal(3, result1[2].GameId);
+                    Assert.Equal(4, result1[3].GameId);
                     Assert.Equal(2, result2.Count);
-                    Assert.Equal(1, result2[0].GameID);
-                    Assert.Equal(4, result2[1].GameID);
+                    Assert.Equal(1, result2[0].GameId);
+                    Assert.Equal(4, result2[1].GameId);
                     Assert.Empty(result3);
                 }
             }
@@ -86,16 +86,16 @@ namespace PlayBoardGames.Tests
             var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
             var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
             var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
-            var game1 = new Game {GameID = 1, Title = "game1"};
-            var game2 = new Game {GameID = 2, Title = "game2"};
-            var game3 = new Game {GameID = 3, Title = "game3"};
-            var game4 = new Game {GameID = 4, Title = "game4"};
-            var shelfItem1 = new GameAppUser {UserId = "id1", GameID = 1};
-            var shelfItem2 = new GameAppUser {UserId = "id1", GameID = 2};
-            var shelfItem3 = new GameAppUser {UserId = "id1", GameID = 3};
-            var shelfItem4 = new GameAppUser {UserId = "id1", GameID = 4};
-            var shelfItem5 = new GameAppUser {UserId = "id2", GameID = 1};
-            var shelfItem6 = new GameAppUser {UserId = "id2", GameID = 4};
+            var game1 = new Game {GameId = 1, Title = "game1"};
+            var game2 = new Game {GameId = 2, Title = "game2"};
+            var game3 = new Game {GameId = 3, Title = "game3"};
+            var game4 = new Game {GameId = 4, Title = "game4"};
+            var shelfItem1 = new GameAppUser {UserId = "id1", GameId = 1};
+            var shelfItem2 = new GameAppUser {UserId = "id1", GameId = 2};
+            var shelfItem3 = new GameAppUser {UserId = "id1", GameId = 3};
+            var shelfItem4 = new GameAppUser {UserId = "id1", GameId = 4};
+            var shelfItem5 = new GameAppUser {UserId = "id2", GameId = 1};
+            var shelfItem6 = new GameAppUser {UserId = "id2", GameId = 4};
             
             var result1 = new List<Game>();
             var result2 = new List<Game>();
@@ -139,13 +139,13 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(6, shelf.Count);
                     Assert.Empty(result1);
                     Assert.Equal(2, result2.Count);
-                    Assert.Equal(2, result2[0].GameID);
-                    Assert.Equal(3, result2[1].GameID);
+                    Assert.Equal(2, result2[0].GameId);
+                    Assert.Equal(3, result2[1].GameId);
                     Assert.Equal(4, result3.Count);
-                    Assert.Equal(1, result3[0].GameID);
-                    Assert.Equal(2, result3[1].GameID);
-                    Assert.Equal(3, result3[2].GameID);
-                    Assert.Equal(4, result3[3].GameID);
+                    Assert.Equal(1, result3[0].GameId);
+                    Assert.Equal(2, result3[1].GameId);
+                    Assert.Equal(3, result3[2].GameId);
+                    Assert.Equal(4, result3[3].GameId);
                 }
             }
         }
@@ -155,8 +155,8 @@ namespace PlayBoardGames.Tests
         {
             //Arrange
             var user = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
-            var game = new Game {GameID = 1, Title = "game1"};
-            var shelfItem = new GameAppUser {UserId = "id1", GameID = 1};
+            var game = new Game {GameId = 1, Title = "game1"};
+            var shelfItem = new GameAppUser {UserId = "id1", GameId = 1};
 
             using (var factory = new SQLiteDbContextFactory())
             {
@@ -184,8 +184,8 @@ namespace PlayBoardGames.Tests
                     Assert.Single(shelf);
                     Assert.Equal(user.Id, shelf.Single().AppUser.Id);
                     Assert.Equal(user.Id, shelf.Single().UserId);
-                    Assert.Equal(game.GameID, shelf.Single().Game.GameID);
-                    Assert.Equal(game.GameID, shelf.Single().GameID);
+                    Assert.Equal(game.GameId, shelf.Single().Game.GameId);
+                    Assert.Equal(game.GameId, shelf.Single().GameId);
                 }
             }
         }
@@ -195,8 +195,8 @@ namespace PlayBoardGames.Tests
         {
             //Arrange
             var user = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
-            var game = new Game {GameID = 1, Title = "game1"};
-            var shelfItem = new GameAppUser {UserId = "id1", GameID = 1};
+            var game = new Game {GameId = 1, Title = "game1"};
+            var shelfItem = new GameAppUser {UserId = "id1", GameId = 1};
 
             using (var factory = new SQLiteDbContextFactory())
             {

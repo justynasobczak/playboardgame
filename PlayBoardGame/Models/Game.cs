@@ -4,11 +4,11 @@ namespace PlayBoardGame.Models
 {
     public class Game
     {
-        public int GameID { get; set; }
+        public int GameId { get; set; }
 
         public string Title { get; set; }
 
-        public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
+        public IEnumerable<GameAppUser> GameAppUser { get; set; }
         
         public IEnumerable<MeetingGame> MeetingGame { get; set; }
     }

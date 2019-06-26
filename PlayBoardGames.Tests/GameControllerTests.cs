@@ -16,9 +16,9 @@ namespace PlayBoardGames.Tests
             //Arrange
             Mock<IGameRepository> mock = new Mock<IGameRepository>();
             mock.Setup(g => g.Games).Returns(new Game[]
-            {   new Game {GameID = 1, Title = "Game1"},
-                new Game {GameID = 2, Title = "Game2"},
-                new Game {GameID = 3, Title = "Game3"}
+            {   new Game {GameId = 1, Title = "Game1"},
+                new Game {GameId = 2, Title = "Game2"},
+                new Game {GameId = 3, Title = "Game3"}
             }.AsQueryable<Game>());
             GameController controller = new GameController(mock.Object);
 
@@ -42,9 +42,9 @@ namespace PlayBoardGames.Tests
             //Arrange
             Mock<IGameRepository> mock = new Mock<IGameRepository>();
             mock.Setup(g => g.Games).Returns(new Game[]
-            {   new Game {GameID = 1, Title = "Game1"},
-                new Game {GameID = 2, Title = "Game2"},
-                new Game {GameID = 3, Title = "Game3"}
+            {   new Game {GameId = 1, Title = "Game1"},
+                new Game {GameId = 2, Title = "Game2"},
+                new Game {GameId = 3, Title = "Game3"}
             }.AsQueryable<Game>());
 
             GameController controller = new GameController(mock.Object);
@@ -59,20 +59,20 @@ namespace PlayBoardGames.Tests
         public void Can_Delete_Valid_Game()
         {
             //Arrange
-            Game game = new Game { GameID = 2, Title = "Test" };
+            Game game = new Game { GameId = 2, Title = "Test" };
             Mock<IGameRepository> mock = new Mock<IGameRepository>();
             mock.Setup(m => m.Games).Returns(new Game[] {
-            new Game {GameID = 1, Title = "P1" },
+            new Game {GameId = 1, Title = "P1" },
             game,
-            new Game { GameID = 3, Title = "P3"},
+            new Game { GameId = 3, Title = "P3"},
             }.AsQueryable<Game>());
             GameController controller = new GameController(mock.Object);
 
             //Act
-            controller.Delete(game.GameID);
+            controller.Delete(game.GameId);
 
             //Assert
-            mock.Verify(m => m.DeleteGame(game.GameID));
+            mock.Verify(m => m.DeleteGame(game.GameId));
         }
 
         private T GetViewModel<T>(IActionResult result) where T : class

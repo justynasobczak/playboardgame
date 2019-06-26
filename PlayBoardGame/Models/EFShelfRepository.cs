@@ -24,7 +24,7 @@ namespace PlayBoardGame.Models
 
         public void AddToShelf(GameAppUser gameAppUser)
         {
-            _applicationDBContext.Set<GameAppUser>().Add(gameAppUser);
+            _applicationDBContext.GameAppUser.Add(gameAppUser);
 
             _applicationDBContext.SaveChanges();
         }
@@ -32,10 +32,10 @@ namespace PlayBoardGame.Models
         public GameAppUser RemoveFromShelf(GameAppUser gameAppUser)
         {
             var dbEntry = _applicationDBContext.GameAppUser.FirstOrDefault
-                (gu => gu.GameID == gameAppUser.GameID && gu.UserId == gameAppUser.UserId);
+                (gu => gu.GameId == gameAppUser.GameId && gu.UserId == gameAppUser.UserId);
             if (dbEntry != null)
             {
-                _applicationDBContext.Set<GameAppUser>().Remove(dbEntry);
+                _applicationDBContext.GameAppUser.Remove(dbEntry);
 
                 _applicationDBContext.SaveChanges();
             }

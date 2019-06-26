@@ -18,7 +18,7 @@ namespace PlayBoardGame.Models
 
         public IQueryable<AppUser> GetInvitedUsers(int meetingId)
         {
-            var invitedUsers = _userManager.Users.Where(u => u.MeetingInvitedUser.Any(mu => mu.MeetingID == meetingId));
+            var invitedUsers = _userManager.Users.Where(u => u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId));
             return invitedUsers;
         }
 
@@ -26,7 +26,7 @@ namespace PlayBoardGame.Models
         {
             var invitedUsersList = new Dictionary<string, InvitationStatus>();
             var entry = new List<MeetingInvitedUser>();
-            entry = _applicationDbContext.MeetingInvitedUser.Where(mu => mu.MeetingID == meetingId).ToList();
+            entry = _applicationDbContext.MeetingInvitedUser.Where(mu => mu.MeetingId == meetingId).ToList();
 
             foreach (var item in entry)
             {
@@ -45,9 +45,9 @@ namespace PlayBoardGame.Models
 
         public void AddUserToMeeting(string userId, int meetingId, InvitationStatus status)
         {
-            _applicationDbContext.Set<MeetingInvitedUser>().Add(new MeetingInvitedUser
+            _applicationDbContext.MeetingInvitedUser.Add(new MeetingInvitedUser
             {
-                MeetingID = meetingId,
+                MeetingId = meetingId,
                 UserId = userId,
                 Status = status
             });
@@ -58,8 +58,8 @@ namespace PlayBoardGame.Models
         public MeetingInvitedUser RemoveUserFromMeeting(string userId, int meetingId)
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
-                (mu => mu.MeetingID == meetingId && mu.UserId == userId);
-            _applicationDbContext.Set<MeetingInvitedUser>().Remove(dbEntry);
+                (mu => mu.MeetingId == meetingId && mu.UserId == userId);
+            _applicationDbContext.MeetingInvitedUser.Remove(dbEntry);
             _applicationDbContext.SaveChanges();
 
             return dbEntry;
@@ -68,11 +68,11 @@ namespace PlayBoardGame.Models
         public void ChangeStatus(string userId, int meetingId, InvitationStatus status)
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
-                (mu => mu.MeetingID == meetingId && mu.UserId == userId);
+                (mu => mu.MeetingId == meetingId && mu.UserId == userId);
             if (dbEntry == null) return;
             dbEntry.Status = status;
                 
-            _applicationDbContext.Set<MeetingInvitedUser>().Update(dbEntry);
+            _applicationDbContext.MeetingInvitedUser.Update(dbEntry);
             _applicationDbContext.SaveChanges();
         }
     }

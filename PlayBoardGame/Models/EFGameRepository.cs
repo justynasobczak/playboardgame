@@ -12,16 +12,16 @@ namespace PlayBoardGame.Models
         }
         public IQueryable<Game> Games => _applicationDBContext.Games;
 
-        public Game GetGame(int gameId) => Games.FirstOrDefault(g => g.GameID == gameId);
+        public Game GetGame(int gameId) => Games.FirstOrDefault(g => g.GameId == gameId);
 
         public void SaveGame(Game game)
         {
-            if (game.GameID == 0)
+            if (game.GameId == 0)
             {
                 _applicationDBContext.Games.Add(game);
             } else
             {
-                var dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == game.GameID);
+                var dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameId == game.GameId);
                 if (dbEntry != null)
                 {
                     dbEntry.Title = game.Title;
@@ -33,7 +33,7 @@ namespace PlayBoardGame.Models
 
         public Game DeleteGame(int GameID)
         {
-            var dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameID == GameID);
+            var dbEntry = _applicationDBContext.Games.FirstOrDefault(g => g.GameId == GameID);
             if (dbEntry == null) return dbEntry;
             _applicationDBContext.Games.Remove(dbEntry);
             _applicationDBContext.SaveChanges();

@@ -54,7 +54,7 @@
             <div class="form-group">
                 <label asp-for="SelectedGames">Games</label>
                 <span asp-validation-for="SelectedGames" class="text-danger"></span>
-                <select multiple="multiple" asp-for="SelectedGames" asp-items="@(new SelectList(Model.Games, "GameID", "Title"))" 
+                <select multiple="multiple" asp-for="SelectedGames" asp-items="@(new SelectList(Model.Games, "GameId", "Title"))" 
                         class="form-control">
                 </select>
             </div>

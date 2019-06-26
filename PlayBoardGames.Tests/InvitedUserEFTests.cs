@@ -26,7 +26,7 @@ namespace PlayBoardGames.Tests
             var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
             var user4 = new AppUser {Id = "id4", UserName = "user4", Email = "user4@example.com"};
             var user5 = new AppUser {Id = "id5", UserName = "user5", Email = "user5@example.com"};
-            var meeting = new Meeting {MeetingID = 1, Title = "meeting1"};
+            var meeting = new Meeting {MeetingId = 1, Title = "meeting1"};
             var result = new Dictionary<string, InvitationStatus>();
 
             using (var factory = new SQLiteDbContextFactory())
@@ -86,7 +86,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {                
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    result = invitedUserRepository.GetInvitedUsersList(meeting.MeetingID);
+                    result = invitedUserRepository.GetInvitedUsersList(meeting.MeetingId);
                     Assert.Equal(5, result.Count);
                     Assert.Equal(InvitationStatus.Pending, result["id1"]);
                     Assert.Equal(InvitationStatus.Accepted, result["id2"]);
@@ -109,7 +109,7 @@ namespace PlayBoardGames.Tests
             }
 
             var user = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
-            var meeting = new Meeting {MeetingID = 1, Title = "meeting1"};
+            var meeting = new Meeting {MeetingId = 1, Title = "meeting1"};
 
             using (var factory = new SQLiteDbContextFactory())
             {
@@ -124,7 +124,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    invitedUserRepository.AddUserToMeeting(user.Id, meeting.MeetingID, InvitationStatus.Pending);
+                    invitedUserRepository.AddUserToMeeting(user.Id, meeting.MeetingId, InvitationStatus.Pending);
                 }
 
                 //Assert
@@ -137,8 +137,8 @@ namespace PlayBoardGames.Tests
                     Assert.Single(invitedUsers);
                     Assert.Equal(user.Id, invitedUsers.Single().AppUser.Id);
                     Assert.Equal(user.Id, invitedUsers.Single().UserId);
-                    Assert.Equal(meeting.MeetingID, invitedUsers.Single().Meeting.MeetingID);
-                    Assert.Equal(meeting.MeetingID, invitedUsers.Single().MeetingID);
+                    Assert.Equal(meeting.MeetingId, invitedUsers.Single().Meeting.MeetingId);
+                    Assert.Equal(meeting.MeetingId, invitedUsers.Single().MeetingId);
                 }
             }
         }
@@ -155,7 +155,7 @@ namespace PlayBoardGames.Tests
             }
 
             var user = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
-            var meeting = new Meeting {MeetingID = 1, Title = "meeting1"};
+            var meeting = new Meeting {MeetingId = 1, Title = "meeting1"};
 
             using (var factory = new SQLiteDbContextFactory())
             {
@@ -176,7 +176,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    invitedUserRepository.RemoveUserFromMeeting(invitedUser.UserId, invitedUser.MeetingID);
+                    invitedUserRepository.RemoveUserFromMeeting(invitedUser.UserId, invitedUser.MeetingId);
                 }
 
                 //Assert
@@ -200,7 +200,7 @@ namespace PlayBoardGames.Tests
             }
 
             var user = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
-            var meeting = new Meeting {MeetingID = 1, Title = "meeting1"};
+            var meeting = new Meeting {MeetingId = 1, Title = "meeting1"};
 
             using (var factory = new SQLiteDbContextFactory())
             {
@@ -221,7 +221,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    invitedUserRepository.ChangeStatus(invitedUser.UserId, invitedUser.MeetingID, InvitationStatus.Accepted);
+                    invitedUserRepository.ChangeStatus(invitedUser.UserId, invitedUser.MeetingId, InvitationStatus.Accepted);
                 }
 
                 //Assert
@@ -235,7 +235,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    invitedUserRepository.ChangeStatus(invitedUser.UserId, invitedUser.MeetingID, InvitationStatus.Rejected);
+                    invitedUserRepository.ChangeStatus(invitedUser.UserId, invitedUser.MeetingId, InvitationStatus.Rejected);
                 }
 
                 //Assert
@@ -249,7 +249,7 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    invitedUserRepository.ChangeStatus(invitedUser.UserId, invitedUser.MeetingID, InvitationStatus.Cancelled);
+                    invitedUserRepository.ChangeStatus(invitedUser.UserId, invitedUser.MeetingId, InvitationStatus.Cancelled);
                 }
 
                 //Assert

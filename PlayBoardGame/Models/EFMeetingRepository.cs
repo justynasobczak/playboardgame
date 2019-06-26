@@ -16,18 +16,16 @@ namespace PlayBoardGame.Models
         }
 
         public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
-
-        public IEnumerable<MeetingGame> GamesInMeeting => _applicationDBContext.MeetingGame;
         
         public IQueryable<Game> GetGamesFromMeeting(int meetingId)
         {
-            var games = _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingID == meetingId));
+            var games = _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId));
             return games;
         }
 
         public Meeting GetMeeting(int meetingId)
         {
-            return Meetings.FirstOrDefault(m => m.MeetingID == meetingId);
+            return Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
         }
 
         public IQueryable<Meeting> GetMeetingsForUser(string userId)
@@ -41,13 +39,13 @@ namespace PlayBoardGame.Models
 
         public void SaveMeeting(Meeting meeting)
         {
-            if (meeting.MeetingID == 0)
+            if (meeting.MeetingId == 0)
             {
                 _applicationDBContext.Meetings.Add(meeting);
             }
             else
             {
-                var dbEntry = Meetings.FirstOrDefault(m => m.MeetingID == meeting.MeetingID);
+                var dbEntry = Meetings.FirstOrDefault(m => m.MeetingId == meeting.MeetingId);
                 if (dbEntry != null)
                 {
                     dbEntry.Title = meeting.Title;
@@ -73,8 +71,8 @@ namespace PlayBoardGame.Models
 
         public void RemoveGameFromMeeting(int gameId, int meetingId)
         {
-            var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameID == gameId
-                                                                                 && mg.MeetingID == meetingId);
+            var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameId == gameId
+                                                                                 && mg.MeetingId == meetingId);
             _applicationDBContext.MeetingGame.Remove(dbEntry);
             _applicationDBContext.SaveChanges();
         }
@@ -104,16 +102,16 @@ namespace PlayBoardGame.Models
         {
             var meeting = GetMeeting(meetingId);
             var invitedUsers = _applicationDBContext.Users
-                .Where(m => m.MeetingInvitedUser.Any(mu => mu.MeetingID == meetingId)).ToList();
+                .Where(m => m.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId)).ToList();
 
-            var meetingsForOrganizer = GetMeetingsForUser(meeting.OrganizerId).Where(m => m.MeetingID != meetingId);
+            var meetingsForOrganizer = GetMeetingsForUser(meeting.OrganizerId).Where(m => m.MeetingId != meetingId);
             var meetingsForInvitedUsers = new List<Meeting>();
             foreach (var user in invitedUsers)
             {
                 var meetingsForUser = GetMeetingsForUser(user.Id).ToList();
                 foreach (var m in meetingsForUser)
                 {
-                    if (m.MeetingID != meetingId)
+                    if (m.MeetingId != meetingId)
                     {
                         meetingsForInvitedUsers.Add(m);
                     }

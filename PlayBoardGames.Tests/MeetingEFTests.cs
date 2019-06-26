@@ -79,7 +79,7 @@ namespace PlayBoardGames.Tests
 
                 var meetingToEdit = new Meeting
                 {
-                    MeetingID = 1,
+                    MeetingId = 1,
                     Title = "TestToEdit",
                     StartDateTime = DateTime.Today.AddDays(2).AddHours(2),
                     EndDateTime = DateTime.Today.AddDays(2).AddHours(4),
@@ -99,7 +99,7 @@ namespace PlayBoardGames.Tests
 
                     context.Meetings.Add(new Meeting
                     {
-                        MeetingID = 1,
+                        MeetingId = 1,
                         Title = "TestToAdd",
                         StartDateTime = DateTime.Today.AddDays(1).AddHours(5),
                         EndDateTime = DateTime.Today.AddDays(1).AddHours(8),
@@ -137,6 +137,98 @@ namespace PlayBoardGames.Tests
                     Assert.NotNull(meetings.Single().Organizer);
                     Assert.Equal(organizer2.Id, meetings.Single().Organizer.Id);
                     Assert.Equal(meetingToEdit.Notes, meetings.Single().Notes);
+                }
+            }
+        }
+
+        [Fact]
+        public void Can_Add_Game_To_Meeting()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                var game = new Game
+                    {GameId = 1, Title = "game1"};
+
+                var meeting = new Meeting
+                {
+                    MeetingId = 1,
+                    Title = "TestToAddGame"
+                };
+
+                var gameInMeeting = new MeetingGame
+                {
+                    Game = game,
+                    Meeting = meeting
+                };
+
+                using (var context = factory.CreateContext())
+                {
+                    context.Games.Add(game);
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    meetingRepository.AddGameToMeeting(gameInMeeting);
+                }
+
+                //Assert
+                using (var context = factory.CreateContext())
+                {
+                    var gameInMeetings = context.MeetingGame
+                        .Include(mg => mg.Meeting)
+                        .Include(mg => mg.Game)
+                        .ToList();
+                    Assert.Single(gameInMeetings);
+                    Assert.Equal(meeting.MeetingId, gameInMeetings.Single().MeetingId);
+                    Assert.Equal(game.GameId, gameInMeetings.Single().GameId);
+                }
+            }
+        }
+        
+        [Fact]
+        public void Can_Remove_Game_From_Meeting()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                var game = new Game
+                    {GameId = 1, Title = "game1"};
+
+                var meeting = new Meeting
+                {
+                    MeetingId = 1,
+                    Title = "TestToAddGame"
+                };
+
+                var gameInMeeting = new MeetingGame
+                {
+                    Game = game,
+                    Meeting = meeting
+                };
+
+                using (var context = factory.CreateContext())
+                {
+                    context.Games.Add(game);
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+                    context.MeetingGame.Add(gameInMeeting);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    meetingRepository.RemoveGameFromMeeting(game.GameId, meeting.MeetingId);
+                }
+
+                //Assert
+                using (var context = factory.CreateContext())
+                {
+                    var gameInMeetings = context.MeetingGame
+                        .Include(mg => mg.Meeting)
+                        .Include(mg => mg.Game)
+                        .ToList();
+                    Assert.Empty(gameInMeetings);
                 }
             }
         }
@@ -241,52 +333,52 @@ namespace PlayBoardGames.Tests
             {
                 var meeting1 = new Meeting
                 {
-                    MeetingID = 1, Title = "Meeting1",
+                    MeetingId = 1, Title = "Meeting1",
                     StartDateTime = DateTime.Now.AddDays(-2).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddDays(-1).ToUniversalTime()
                 };
                 var meeting2 = new Meeting
                 {
-                    MeetingID = 2, Title = "Meeting2",
+                    MeetingId = 2, Title = "Meeting2",
                     StartDateTime = DateTime.Now.AddHours(-6).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddHours(-1).AddMinutes(1).ToUniversalTime()
                 };
                 var meeting3 = new Meeting
                 {
-                    MeetingID = 3, Title = "Meeting3",
+                    MeetingId = 3, Title = "Meeting3",
                     StartDateTime = DateTime.Now.AddHours(-5).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddMinutes(1).ToUniversalTime()
                 };
                 var meeting4 = new Meeting
                 {
-                    MeetingID = 4, Title = "Meeting4",
+                    MeetingId = 4, Title = "Meeting4",
                     StartDateTime = DateTime.Now.AddHours(-1).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddHours(2).ToUniversalTime()
                 };
                 var meeting5 = new Meeting
                 {
-                    MeetingID = 5, Title = "Meeting5",
+                    MeetingId = 5, Title = "Meeting5",
                     StartDateTime = DateTime.Now.ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddHours(2).ToUniversalTime()
                 };
                 var meeting6 = new Meeting
                 {
-                    MeetingID = 6, Title = "Meeting6",
+                    MeetingId = 6, Title = "Meeting6",
                     StartDateTime = DateTime.Now.AddHours(1).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddHours(3).ToUniversalTime()
                 };
                 var meeting7 = new Meeting
                 {
-                    MeetingID = 7, Title = "Meeting7",
+                    MeetingId = 7, Title = "Meeting7",
                     StartDateTime = DateTime.Now.AddHours(6).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddHours(23).ToUniversalTime()
                 };
                 var meeting8 = new Meeting
                 {
-                    MeetingID = 8, Title = "Meeting8",
+                    MeetingId = 8, Title = "Meeting8",
                     StartDateTime = DateTime.Now.AddHours(24).ToUniversalTime(),
                     EndDateTime = DateTime.Now.AddHours(30).ToUniversalTime()
-                };     
+                };
 
                 var list = new List<Meeting>
                 {
@@ -315,9 +407,11 @@ namespace PlayBoardGames.Tests
                     var meetingRepository = new EFMeetingRepository(context);
                     result1 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.ToUniversalTime(),
                         DateTime.Now.AddHours(1).ToUniversalTime()).ToList();
-                    result2 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddHours(-1).ToUniversalTime(),
+                    result2 = meetingRepository.GetOverlappingMeetings(list,
+                        DateTime.Now.AddHours(-1).ToUniversalTime(),
                         DateTime.Now.AddHours(3).ToUniversalTime()).ToList();
-                    result3 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddHours(-4).ToUniversalTime(),
+                    result3 = meetingRepository.GetOverlappingMeetings(list,
+                        DateTime.Now.AddHours(-4).ToUniversalTime(),
                         DateTime.Now.AddHours(4).ToUniversalTime()).ToList();
                     result4 = meetingRepository.GetOverlappingMeetings(list, DateTime.Now.AddHours(2).ToUniversalTime(),
                         DateTime.Now.AddDays(1).ToUniversalTime()).ToList();
@@ -327,17 +421,17 @@ namespace PlayBoardGames.Tests
 
                 //Assert
                 Assert.Equal(4, result1.Count);
-                Assert.Equal(resultList1.OrderBy(m => m.MeetingID), result1.OrderBy(m => m.MeetingID));
+                Assert.Equal(resultList1.OrderBy(m => m.MeetingId), result1.OrderBy(m => m.MeetingId));
                 Assert.Equal(5, result2.Count);
-                Assert.Equal(resultList2.OrderBy(m => m.MeetingID), result2.OrderBy(m => m.MeetingID));
+                Assert.Equal(resultList2.OrderBy(m => m.MeetingId), result2.OrderBy(m => m.MeetingId));
                 Assert.Equal(5, result3.Count);
-                Assert.Equal(resultList2.OrderBy(m => m.MeetingID), result3.OrderBy(m => m.MeetingID));
+                Assert.Equal(resultList2.OrderBy(m => m.MeetingId), result3.OrderBy(m => m.MeetingId));
                 Assert.Equal(3, result4.Count);
-                Assert.Equal(resultList4.OrderBy(m => m.MeetingID), result4.OrderBy(m => m.MeetingID));
+                Assert.Equal(resultList4.OrderBy(m => m.MeetingId), result4.OrderBy(m => m.MeetingId));
                 Assert.Empty(result5);
             }
         }
-        
+
         [Fact]
         public void Can_Get_Overlapping_Meetings_For_Meeting()
         {
@@ -357,7 +451,7 @@ namespace PlayBoardGames.Tests
                     {Id = "id5", UserName = "user5", Email = "user5@example.com"};
                 var meeting1 = new Meeting
                 {
-                    MeetingID = 1,
+                    MeetingId = 1,
                     Title = "Meeting1",
                     StartDateTime = DateTime.Today.AddDays(3),
                     EndDateTime = DateTime.Today.AddDays(4),
@@ -365,7 +459,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting2 = new Meeting
                 {
-                    MeetingID = 2,
+                    MeetingId = 2,
                     Title = "Meeting2",
                     StartDateTime = DateTime.Today.AddDays(1),
                     EndDateTime = DateTime.Today.AddDays(1).AddHours(3),
@@ -373,7 +467,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting3 = new Meeting
                 {
-                    MeetingID = 3,
+                    MeetingId = 3,
                     Title = "Meeting3",
                     StartDateTime = DateTime.Today.AddDays(1),
                     EndDateTime = DateTime.Today.AddDays(1).AddHours(3),
@@ -381,7 +475,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting4 = new Meeting
                 {
-                    MeetingID = 4,
+                    MeetingId = 4,
                     Title = "Meeting4",
                     StartDateTime = DateTime.Today.AddDays(1),
                     EndDateTime = DateTime.Today.AddDays(1).AddHours(3),
@@ -389,7 +483,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting5 = new Meeting
                 {
-                    MeetingID = 5,
+                    MeetingId = 5,
                     Title = "Meeting5",
                     StartDateTime = DateTime.Today.AddDays(1),
                     EndDateTime = DateTime.Today.AddDays(1).AddHours(3),
@@ -397,7 +491,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting6 = new Meeting
                 {
-                    MeetingID = 6,
+                    MeetingId = 6,
                     Title = "Meeting6",
                     StartDateTime = DateTime.Today.AddDays(1),
                     EndDateTime = DateTime.Today.AddDays(1).AddHours(3),
@@ -405,7 +499,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting7 = new Meeting
                 {
-                    MeetingID = 7,
+                    MeetingId = 7,
                     Title = "Meeting7",
                     StartDateTime = DateTime.Today.AddDays(2).AddHours(1),
                     EndDateTime = DateTime.Today.AddDays(2).AddHours(4),
@@ -413,7 +507,7 @@ namespace PlayBoardGames.Tests
                 };
                 var meeting8 = new Meeting
                 {
-                    MeetingID = 8,
+                    MeetingId = 8,
                     Title = "Meeting8",
                     StartDateTime = DateTime.Today.AddDays(-3),
                     EndDateTime = DateTime.Today.AddDays(-2),
@@ -509,7 +603,7 @@ namespace PlayBoardGames.Tests
                     context.MeetingInvitedUser.Add(invitedUser10);
                     context.SaveChanges();
                     var meetingRepository = new EFMeetingRepository(context);
-                    expectedResult = meetingRepository.GetOverlappingMeetingsForMeeting(DateTime.Today.AddDays(1), 
+                    expectedResult = meetingRepository.GetOverlappingMeetingsForMeeting(DateTime.Today.AddDays(1),
                         DateTime.Today.AddDays(2), 1).ToList();
                 }
 
@@ -525,7 +619,8 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(8, meetings.Count);
                     Assert.Equal(10, invitedUsers.Count);
                     Assert.Equal(4, expectedResult.Count);
-                    Assert.Equal(expectedResult.OrderBy(m => m.MeetingID), expectedResultList.OrderBy(m => m.MeetingID));
+                    Assert.Equal(expectedResult.OrderBy(m => m.MeetingId),
+                        expectedResultList.OrderBy(m => m.MeetingId));
                 }
             }
         }

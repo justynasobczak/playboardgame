@@ -13,11 +13,11 @@ namespace PlayBoardGame.Models
             base.OnModelCreating(builder);
             
             builder.Entity<GameAppUser>()
-                .HasKey(bc => new { bc.GameID, bc.UserId });
+                .HasKey(bc => new { bc.GameId, bc.UserId });
             builder.Entity<GameAppUser>()
                 .HasOne(bc => bc.Game)
                 .WithMany(b => b.GameAppUser)
-                .HasForeignKey(bc => bc.GameID);
+                .HasForeignKey(bc => bc.GameId);
             builder.Entity<GameAppUser>()
                 .HasOne(bc => bc.AppUser)
                 .WithMany(c => c.GameAppUser)
@@ -29,11 +29,11 @@ namespace PlayBoardGame.Models
                 .HasForeignKey(m => m.OrganizerId);
             
             builder.Entity<MeetingInvitedUser>()
-                .HasKey(mu => new { mu.MeetingID, mu.UserId });
+                .HasKey(mu => new { mu.MeetingId, mu.UserId });
             builder.Entity<MeetingInvitedUser>()
                 .HasOne(mu => mu.Meeting)
                 .WithMany(m => m.MeetingInvitedUser)
-                .HasForeignKey(mu => mu.MeetingID);
+                .HasForeignKey(mu => mu.MeetingId);
             builder.Entity<MeetingInvitedUser>()
                 .HasOne(mu => mu.AppUser)
                 .WithMany(u => u.MeetingInvitedUser)
@@ -58,15 +58,15 @@ namespace PlayBoardGame.Models
                     v => (Country)Enum.Parse(typeof(Country), v));
             
             builder.Entity<MeetingGame>()
-                .HasKey(mg => new { mg.GameID, mg.MeetingID });
+                .HasKey(mg => new { mg.GameId, mg.MeetingId });
             builder.Entity<MeetingGame>()
                 .HasOne(mg => mg.Game)
                 .WithMany(g => g.MeetingGame)
-                .HasForeignKey(mg => mg.GameID);
+                .HasForeignKey(mg => mg.GameId);
             builder.Entity<MeetingGame>()
                 .HasOne(mg => mg.Meeting)
                 .WithMany(m => m.MeetingGame)
-                .HasForeignKey(mg => mg.MeetingID);
+                .HasForeignKey(mg => mg.MeetingId);
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }

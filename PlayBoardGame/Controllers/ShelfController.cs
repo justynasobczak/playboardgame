@@ -43,13 +43,13 @@ namespace PlayBoardGame.Controllers
             if (!ModelState.IsValid) return Edit();
             foreach (var gameId in model.IdsToAdd)
             {
-                var gameAppUser = new GameAppUser {UserId = currentUserId, GameID = gameId};
+                var gameAppUser = new GameAppUser {UserId = currentUserId, GameId = gameId};
                 _shelfRepository.AddToShelf(gameAppUser);
             }
 
             foreach (var gameId in model.IdsToDelete)
             {
-                var gameAppUser = new GameAppUser {UserId = currentUserId, GameID = gameId};
+                var gameAppUser = new GameAppUser {UserId = currentUserId, GameId = gameId};
                 _shelfRepository.RemoveFromShelf(gameAppUser);
             }
 

@@ -21,9 +21,9 @@ namespace PlayBoardGame.Models
         
         public string TimeZone { get; set; }
 
-        public ICollection<GameAppUser> GameAppUser { get; } = new List<GameAppUser>();
+        public IEnumerable<GameAppUser> GameAppUser { get; set; }
         
-        public ICollection<Meeting> OrganizedMeetings { get; set; }
+        public IEnumerable<Meeting> OrganizedMeetings { get; set; }
         
         public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
     }

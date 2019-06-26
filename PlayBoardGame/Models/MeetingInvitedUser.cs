@@ -2,7 +2,7 @@ namespace PlayBoardGame.Models
 {
     public class MeetingInvitedUser
     {
-        public int MeetingID { get; set; }
+        public int MeetingId { get; set; }
 
         public Meeting Meeting { get; set; }
 
