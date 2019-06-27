@@ -39,7 +39,11 @@ namespace PlayBoardGame.Controllers
             var timeZone = GetTimeZoneOfCurrentUser();
             var currentUserId = GetCurrentUserId().Result;
             var meeting = _meetingRepository.GetMeeting(id);
-            if (meeting == null) return RedirectToAction("Error", "Error");
+            if (meeting == null)
+            {
+                _logger.LogCritical(Constants.UnknownId + " of meeting");
+                return RedirectToAction("Error", "Error");
+            }
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),

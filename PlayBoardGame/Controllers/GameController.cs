@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace PlayBoardGame.Controllers
 {
@@ -10,10 +11,12 @@ namespace PlayBoardGame.Controllers
     public class GameController : Controller
     {
         private readonly IGameRepository _gameRepository;
+        private readonly ILogger<GameController> _logger;
 
-        public GameController(IGameRepository gameRepository)
+        public GameController(IGameRepository gameRepository, ILogger<GameController> logger)
         {
             _gameRepository = gameRepository;
+            _logger = logger;
         }
 
         public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games});
@@ -30,19 +33,17 @@ namespace PlayBoardGame.Controllers
                 };
                 return View(vm);
             }
+            _logger.LogCritical(Constants.UnknownId + " of game");
             return RedirectToAction("Error", "Error");
         }
 
         [HttpPost]
         public IActionResult Edit(CreateEditGameViewModel game)
         {
-            if (ModelState.IsValid)
-            {
-                _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameID});
-                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                return RedirectToAction("List");
-            }
-            return View(game);
+            if (!ModelState.IsValid) return View(game);
+            _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameID});
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            return RedirectToAction("List");
         }
 
         public ViewResult Create() => View("Edit", new CreateEditGameViewModel());

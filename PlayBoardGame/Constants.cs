@@ -14,5 +14,8 @@
         public const string FutureDateInPastMessage = "Please enter a date in the future.";
         public const string EndDateBeforeStartMessage = "Please enter a date later than start date.";
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
+        
+        //Logs
+        public const string UnknownId = "Unknown Id";
     }
 }

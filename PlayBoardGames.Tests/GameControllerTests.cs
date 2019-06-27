@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
+using NLog;
 using PlayBoardGame.Controllers;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
@@ -14,13 +16,15 @@ namespace PlayBoardGames.Tests
         public void Can_Edit_Game()
         {
             //Arrange
-            Mock<IGameRepository> mock = new Mock<IGameRepository>();
-            mock.Setup(g => g.Games).Returns(new Game[]
+            var mockRepo = new Mock<IGameRepository>();
+            mockRepo.Setup(g => g.Games).Returns(new []
             {   new Game {GameId = 1, Title = "Game1"},
                 new Game {GameId = 2, Title = "Game2"},
                 new Game {GameId = 3, Title = "Game3"}
-            }.AsQueryable<Game>());
-            GameController controller = new GameController(mock.Object);
+            }.AsQueryable);
+            var mockLogger = new Mock<ILogger<GameController>>();
+            
+            var controller = new GameController(mockRepo.Object, mockLogger.Object);
 
             //Act
             var g1 = GetViewModel<CreateEditGameViewModel>(controller.Edit(1));
@@ -37,17 +41,18 @@ namespace PlayBoardGames.Tests
         }
 
         [Fact]
-        public void Cannot_Edit_NonexistedGame()
+        public void Cannot_Edit_NonExistedGame()
         {
             //Arrange
-            Mock<IGameRepository> mock = new Mock<IGameRepository>();
-            mock.Setup(g => g.Games).Returns(new Game[]
+            var mockRepo = new Mock<IGameRepository>();
+            mockRepo.Setup(g => g.Games).Returns(new []
             {   new Game {GameId = 1, Title = "Game1"},
                 new Game {GameId = 2, Title = "Game2"},
                 new Game {GameId = 3, Title = "Game3"}
-            }.AsQueryable<Game>());
+            }.AsQueryable);
+            var mockLogger = new Mock<ILogger<GameController>>();
 
-            GameController controller = new GameController(mock.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object);
 
             //Act
             var result = GetViewModel<CreateEditGameViewModel>(controller.Edit(4));
@@ -59,20 +64,22 @@ namespace PlayBoardGames.Tests
         public void Can_Delete_Valid_Game()
         {
             //Arrange
-            Game game = new Game { GameId = 2, Title = "Test" };
-            Mock<IGameRepository> mock = new Mock<IGameRepository>();
-            mock.Setup(m => m.Games).Returns(new Game[] {
+            var game = new Game { GameId = 2, Title = "Test" };
+            var mockRepo = new Mock<IGameRepository>();
+            mockRepo.Setup(m => m.Games).Returns(new [] {
             new Game {GameId = 1, Title = "P1" },
             game,
             new Game { GameId = 3, Title = "P3"},
-            }.AsQueryable<Game>());
-            GameController controller = new GameController(mock.Object);
+            }.AsQueryable);
+            var mockLogger = new Mock<ILogger<GameController>>();
+            
+            var controller = new GameController(mockRepo.Object, mockLogger.Object);
 
             //Act
             controller.Delete(game.GameId);
 
             //Assert
-            mock.Verify(m => m.DeleteGame(game.GameId));
+            mockRepo.Verify(m => m.DeleteGame(game.GameId));
         }
 
         private T GetViewModel<T>(IActionResult result) where T : class
