@@ -34,7 +34,7 @@ namespace PlayBoardGame.Controllers
                 return View(vm);
             }
             _logger.LogCritical(Constants.UnknownId + " of game");
-            return RedirectToAction("Error", "Error");
+            return RedirectToAction(nameof(ErrorController.Error), "Error");
         }
 
         [HttpPost]
@@ -43,10 +43,10 @@ namespace PlayBoardGame.Controllers
             if (!ModelState.IsValid) return View(game);
             _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameID});
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-            return RedirectToAction("List");
+            return RedirectToAction(nameof(List));
         }
 
-        public ViewResult Create() => View("Edit", new CreateEditGameViewModel());
+        public ViewResult Create() => View(nameof(Edit), new CreateEditGameViewModel());
 
         [HttpPost]
         public IActionResult Delete(int id)
@@ -56,7 +56,7 @@ namespace PlayBoardGame.Controllers
             {
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
-            return RedirectToAction("List");
+            return RedirectToAction(nameof(List));
         }
     }
 }

@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
-using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -33,7 +30,7 @@ namespace PlayBoardGame.Controllers
         {
             if (id == 0)
             {
-                return RedirectToAction("List", "Meeting");
+                return RedirectToAction(nameof(MeetingController.List), "Meeting");
             }
 
             var invitedUsersList = new Dictionary<string, InvitationStatus>();
@@ -71,7 +68,7 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
-            return RedirectToAction("List", new {id = meetingId});
+            return RedirectToAction(nameof(List), new {id = meetingId});
         }
 
         [HttpPost]
@@ -92,12 +89,12 @@ namespace PlayBoardGame.Controllers
                     overlappingMeetingsTitle += m.Title + " ";
                 }
                 TempData["ErrorMessage"] = Constants.OverlappingMeetingsMessage + overlappingMeetingsTitle;
-                return RedirectToAction("List", new {id = meetingId});
+                return RedirectToAction(nameof(List), new {id = meetingId});
             }
             _invitedUserRepository.AddUserToMeeting(userId, meetingId, InvitationStatus.Pending);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
 
-            return RedirectToAction("List", new {id = meetingId});
+            return RedirectToAction(nameof(List), new {id = meetingId});
         }
 
         [HttpPost]
@@ -105,7 +102,7 @@ namespace PlayBoardGame.Controllers
         {
             _invitedUserRepository.ChangeStatus(userId, meetingId, status);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-            return RedirectToAction("List", new {id = meetingId});
+            return RedirectToAction(nameof(List), new {id = meetingId});
         }
     }
 }

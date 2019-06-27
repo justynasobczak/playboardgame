@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using  System.Linq;
+using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -16,7 +15,7 @@ namespace PlayBoardGame.Models
         
         void AddGameToMeeting(MeetingGame gameInMeeting);
 
-        void RemoveGameFromMeeting(int gameId, int meetingId);
+        MeetingGame RemoveGameFromMeeting(int gameId, int meetingId);
 
         IQueryable<Game> GetGamesFromMeeting(int meetingId);
 

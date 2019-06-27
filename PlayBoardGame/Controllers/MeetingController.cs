@@ -42,7 +42,7 @@ namespace PlayBoardGame.Controllers
             if (meeting == null)
             {
                 _logger.LogCritical(Constants.UnknownId + " of meeting");
-                return RedirectToAction("Error", "Error");
+                return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
@@ -144,7 +144,7 @@ namespace PlayBoardGame.Controllers
                 }
 
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                return RedirectToAction("Edit", new {id = meeting.MeetingId});
+                return RedirectToAction(nameof(Edit), new {id = meeting.MeetingId});
             }
 
             vm.Organizers = _userManager.Users.ToList();
@@ -156,7 +156,7 @@ namespace PlayBoardGame.Controllers
         {
             var timeZone = GetTimeZoneOfCurrentUser();
             var currentUserId = GetCurrentUserId().Result;
-            return View("Edit", new MeetingViewModels.CreateEditMeetingViewModel
+            return View(nameof(Edit), new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,

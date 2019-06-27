@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 using PlayBoardGame.Infrastructure;
+using Microsoft.Extensions.Logging;
 
 namespace PlayBoardGame.Controllers
 {
@@ -12,10 +13,12 @@ namespace PlayBoardGame.Controllers
     public class UserController : Controller
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(UserManager<AppUser> userManager)
+        public UserController(UserManager<AppUser> userManager, ILogger<UserController> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<IActionResult> UserProfileAsync()
@@ -40,7 +43,8 @@ namespace PlayBoardGame.Controllers
                 };
                 return View("UserProfile", vm);
             }
-            return RedirectToAction("Error", "Error");
+            _logger.LogCritical(Constants.UnknownId + " of user");
+            return RedirectToAction(nameof(ErrorController.Error), "Error");
         }
 
         [HttpPost]
@@ -64,10 +68,11 @@ namespace PlayBoardGame.Controllers
                     if (result.Succeeded)
                     {
                         TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                        return RedirectToAction("List", "Shelf");
+                        return RedirectToAction(nameof(ShelfController.List), "Shelf");
                     }
                 }
-                return RedirectToAction("Error", "Error");
+                _logger.LogCritical(Constants.UnknownId + " of user");
+                return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
             else
             {
@@ -98,7 +103,7 @@ namespace PlayBoardGame.Controllers
                         if (result.Succeeded)
                         {
                             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                            return RedirectToAction("List", "Shelf");
+                            return RedirectToAction(nameof(ShelfController.List), "Shelf");
                         }
                     }
                     else
@@ -107,7 +112,8 @@ namespace PlayBoardGame.Controllers
                         return View("ChangePassword", vm);
                     }
                 }
-                return RedirectToAction("Error", "Error");
+                _logger.LogCritical(Constants.UnknownId + " of user");
+                return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
             else
             {

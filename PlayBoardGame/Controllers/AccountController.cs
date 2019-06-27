@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
 using PlayBoardGame.Infrastructure;
@@ -16,13 +17,15 @@ namespace PlayBoardGame.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailTemplateSender _templateSender;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
-            IEmailTemplateSender templateSender)
+            IEmailTemplateSender templateSender, ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _templateSender = templateSender;
+            _logger = logger;
         }
 
         public IActionResult AccessDenied()
@@ -38,7 +41,7 @@ namespace PlayBoardGame.Controllers
                 return View(new RegisterViewModel {TimeZoneList = ToolsExtensions.GetTimeZones()});
             }
 
-            return RedirectToAction("List", "Shelf");
+            return RedirectToAction(nameof(ShelfController.List), "Shelf");
         }
 
         [HttpPost]
@@ -68,9 +71,13 @@ namespace PlayBoardGame.Controllers
                     if (!response.Successful)
                     {
                         TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+                        foreach (var error in response.Errors)
+                        {
+                            _logger.LogError(error);
+                        }
                     }
 
-                    return RedirectToAction("Index", "Start");
+                    return RedirectToAction(nameof(StartController.Index), "Start");
                 }
                 else
                 {
@@ -82,7 +89,7 @@ namespace PlayBoardGame.Controllers
             }
             
             vm.TimeZoneList = ToolsExtensions.GetTimeZones();
-            return View("Register", vm);
+            return View(nameof(Register), vm);
         }
 
         public IActionResult Login()
@@ -92,7 +99,7 @@ namespace PlayBoardGame.Controllers
                 return View();
             }
 
-            return RedirectToAction("List", "Shelf");
+            return RedirectToAction(nameof(ShelfController.List), "Shelf");
         }
 
         [HttpPost]
@@ -109,20 +116,20 @@ namespace PlayBoardGame.Controllers
                         user, vm.Password, false, false);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("List", "Shelf");
+                        return RedirectToAction(nameof(ShelfController.List), "Shelf");
                     }
                 }
 
                 ModelState.AddModelError(nameof(LoginViewModel.Email), Constants.UserOrPasswordErrorMessage);
             }
 
-            return View("Login", vm);
+            return View(nameof(Login), vm);
         }
 
         public async Task<IActionResult> LogoutAsync()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login");
+            return RedirectToAction(nameof(Login));
         }
 
         [HttpGet]
@@ -133,7 +140,7 @@ namespace PlayBoardGame.Controllers
                 return View();
             }
 
-            return RedirectToAction("List", "Shelf");
+            return RedirectToAction(nameof(ShelfController.List), "Shelf");
         }
 
         [HttpPost]
@@ -145,7 +152,7 @@ namespace PlayBoardGame.Controllers
                 if (user != null)
                 {
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var resetLink = Url.Action("ResetPassword", "Account", new {emailToken = token},
+                    var resetLink = Url.Action(nameof(ResetPassword), "Account", new {emailToken = token},
                         protocol: HttpContext.Request.Scheme);
                     var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
@@ -157,12 +164,16 @@ namespace PlayBoardGame.Controllers
                     if (response.Successful)
                     {
                         TempData["SuccessMessage"] = Constants.SendResetLinkSuccessMessage;
-                        return RedirectToAction("Login");
+                        return RedirectToAction(nameof(Login));
                     }
                     else
                     {
                         ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
                             Constants.GeneralSendEmailErrorMessage);
+                        foreach (var error in response.Errors)
+                        {
+                            _logger.LogError(error);
+                        }
                     }
                 }
 
@@ -170,7 +181,7 @@ namespace PlayBoardGame.Controllers
                     Constants.LackOfEmailMatchMessage);
             }
 
-            return View("SendResetPasswordLink", vm);
+            return View(nameof(SendResetPasswordLink), vm);
         }
 
         public IActionResult ResetPassword(string emailToken)
@@ -187,7 +198,7 @@ namespace PlayBoardGame.Controllers
                 if (user != null)
                 {
                     if (!await _userManager.VerifyUserTokenAsync(user,
-                        _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", vm.EmailToken))
+                        _userManager.Options.Tokens.PasswordResetTokenProvider, nameof(ResetPassword), vm.EmailToken))
                     {
                         ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
                             Constants.NotValidTokenMessage);
@@ -198,7 +209,7 @@ namespace PlayBoardGame.Controllers
                         if (result.Succeeded)
                         {
                             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                            return RedirectToAction("Login");
+                            return RedirectToAction(nameof(Login));
                         }
 
                         ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
@@ -212,7 +223,7 @@ namespace PlayBoardGame.Controllers
                 }
             }
 
-            return View("ResetPassword", vm);
+            return View(nameof(ResetPassword), vm);
         }
     }
 }

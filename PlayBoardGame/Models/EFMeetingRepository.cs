@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace PlayBoardGame.Models
 {
@@ -16,7 +14,7 @@ namespace PlayBoardGame.Models
         }
 
         public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
-        
+
         public IQueryable<Game> GetGamesFromMeeting(int meetingId)
         {
             var games = _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId));
@@ -69,12 +67,16 @@ namespace PlayBoardGame.Models
             _applicationDBContext.SaveChanges();
         }
 
-        public void RemoveGameFromMeeting(int gameId, int meetingId)
+        public MeetingGame RemoveGameFromMeeting(int gameId, int meetingId)
         {
             var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameId == gameId
                                                                                  && mg.MeetingId == meetingId);
-            _applicationDBContext.MeetingGame.Remove(dbEntry);
-            _applicationDBContext.SaveChanges();
+            if (dbEntry != null)
+            {
+                _applicationDBContext.MeetingGame.Remove(dbEntry);
+                _applicationDBContext.SaveChanges();
+            }
+            return dbEntry;
         }
 
         public IQueryable<Meeting> GetOverlappingMeetings(IQueryable<Meeting> meetings, DateTime startDate,

@@ -59,8 +59,11 @@ namespace PlayBoardGame.Models
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
                 (mu => mu.MeetingId == meetingId && mu.UserId == userId);
-            _applicationDbContext.MeetingInvitedUser.Remove(dbEntry);
-            _applicationDbContext.SaveChanges();
+            if (dbEntry != null)
+            {
+                _applicationDbContext.MeetingInvitedUser.Remove(dbEntry);
+                _applicationDbContext.SaveChanges();
+            }
 
             return dbEntry;
         }
@@ -71,7 +74,7 @@ namespace PlayBoardGame.Models
                 (mu => mu.MeetingId == meetingId && mu.UserId == userId);
             if (dbEntry == null) return;
             dbEntry.Status = status;
-                
+
             _applicationDbContext.MeetingInvitedUser.Update(dbEntry);
             _applicationDbContext.SaveChanges();
         }

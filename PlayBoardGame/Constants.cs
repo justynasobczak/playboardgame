@@ -17,5 +17,6 @@
         
         //Logs
         public const string UnknownId = "Unknown Id";
+        public const string UnknownError = "Unknown error occurred";
     }
 }

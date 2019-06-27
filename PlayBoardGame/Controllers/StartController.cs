@@ -6,6 +6,6 @@ namespace PlayBoardGame.Controllers
     [Authorize]
     public class StartController : Controller
     {
-        public ViewResult Index() => View("Index");
+        public ViewResult Index() => View();
     }
 }
