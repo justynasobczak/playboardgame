@@ -26,31 +26,37 @@
         foreach (var item in Model.InvitedUsersList)
         {
             <tr>
-                <td>@item.UserName</td>
+                <td>@item.DisplayedUserName</td>
                 <td>@item.Status</td>
                 <td>
                     <form method="post">
-                        <input type="hidden" name="userId" value="@item.Id"/>
-                        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-                        <button asp-action="Delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                        @if (item.Status == InvitationStatus.Pending || item.Status == InvitationStatus.Rejected
-                            || item.Status == InvitationStatus.Cancelled)
+                        <input type="hidden" name="userId" value="@item.Id" />
+                        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()" />
+                        @if (Model.IsEditable)
                         {
-                            <button asp-action="ChangeStatus" type="submit" class="btn btn-success btn-sm" asp-route-status="Accepted">
-                                Accept
-                            </button>
+                            <button asp-action="Delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
                         }
-                        @if (item.Status == InvitationStatus.Pending)
+                        @if (item.UserName == User.Identity.Name)
                         {
-                            <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Rejected">
-                                Reject
-                            </button>
-                        }
-                        @if (item.Status == InvitationStatus.Accepted)
-                        {
-                            <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Cancelled">
-                                Cancel
-                            </button>
+                            @if (item.Status == InvitationStatus.Pending || item.Status == InvitationStatus.Rejected
+                             || item.Status == InvitationStatus.Cancelled)
+                            {
+                                <button asp-action="ChangeStatus" type="submit" class="btn btn-success btn-sm" asp-route-status="Accepted">
+                                    Accept
+                                </button>
+                            }
+                            @if (item.Status == InvitationStatus.Pending)
+                            {
+                                <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Rejected">
+                                    Reject
+                                </button>
+                            }
+                            @if (item.Status == InvitationStatus.Accepted)
+                            {
+                                <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Cancelled">
+                                    Cancel
+                                </button>
+                            }
                         }
                     </form>
                 </td>
@@ -66,7 +72,10 @@
         <label class="mr-sm-2">Select user:</label>
         <span asp-validation-for="SelectedToInviteUserId" class="text-danger"></span>
         <select class="form-control mb-2 mr-sm-2" asp-for="SelectedToInviteUserId" asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))"></select>
-        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-        <button type="submit" class="btn btn-primary mb-2">Invite</button>
+        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()" />
+        @if (Model.IsEditable)
+        {
+            <button type="submit" class="btn btn-primary mb-2">Invite</button>
+        }
     </form>
 }

@@ -37,7 +37,6 @@ namespace PlayBoardGame.Controllers
         public IActionResult Edit(int id)
         {
             var timeZone = GetTimeZoneOfCurrentUser();
-            var currentUserId = GetCurrentUserId().Result;
             var meeting = _meetingRepository.GetMeeting(id);
             if (meeting == null)
             {
@@ -55,7 +54,7 @@ namespace PlayBoardGame.Controllers
                 Notes = meeting.Notes,
                 Games = _gameRepository.Games.ToList(),
                 SelectedGames = GetGameIdsFromMeeting(id),
-                IsEditable = meeting.OrganizerId == currentUserId,
+                IsEditable = meeting.Organizer.UserName == User.Identity.Name,
                 Address = new AddressViewModels
                 {
                     Street = meeting.Street,

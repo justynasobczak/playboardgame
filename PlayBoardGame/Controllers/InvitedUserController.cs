@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,8 @@ namespace PlayBoardGame.Controllers
             var invitedUsersList = new Dictionary<string, InvitationStatus>();
             invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id);
 
+            var meeting = _meetingRepository.GetMeeting(id);
+
             var list = new List<InvitedUserViewModel.InvitedUsersList>();
 
             foreach (var kvp in invitedUsersList)
@@ -43,7 +46,8 @@ namespace PlayBoardGame.Controllers
                 var user = _userManager.FindByIdAsync(kvp.Key).Result;
                 list.Add(new InvitedUserViewModel.InvitedUsersList
                 {
-                    UserName = user.UserName + " " + user.FirstName + " " + user.LastName,
+                    DisplayedUserName = user.UserName + " " + user.FirstName + " " + user.LastName,
+                    UserName = user.UserName,
                     Status = kvp.Value,
                     Id = kvp.Key
                 });
@@ -54,7 +58,8 @@ namespace PlayBoardGame.Controllers
                 InvitedUsers = _invitedUserRepository.GetInvitedUsers(id),
                 MeetingId = id,
                 AvailableUsers = _invitedUserRepository.GetAvailableUsers(id).ToList(),
-                InvitedUsersList = list
+                InvitedUsersList = list,
+                IsEditable = meeting.Organizer.UserName == User.Identity.Name
             };
             return View(vm);
         }
