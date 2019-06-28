@@ -37,6 +37,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(ShelfModificationViewModel model)
         {
             var currentUserId = GetCurrentUserId().Result;

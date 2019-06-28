@@ -8,7 +8,7 @@ namespace PlayBoardGame.Models.ViewModels
     {
         public class CreateEditMeetingViewModel
         {
-            public int MeetingID { get; set; }
+            public int MeetingId { get; set; }
 
             [Required]
             public string Title { get; set; }
@@ -27,7 +27,7 @@ namespace PlayBoardGame.Models.ViewModels
             
             public bool IsEditable { get; set; }
             
-            public List<AppUser> Organizers { get; set; }
+            public List<AppUser> Organizers { get; set;}
             
             public AddressViewModels Address { get; set; }
             

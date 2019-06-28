@@ -49,7 +49,7 @@ namespace PlayBoardGame.Controllers
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = meeting.Organizer.Id,
                 Title = meeting.Title,
-                MeetingID = meeting.MeetingId,
+                MeetingId = meeting.MeetingId,
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone),
                 Notes = meeting.Notes,
@@ -68,6 +68,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MeetingViewModels.CreateEditMeetingViewModel vm)
         {
             var timeZone = GetTimeZoneOfCurrentUser();
@@ -76,9 +77,9 @@ namespace PlayBoardGame.Controllers
             var currentUserId = GetCurrentUserId().Result;
             var overlappingMeetings = new List<Meeting>();
 
-            overlappingMeetings = vm.MeetingID == 0
+            overlappingMeetings = vm.MeetingId == 0
                 ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId).ToList()
-                : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingID).ToList();
+                : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingId).ToList();
 
             if (!ToolsExtensions.IsDateInFuture(startDateUTC))
             {
@@ -109,7 +110,7 @@ namespace PlayBoardGame.Controllers
                 var organizer = await _userManager.FindByIdAsync(currentUserId);
                 var meeting = new Meeting
                 {
-                    MeetingId = vm.MeetingID,
+                    MeetingId = vm.MeetingId,
                     Title = vm.Title,
                     StartDateTime = startDateUTC,
                     EndDateTime = endDateUTC,

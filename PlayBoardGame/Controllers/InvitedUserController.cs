@@ -60,6 +60,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(string userId, int meetingId)
         {
             var deletedEntry = _invitedUserRepository.RemoveUserFromMeeting(userId, meetingId);
@@ -72,6 +73,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Add(InvitedUserViewModel.InvitedUserListViewModel vm)
         {
             var userId = vm.SelectedToInviteUserId;
@@ -98,6 +100,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult ChangeStatus(string userId, int meetingId, InvitationStatus status)
         {
             _invitedUserRepository.ChangeStatus(userId, meetingId, status);

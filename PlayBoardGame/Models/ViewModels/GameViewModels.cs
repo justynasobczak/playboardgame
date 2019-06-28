@@ -10,7 +10,7 @@ namespace PlayBoardGame.Models.ViewModels
 
     public class CreateEditGameViewModel
     {
-        public int GameID { get; set; }
+        public int GameId { get; set; }
 
         [Required]
         public string Title { get; set; }

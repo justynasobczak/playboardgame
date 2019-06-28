@@ -4,7 +4,7 @@
     ViewBag.Title = "Create/edit game";
 }
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="GameID" />
+    <input type="hidden" asp-for="GameId" />
     <div class="form-group">
         <label asp-for="Title">Title</label>
         <span asp-validation-for="Title" class="text-danger"></span>

@@ -29,7 +29,7 @@ namespace PlayBoardGame.Controllers
                 var vm = new CreateEditGameViewModel
                 {
                     Title = game.Title,
-                    GameID = game.GameId
+                    GameId = game.GameId
                 };
                 return View(vm);
             }
@@ -38,10 +38,11 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(CreateEditGameViewModel game)
         {
             if (!ModelState.IsValid) return View(game);
-            _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameID});
+            _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameId});
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List));
         }
@@ -49,6 +50,7 @@ namespace PlayBoardGame.Controllers
         public ViewResult Create() => View(nameof(Edit), new CreateEditGameViewModel());
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
             var deletedGame = _gameRepository.DeleteGame(id);

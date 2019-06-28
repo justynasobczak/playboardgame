@@ -4,6 +4,6 @@ namespace PlayBoardGame.Email.SendGrid
 {
     public class SendGridResponse
     {
-        public List<SendGridResponseError> Errors { get; set; }
+        public List<SendGridResponseError> Errors { get; set;}
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
-using NLog;
 using PlayBoardGame.Controllers;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
@@ -32,11 +31,11 @@ namespace PlayBoardGames.Tests
             var g3 = GetViewModel<CreateEditGameViewModel>(controller.Edit(3));
 
             //Assert
-            Assert.Equal(1, g1.GameID);
+            Assert.Equal(1, g1.GameId);
             Assert.Equal("Game1", g1.Title);
-            Assert.Equal(2, g2.GameID);
+            Assert.Equal(2, g2.GameId);
             Assert.Equal("Game2", g2.Title);
-            Assert.Equal(3, g3.GameID);
+            Assert.Equal(3, g3.GameId);
             Assert.Equal("Game3", g3.Title);
         }
 

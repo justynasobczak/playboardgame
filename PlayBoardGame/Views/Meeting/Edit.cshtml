@@ -7,13 +7,13 @@
 
 @await Component.InvokeAsync("MeetingTabs", new
 {
-    meetingId = Model.MeetingID, tabName = TabName.Details,
+    meetingId = Model.MeetingId, tabName = TabName.Details,
     isCreateMode = ViewContext.RouteData.Values["action"] as string == nameof(MeetingController.Create)
 })
 
 <div>
     <form asp-action="Edit" method="post">
-        <input type="hidden" asp-for="MeetingID"/>
+        <input type="hidden" asp-for="MeetingId"/>
         <input type="hidden" asp-for="Organizers"/>
         <input type="hidden" asp-for="IsEditable"/>
 

@@ -48,6 +48,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UserProfileAsync(UserProfileViewModel vm)
         {
             if (ModelState.IsValid)
@@ -89,6 +90,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel vm)
         {
             if (ModelState.IsValid)

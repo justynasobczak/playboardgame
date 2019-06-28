@@ -45,6 +45,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterAsync(RegisterViewModel vm)
         {
             if (ModelState.IsValid)
@@ -144,6 +145,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendResetPasswordLinkAsync(SendResetPasswordLinkViewModel vm)
         {
             if (ModelState.IsValid)
@@ -190,6 +192,7 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordViewModel vm)
         {
             if (ModelState.IsValid)
