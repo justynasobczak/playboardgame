@@ -38,20 +38,20 @@
                         }
                         @if (item.UserName == User.Identity.Name)
                         {
-                            @if (item.Status == InvitationStatus.Pending || item.Status == InvitationStatus.Rejected
+                            if (item.Status == InvitationStatus.Pending || item.Status == InvitationStatus.Rejected
                              || item.Status == InvitationStatus.Cancelled)
                             {
                                 <button asp-action="ChangeStatus" type="submit" class="btn btn-success btn-sm" asp-route-status="Accepted">
                                     Accept
                                 </button>
                             }
-                            @if (item.Status == InvitationStatus.Pending)
+                            if (item.Status == InvitationStatus.Pending)
                             {
                                 <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Rejected">
                                     Reject
                                 </button>
                             }
-                            @if (item.Status == InvitationStatus.Accepted)
+                            if (item.Status == InvitationStatus.Accepted)
                             {
                                 <button asp-action="ChangeStatus" type="submit" class="btn btn-warning btn-sm" asp-route-status="Cancelled">
                                     Cancel
