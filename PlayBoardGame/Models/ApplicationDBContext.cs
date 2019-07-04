@@ -67,11 +67,22 @@ namespace PlayBoardGame.Models
                 .HasOne(mg => mg.Meeting)
                 .WithMany(m => m.MeetingGame)
                 .HasForeignKey(mg => mg.MeetingId);
+            
+            builder.Entity<Message>()
+                .HasOne(m => m.Author)
+                .WithMany(u => u.WrittenMessages)
+                .HasForeignKey(m => m.AuthorId);
+            
+            builder.Entity<Message>()
+                .HasOne(m => m.Meeting)
+                .WithMany(m => m.Messages)
+                .HasForeignKey(m => m.MeetingId);
         }
         public DbSet<Game> Games { get; set; }
         public DbSet<GameAppUser> GameAppUser { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<MeetingInvitedUser> MeetingInvitedUser { get; set; }
-        public DbSet<MeetingGame> MeetingGame { get; set; } 
+        public DbSet<MeetingGame> MeetingGame { get; set; }
+        public DbSet<Message> Messages { get; set; }
     }
 }
