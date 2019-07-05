@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayBoardGame.Models
 {
     public interface IMessageRepository
     {
-        IEnumerable<Message> Messages { get; }
+        IQueryable<Message> Messages { get; }
 
         void SaveMessage(Message message);
 

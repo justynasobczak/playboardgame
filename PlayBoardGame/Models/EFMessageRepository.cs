@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlayBoardGame.Models
 {
@@ -7,12 +8,14 @@ namespace PlayBoardGame.Models
     {
         private readonly ApplicationDBContext _applicationDBContext;
 
-        EFMessageRepository(ApplicationDBContext applicationDbContext)
+        public EFMessageRepository(ApplicationDBContext applicationDbContext)
         {
             _applicationDBContext = applicationDbContext;
         }
-
-        public IEnumerable<Message> Messages => _applicationDBContext.Messages;
+        
+        public IQueryable<Message> Messages => _applicationDBContext.Messages
+            .Include(m => m.Author)
+            .Include(m => m.Meeting);
         
         public void SaveMessage(Message message)
         {
