@@ -33,6 +33,11 @@ namespace PlayBoardGame.Models
             _applicationDBContext.SaveChanges();
         }
 
+        public Message GetMessage(int messageId)
+        {
+            return _applicationDBContext.Messages.FirstOrDefault(m => m.MessageId == messageId);
+        }
+
         public Message DeleteMessage(int messageId)
         {
             var dbEntry = _applicationDBContext.Messages.FirstOrDefault(m => m.MessageId == messageId);

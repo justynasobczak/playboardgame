@@ -1,0 +1,11 @@
+@model EditMessageViewModel
+<div>
+    <form method="post" id="messageForm">
+        <div class="form-group">
+            <label asp-for="Text">Text</label>
+            <span asp-validation-for="Text" class="text-danger"></span>
+            <input asp-for="Text" class="form-control"/>
+            <input type="hidden" asp-for="MessageId"/>
+        </div>
+    </form>
+</div>

@@ -10,5 +10,6 @@ namespace PlayBoardGame.Models
 
         Message DeleteMessage(int messageId);
 
+        Message GetMessage(int messageId);
     }
 }
