@@ -1,32 +1,39 @@
 ﻿body {
-    font-size: 17px;
-    background-color: #F4F4F4;
+    font-size: 16px;
+    background-color: #FAFAFA;
     font-family: 'Open Sans', sans-serif;
 }
 
-#banner {
-    background: url(img/chess-banner.jpg) no-repeat center center;
-    background-size: cover;
-    height: 10vh;
+.mainMenu {
+    background-color: white;
+    border-bottom: 1px solid #d2d2d2;
+    border-top: 1px solid #d2d2d2;
+}
+
+.mainMenu a,
+.mainMenu a:link,
+.mainMenu a:visited
+{
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+.mainMenu a:visited
+{
+    color: #646464;
 }
 
 h1 {
-    font-size: 34px;
-    font-weight: 400;
+    font-size: 20px;
+    font-weight: 600;
     color: #FE6847;
     margin: 20px;
 }
 
-.navbar {
-    min-height: 57px;
-    letter-spacing: 4px;
-}
-
-.bg-menu {
-    background-color: #322D27;
-    -webkit-box-shadow: -2px -1px 23px 2px rgba(0, 0, 0, 0.81);
-    -moz-box-shadow: -2px -1px 23px 2px rgba(0, 0, 0, 0.81);
-    box-shadow: -2px -1px 23px 2px rgba(0, 0, 0, 0.81);
+h4 {
+    color: #646464;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .tab-links {
@@ -42,7 +49,8 @@ h1 {
 }
 
 .plainText a:link,
-.plainText a:visited
+.plainText a:visited,
+.plainText button
 {
     color: #138496;
     text-decoration: none;
