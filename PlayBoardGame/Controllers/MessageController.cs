@@ -26,15 +26,19 @@ namespace PlayBoardGame.Controllers
             _logger = logger;
         }
 
-        public IActionResult List()
+        public IActionResult List(int id)
         {
+            if (id == 0)
+            {
+                return RedirectToAction(nameof(MeetingController.List), "Meeting");
+            }
             var currentUserId = GetCurrentUserId().Result;
             var currentUser = _userManager.FindByIdAsync(currentUserId).Result;
             var currentUserTimeZone = currentUser.TimeZone;
             var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
 
-            var messages = GetMessagesWithDates(_messageRepository.Messages, timeZone);
-            return View(new MessagesListViewModel {Messages = messages});
+            var messages = GetMessagesWithDates(_messageRepository.GetMessagesList(id), timeZone);
+            return View(new MessagesListViewModel {Messages = messages, MeetingId = id});
         }
 
         [HttpPost]
@@ -47,12 +51,13 @@ namespace PlayBoardGame.Controllers
                 {
                     Text = vm.Text,
                     Created = DateTime.UtcNow,
-                    AuthorId = GetCurrentUserId().Result
+                    AuthorId = GetCurrentUserId().Result,
+                    MeetingId = vm.MeetingId
                 };
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 _messageRepository.SaveMessage(message);
             } 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new {id = vm.MeetingId});
         }
 
         [HttpPost]
@@ -90,7 +95,7 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new {id = deletedMessage.MeetingId});
         }
 
         private async Task<string> GetCurrentUserId()

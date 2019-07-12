@@ -2,52 +2,56 @@
 @{
     ViewBag.Title = "Messages";
 }
-<table class="table table-sm table-bordered">
-    <tr>
-        <th class="text-left">Text</th>
 
-        <th class="text-left">Author</th>
+@await Component.InvokeAsync("MeetingTabs", new
+{
+    meetingId = Model.MeetingId, tabName = TabName.Messages,
+    isCreateMode = false
+})
 
-        <th class="text-left">Created</th>
-
-        <th class="text-left">Action</th>
-    </tr>
-
-    @if (Model.Messages.Count() == 0)
-    {
-        <tr>
-            <td colspan="4" class="text-center">No messages</td>
-        </tr>
-    }
-    else
-    {
-        foreach (var message in Model.Messages)
+@if (Model.Messages.Count() == 0)
+{
+    <p>No messages</p>
+}
+else
+{
+    <div class="container-fluid">
+        @foreach (var message in Model.Messages)
         {
-            <tr>
-                <td>@message.Text</td>
-
-                <td>@message.Author.UserName</td>
-
-                <td>@message.Created</td>
-
-                <td>
+            <div class="row">
+                <div class="col-sm-12">
+                    @message.Text
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-sm-1 text-left">
                     <form asp-action="Delete" method="post">
                         <input type="hidden" name="id" value="@message.MessageId"/>
-                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        <button type="submit" class="btn btn-link btn-sm">Delete</button>
                     </form>
-                    <a href="#" class="btn btn-primary btn-sm" onclick="ShowMessage(@message.MessageId)">Edit</a>
-                </td>
-            </tr>
+                </div>
+                <div class="col-sm-1 text-left">
+                    <a href="#" class="btn btn-link btn-sm" onclick="ShowMessage(@message.MessageId)">Edit</a>
+                </div>
+                <div class="col-sm-10 text-right">@message.Author @message.Created</div>
+            </div>
         }
-    }
-</table>
-
-<form class="form-inline" asp-action="Create" method="post">
-    <div class="form-group mx-sm-3 mb-2">
-        <input asp-for="Text" class="form-control" placeholder="Type message">
     </div>
-    <button type="submit" class="btn btn-info mb-2">Send</button>
-</form>
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <form class="form-inline" asp-action="Create" method="post">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
+                    <input asp-for="Text" class="form-control" placeholder="Type message"></input>
+                </div>
+                <button type="submit" class="btn btn-info mb-2">Send</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">

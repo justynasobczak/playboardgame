@@ -16,6 +16,11 @@ namespace PlayBoardGame.Models
         public IQueryable<Message> Messages => _applicationDBContext.Messages
             .Include(m => m.Author)
             .Include(m => m.Meeting);
+
+        public IQueryable<Message> GetMessagesList(int meetingId)
+        {
+            return Messages.Where(m => m.MeetingId == meetingId);
+        }
         
         public void SaveMessage(Message message)
         {

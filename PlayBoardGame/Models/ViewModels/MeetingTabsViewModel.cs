@@ -12,6 +12,7 @@ namespace PlayBoardGame.Models.ViewModels
     public enum TabName
     {
         Details,
-        Users
+        Users,
+        Messages
     }
 }

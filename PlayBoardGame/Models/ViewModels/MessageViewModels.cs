@@ -8,6 +8,8 @@ namespace PlayBoardGame.Models.ViewModels
         public IEnumerable<Message> Messages { get; set; }
 
         [Required] public string Text { get; set; }
+        
+        public int MeetingId { get; set; }
     }
 
     public class EditMessageViewModel
