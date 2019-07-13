@@ -23,6 +23,7 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult Edit(int id)
         {
+            // bozy: linq: var game1 = (from item in _gameRepository.Games where item.GameId == id select item).FirstOrDefault();
             var game = _gameRepository.Games.FirstOrDefault(g => g.GameId == id);
             if (game != null)
             {

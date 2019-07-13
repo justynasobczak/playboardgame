@@ -17,6 +17,8 @@ namespace PlayBoardGame.Models.ViewModels
         [Display(Name = "Time zone")]
         public string TimeZone { get; set; }
         
+        // bozy in ViewModels you have properties declared 3 ways:
+        // Array, IEnumerable<> and List. Please decide for one. And IEnumerable is preferred one.
         public SelectListItem[] TimeZoneList { get; set; }
     }
 
