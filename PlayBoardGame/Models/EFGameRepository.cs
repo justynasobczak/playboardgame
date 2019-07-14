@@ -10,6 +10,7 @@ namespace PlayBoardGame.Models
         {
             _applicationDBContext = applicationDBContext;
         }
+        // bozy Remember about paging to prevent fetching large number of records and causing memory usage bloating.
         public IQueryable<Game> Games => _applicationDBContext.Games;
 
         public Game GetGame(int gameId) => Games.FirstOrDefault(g => g.GameId == gameId);

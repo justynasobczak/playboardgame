@@ -67,6 +67,7 @@ namespace PlayBoardGame.Models
             _applicationDBContext.SaveChanges();
         }
 
+        // bozy: Refactor it to make 1-2 linq queries instead of playing with lists
         public MeetingGame RemoveGameFromMeeting(int gameId, int meetingId)
         {
             var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameId == gameId

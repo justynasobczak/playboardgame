@@ -20,7 +20,7 @@ namespace PlayBoardGame.Controllers
         {
         
             var game = _gameRepository.Games.Any() ? 
-                ToolsExtensions.Random(_gameRepository.Games) : new Game {Title = "Empty base", GameId = 44};
+                ToolsExtensions.Random(_gameRepository.Games) : new Game {Title = "Empty base", GameId = 42};
             
             return View(game);
         }

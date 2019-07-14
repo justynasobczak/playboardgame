@@ -182,8 +182,17 @@ namespace PlayBoardGame.Controllers
 
         private int[] GetGameIdsFromMeeting(int meetingId)
         {
+            // bozy use extension methods or linq or both
+//            return _meetingRepository
+//                .GetGamesFromMeeting(meetingId)
+//                .Select(it => it.GameId)
+//                .ToArray();
+// OR
+//            return (from it in _meetingRepository.GetGamesFromMeeting(meetingId) select it.GameId).ToArray();
+
             var games = _meetingRepository.GetGamesFromMeeting(meetingId).ToList();
             var listOfIds = new List<int>();
+
             foreach (var game in games)
             {
                 listOfIds.Add(game.GameId);

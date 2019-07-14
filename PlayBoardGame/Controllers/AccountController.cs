@@ -65,7 +65,7 @@ namespace PlayBoardGame.Controllers
                     {
                         IsHTML = true,
                         //ToEmail = user.Email,
-                        ToEmail = "justyn.szczepan@gmail.com",
+                        ToEmail = "justyn.szczepan@gmail.com", // bozy: huh?
                         Subject = "Welcome to Let's play board game"
                     }, "Welcome to Let's play board game", "This is content", "This is button", "www.test.pl");
 
@@ -82,6 +82,7 @@ namespace PlayBoardGame.Controllers
                 }
                 else
                 {
+                    // bozy: Please provide users with something less technical BUT dump the errors to your log
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(nameof(RegisterViewModel.Email), error.Description);
@@ -118,7 +119,7 @@ namespace PlayBoardGame.Controllers
                     if (result.Succeeded)
                     {
                         return RedirectToAction(nameof(ShelfController.List), "Shelf");
-                    }
+                    } // bozy: what if something went bad
                 }
 
                 ModelState.AddModelError(nameof(LoginViewModel.Email), Constants.UserOrPasswordErrorMessage);

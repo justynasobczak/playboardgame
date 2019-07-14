@@ -46,6 +46,8 @@ namespace PlayBoardGame.Controllers
                 var user = _userManager.FindByIdAsync(kvp.Key).Result;
                 list.Add(new InvitedUserViewModel.InvitedUsersList
                 {
+                    // bozy Use string interpolation
+                    // DisplayedUserName = $"{user.UserName} {user.FirstName} {user.LastName}";
                     DisplayedUserName = user.UserName + " " + user.FirstName + " " + user.LastName,
                     UserName = user.UserName,
                     Status = kvp.Value,
@@ -87,10 +89,12 @@ namespace PlayBoardGame.Controllers
             var overlappingMeetings = new List<Meeting>();
             overlappingMeetings = _meetingRepository.GetOverlappingMeetingsForUser(meeting.StartDateTime, meeting.EndDateTime, userId)
                 .ToList();
+            // bozy This variable should be inside the if part. Moreover setting a variable with a single space is a code smell
             var overlappingMeetingsTitle = " ";
 
             if (overlappingMeetings.Count > 0)
             {
+                // use string.Join() instead of foreach.
                 foreach (var m in overlappingMeetings)
                 {
                     overlappingMeetingsTitle += m.Title + " ";
