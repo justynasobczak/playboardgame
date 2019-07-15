@@ -1,38 +1,30 @@
 ﻿body {
-    font-size: 16px;
+    font-size: 15px;
     background-color: #FAFAFA;
     font-family: 'Open Sans', sans-serif;
 }
 
 .mainMenu {
     background-color: white;
-    border-bottom: 1px solid #d2d2d2;
-    border-top: 1px solid #d2d2d2;
+    border: 1px solid #d2d2d2;
 }
 
-.mainMenu a,
-.mainMenu a:link,
-.mainMenu a:visited
-{
+.navbar-light .navbar-nav .nav-link {
     color: #1a1a1a;
-    text-decoration: none;
-}
-
-.mainMenu a:visited
-{
-    color: #646464;
+    font-size: 15px;
 }
 
 h1 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #FE6847;
-    margin: 20px;
+    font-size: 18px;
+    font-weight: 400;
+    color: black;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 h4 {
     color: #646464;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
 }
 
