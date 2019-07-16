@@ -14,12 +14,16 @@
     font-size: 15px;
 }
 
+.form-control {
+    font-size: 15px;
+}
+
 h1 {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 400;
     color: black;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 h4 {
@@ -42,14 +46,16 @@ h4 {
 
 .plainText a:link,
 .plainText a:visited,
-.plainText button
-{
+.plainText button {
     color: #138496;
     text-decoration: none;
 }
 
-.plainText a:hover
-{
+.plainText a:hover {
     color: #2176AE;
     text-decoration: underline;
+}
+
+.btn {
+    font-size: 15px;
 }
