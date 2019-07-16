@@ -10,5 +10,9 @@
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == TabName.Users ? "active" : "tab-links"))" 
                asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> Users </a>
         </li>
+        <li class="nav-item">
+            <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == TabName.Messages ? "active" : "tab-links"))" 
+               asp-controller="Message" asp-action="List" asp-route-id="@Model.MeetingId"> Messages </a>
+        </li>
     </ul>
 </div>

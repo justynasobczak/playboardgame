@@ -16,15 +16,13 @@ namespace PlayBoardGame.Controllers
         private readonly IInvitedUserRepository _invitedUserRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMeetingRepository _meetingRepository;
-        private readonly ILogger<InvitedUserController> _logger;
 
         public InvitedUserController(IInvitedUserRepository invitedUserRepository, UserManager<AppUser> userManager,
-            IMeetingRepository meetingRepository, ILogger<InvitedUserController> logger)
+            IMeetingRepository meetingRepository)
         {
             _invitedUserRepository = invitedUserRepository;
             _userManager = userManager;
             _meetingRepository = meetingRepository;
-            _logger = logger;
         }
 
         public IActionResult List(int id)

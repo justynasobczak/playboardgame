@@ -25,6 +25,8 @@ namespace PlayBoardGame.Models
         
         public IEnumerable<Meeting> OrganizedMeetings { get; set; }
         
+        public IEnumerable<Message> WrittenMessages { get; set; }
+        
         public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
     }
     
