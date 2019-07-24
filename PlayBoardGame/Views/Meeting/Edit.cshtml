@@ -7,7 +7,7 @@
 
 @await Component.InvokeAsync("MeetingTabs", new
 {
-    meetingId = Model.MeetingId, tabName = TabName.Details,
+    meetingId = Model.MeetingId, tabName = MeetingTabName.Details,
     isCreateMode = ViewContext.RouteData.Values["action"] as string == nameof(MeetingController.Create)
 })
 

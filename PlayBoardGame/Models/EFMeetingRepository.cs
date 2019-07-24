@@ -17,8 +17,7 @@ namespace PlayBoardGame.Models
 
         public IQueryable<Game> GetGamesFromMeeting(int meetingId)
         {
-            var games = _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId));
-            return games;
+            return _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId));
         }
 
         public Meeting GetMeeting(int meetingId)
@@ -28,11 +27,10 @@ namespace PlayBoardGame.Models
 
         public IQueryable<Meeting> GetMeetingsForUser(string userId)
         {
-            var meetingsByOwner = Meetings.Where(m => m.Organizer.Id == userId).ToList();
-            var meetingsByInvitedUsers =
-                Meetings.Where(m => m.MeetingInvitedUser.Any(mu => mu.UserId == userId)).ToList();
-            var myMeetings = meetingsByOwner.Union(meetingsByInvitedUsers);
-            return myMeetings.AsQueryable();
+            return Meetings.Where(m => m.Organizer.Id == userId ||
+                                       m.MeetingInvitedUser.Any(mu => mu.UserId == userId))
+                .Distinct()
+                .AsQueryable();
         }
 
         public void SaveMeeting(Meeting meeting)
@@ -68,6 +66,7 @@ namespace PlayBoardGame.Models
         }
 
         // bozy: Refactor it to make 1-2 linq queries instead of playing with lists
+        //DONE
         public MeetingGame RemoveGameFromMeeting(int gameId, int meetingId)
         {
             var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameId == gameId
@@ -77,52 +76,41 @@ namespace PlayBoardGame.Models
                 _applicationDBContext.MeetingGame.Remove(dbEntry);
                 _applicationDBContext.SaveChanges();
             }
+
             return dbEntry;
-        }
-
-        public IQueryable<Meeting> GetOverlappingMeetings(IQueryable<Meeting> meetings, DateTime startDate,
-            DateTime endDate)
-        {
-            var overlappingMeetings = new List<Meeting>();
-            foreach (var meeting in meetings.ToList())
-            {
-                if (startDate <= meeting.EndDateTime && endDate >= meeting.StartDateTime)
-                {
-                    overlappingMeetings.Add(meeting);
-                }
-            }
-
-            return overlappingMeetings.AsQueryable();
         }
 
         public IQueryable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId)
         {
-            var meetings = GetMeetingsForUser(userId);
-            return GetOverlappingMeetings(meetings, startDate, endDate);
+            return Meetings.Where(m => startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
+                                       (m.Organizer.Id == userId ||
+                                        m.MeetingInvitedUser.Any(mu => mu.UserId == userId)))
+                .Distinct()
+                .AsQueryable();
         }
 
         public IQueryable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId)
         {
-            var meeting = GetMeeting(meetingId);
-            var invitedUsers = _applicationDBContext.Users
-                .Where(m => m.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId)).ToList();
+            var checkedUsers = _applicationDBContext.Users
+                .Where(u => u.OrganizedMeetings.Any(m => m.MeetingId == meetingId) ||
+                            u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId)).Distinct();
 
-            var meetingsForOrganizer = GetMeetingsForUser(meeting.OrganizerId).Where(m => m.MeetingId != meetingId);
-            var meetingsForInvitedUsers = new List<Meeting>();
-            foreach (var user in invitedUsers)
+            var overlappingMeetings = new List<Meeting>();
+            foreach (var user in checkedUsers)
             {
-                var meetingsForUser = GetMeetingsForUser(user.Id).ToList();
+                var meetingsForUser = Meetings.Where(m =>
+                    startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
+                    m.MeetingId != meetingId &&
+                    (m.Organizer.Id == user.Id ||
+                     m.MeetingInvitedUser.Any(mu => mu.UserId == user.Id)));
+
                 foreach (var m in meetingsForUser)
                 {
-                    if (m.MeetingId != meetingId)
-                    {
-                        meetingsForInvitedUsers.Add(m);
-                    }
+                    overlappingMeetings.Add(m);
                 }
             }
 
-            var allMeetings = meetingsForOrganizer.Union(meetingsForInvitedUsers);
-            return GetOverlappingMeetings(allMeetings, startDate, endDate);
+            return overlappingMeetings.Distinct().AsQueryable();
         }
     }
 }

@@ -4,12 +4,12 @@ namespace PlayBoardGame.Models.ViewModels
     {
         public int MeetingId { get; set; }
         
-        public TabName SelectedTab { get; set; }
+        public MeetingTabName SelectedTab { get; set; }
         
         public bool IsCreateMode { get; set; }
     }
     
-    public enum TabName
+    public enum MeetingTabName
     {
         Details,
         Users,

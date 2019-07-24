@@ -2,7 +2,7 @@
     background: url(img/elder-login.jpg) no-repeat center center fixed;
     background-size: cover;
     color: white;
-    font-size: 20px;
+    font-size: 17px;
     font-family: 'Open Sans', sans-serif;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .custom-danger {
-    font-size: 17px;
+    font-size: 16px;
     padding: 5px 0px;
 }
 

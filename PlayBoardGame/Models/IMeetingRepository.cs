@@ -19,8 +19,6 @@ namespace PlayBoardGame.Models
 
         IQueryable<Game> GetGamesFromMeeting(int meetingId);
 
-        IQueryable<Meeting> GetOverlappingMeetings(IQueryable<Meeting> meetings, DateTime startDate, DateTime endDate);
-
         IQueryable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId);
 
         IQueryable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId);

@@ -3,6 +3,12 @@
 @{
     ViewBag.Title = "User Profile";
 }
+
+@await Component.InvokeAsync("ProfileTabs", new
+{
+    tabName = ProfileTabName.Details
+})
+
 <form asp-action="UserProfileAsync" method="post">
     <div class="form-row">
         <div class="col-md-6">
