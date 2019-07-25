@@ -46,7 +46,8 @@ h4 {
 
 .plainText a:link,
 .plainText a:visited,
-.plainText button {
+.plainText button,
+.footer a {
     color: #138496;
     text-decoration: none;
 }
@@ -58,4 +59,15 @@ h4 {
 
 .btn {
     font-size: 15px;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    border: 1px solid #d2d2d2;
+    padding-top: 10px;
 }

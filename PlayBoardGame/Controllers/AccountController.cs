@@ -80,16 +80,17 @@ namespace PlayBoardGame.Controllers
 
                     return RedirectToAction(nameof(StartController.Index), "Start");
                 }
-                else
+
+                // bozy: Please provide users with something less technical BUT dump the errors to your log
+                //It is not technical, it is for example: User name 'alex@example.com' is already taken. It is from Identity.
+
+                foreach (var error in result.Errors)
                 {
-                    // bozy: Please provide users with something less technical BUT dump the errors to your log
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(nameof(RegisterViewModel.Email), error.Description);
-                    }
+                    ModelState.AddModelError(nameof(RegisterViewModel.Email), error.Description);
+                    _logger.LogError(error.Description);
                 }
             }
-            
+
             vm.TimeZoneList = ToolsExtensions.GetTimeZones();
             return View(nameof(Register), vm);
         }
@@ -108,22 +109,24 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginAsync(LoginViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(nameof(Login), vm);
+            var user = await _userManager.FindByEmailAsync(vm.Email);
+            if (user != null)
             {
-                var user = await _userManager.FindByEmailAsync(vm.Email);
-                if (user != null)
+                await _signInManager.SignOutAsync();
+                var result = await _signInManager.PasswordSignInAsync(
+                    user, vm.Password, false, false);
+                if (result.Succeeded)
                 {
-                    await _signInManager.SignOutAsync();
-                    var result = await _signInManager.PasswordSignInAsync(
-                        user, vm.Password, false, false);
-                    if (result.Succeeded)
-                    {
-                        return RedirectToAction(nameof(ShelfController.List), "Shelf");
-                    } // bozy: what if something went bad
+                    return RedirectToAction(nameof(ShelfController.List), "Shelf");
                 }
 
-                ModelState.AddModelError(nameof(LoginViewModel.Email), Constants.UserOrPasswordErrorMessage);
+                // bozy: what if something went bad
+                // added:
+                _logger.LogError($"Sign-in was not successful for {vm.Email}");
             }
+
+            ModelState.AddModelError(nameof(LoginViewModel.Email), Constants.UserOrPasswordErrorMessage);
 
             return View(nameof(Login), vm);
         }
@@ -149,40 +152,36 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendResetPasswordLinkAsync(SendResetPasswordLinkViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(nameof(SendResetPasswordLink), vm);
+            var user = await _userManager.FindByEmailAsync(vm.Email);
+            if (user != null)
             {
-                var user = await _userManager.FindByEmailAsync(vm.Email);
-                if (user != null)
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var resetLink = Url.Action(nameof(ResetPassword), "Account", new {emailToken = token},
+                    protocol: HttpContext.Request.Scheme);
+                var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                 {
-                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    var resetLink = Url.Action(nameof(ResetPassword), "Account", new {emailToken = token},
-                        protocol: HttpContext.Request.Scheme);
-                    var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
-                    {
-                        IsHTML = true,
-                        //ToEmail = user.Email,
-                        ToEmail = "justyn.szczepan@gmail.com",
-                        Subject = "Reset password"
-                    }, "Reset password", "This is content", "This is button", resetLink);
-                    if (response.Successful)
-                    {
-                        TempData["SuccessMessage"] = Constants.SendResetLinkSuccessMessage;
-                        return RedirectToAction(nameof(Login));
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                            Constants.GeneralSendEmailErrorMessage);
-                        foreach (var error in response.Errors)
-                        {
-                            _logger.LogError(error);
-                        }
-                    }
+                    IsHTML = true,
+                    //ToEmail = user.Email,
+                    ToEmail = "justyn.szczepan@gmail.com",
+                    Subject = "Reset password"
+                }, "Reset password", "This is content", "This is button", resetLink);
+                if (response.Successful)
+                {
+                    TempData["SuccessMessage"] = Constants.SendResetLinkSuccessMessage;
+                    return RedirectToAction(nameof(Login));
                 }
 
                 ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                    Constants.LackOfEmailMatchMessage);
+                    Constants.GeneralSendEmailErrorMessage);
+                foreach (var error in response.Errors)
+                {
+                    _logger.LogError(error);
+                }
             }
+
+            ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                Constants.LackOfEmailMatchMessage);
 
             return View(nameof(SendResetPasswordLink), vm);
         }
@@ -196,35 +195,37 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPasswordAsync(ResetPasswordViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(nameof(ResetPassword), vm);
+            var user = await _userManager.FindByEmailAsync(vm.Email);
+            if (user != null)
             {
-                var user = await _userManager.FindByEmailAsync(vm.Email);
-                if (user != null)
+                if (!await _userManager.VerifyUserTokenAsync(user,
+                    _userManager.Options.Tokens.PasswordResetTokenProvider, nameof(ResetPassword), vm.EmailToken))
                 {
-                    if (!await _userManager.VerifyUserTokenAsync(user,
-                        _userManager.Options.Tokens.PasswordResetTokenProvider, nameof(ResetPassword), vm.EmailToken))
-                    {
-                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                            Constants.NotValidTokenMessage);
-                    }
-                    else
-                    {
-                        var result = await _userManager.ResetPasswordAsync(user, vm.EmailToken, vm.NewPassword);
-                        if (result.Succeeded)
-                        {
-                            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                            return RedirectToAction(nameof(Login));
-                        }
-
-                        ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                            Constants.GeneralResetPasswordErrorMessage);
-                    }
+                    ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                        Constants.NotValidTokenMessage);
                 }
                 else
                 {
+                    var result = await _userManager.ResetPasswordAsync(user, vm.EmailToken, vm.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+                        return RedirectToAction(nameof(Login));
+                    }
+
                     ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                        Constants.LackOfEmailMatchMessage);
+                        Constants.GeneralResetPasswordErrorMessage);
+                    foreach (var error in result.Errors)
+                    {
+                        _logger.LogError(error.Description);
+                    }
                 }
+            }
+            else
+            {
+                ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                    Constants.LackOfEmailMatchMessage);
             }
 
             return View(nameof(ResetPassword), vm);
