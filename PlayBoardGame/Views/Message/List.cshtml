@@ -24,7 +24,7 @@ else
         </div>
         <div class="row mb-2">
             <div class="col-1 text-left plainText">
-                <a href="#" class="btn btn-link btn-xs" onclick="ShowMessage(@message.MessageId)">Edit</a>
+                <a href="#" onclick="ShowMessage(@message.MessageId)"><img src="lib/custom/img/edit-message-pencil.png" alt="edit"/></a>
             </div>
             <div class="col-1 text-left plainText">
                 <form asp-action="Delete" method="post">
