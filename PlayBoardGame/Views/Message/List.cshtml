@@ -23,18 +23,26 @@ else
             </div>
         </div>
         <div class="row mb-2">
-            <div class="col-1 text-left plainText">
-                <a href="#" onclick="ShowMessage(@message.MessageId)"><img src="/lib/custom/img/edit-message-pencil.png" alt="edit"/></a>
+            <div class="col-10 messageFooter">
+                Added by @message.Author on @message.Created
             </div>
-            <div class="col-1 text-left plainText">
-                <form asp-action="Delete" method="post">
-                    <input type="hidden" name="id" value="@message.MessageId"/>
-                    <button type="submit" class="btn btn-link btn-xs">Delete</button>
-                </form>
-            </div>
-            <div class="col-10 text-right">
-                @message.Author @message.Created
-            </div>
+            @if (message.Author.UserName == User?.Identity?.Name)
+            {
+                <div class="col-1 text-right">
+                    <button class="btn btn-link" onclick="ShowMessage(@message.MessageId)">
+                        <i class="fas fa-pencil-alt icons"></i>
+                    </button>
+                </div>
+                <div class="col-1 text-left">
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@message.MessageId"/>
+                        <button type="submit" class="btn btn-link">
+                            <i class="far fa-trash-alt icons"></i>
+                        </button>
+                    </form>
+                </div>
+            }
+
         </div>
     }
 }
@@ -44,6 +52,7 @@ else
     <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
     <textarea asp-for="Text" class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Type message" rows="3"></textarea>
     <button type="submit" class="btn btn-info mt-2 mt-sm-0">Send</button>
+    <a asp-controller="Meeting" asp-action="List" class="btn btn-secondary ml-1">Cancel</a>
 </form>
 
 
@@ -61,8 +70,8 @@ else
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <input type="reset" value="Submit" class="btn btn-primary" id="btnSubmit" onclick="EditMessage()"/>
+                <input type="reset" value="Save" class="btn btn-info" id="btnSubmit" onclick="EditMessage()"/>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
