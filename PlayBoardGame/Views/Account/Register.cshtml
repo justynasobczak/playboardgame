@@ -2,36 +2,52 @@
 @{
     ViewBag.Title = "Registration";
 }
-<form method="post" asp-controller="Account" asp-action="RegisterAsync" class="form-container" novalidate>
-    <img src="~/lib/custom/img/logo-small.png" alt="logo" />
-    <div class="form-group">
-        <label asp-for="Email">Email</label>
-        <div class="custom-danger">
-            <span asp-validation-for="Email" class="text-danger"></span>
+
+@await Component.InvokeAsync("BeforeLoginNav", new
+{
+    pageName = BeforeLoginPageName.Register
+})
+
+<div class="container">
+    <div class="row bodyBeforeLogin">
+        <div class="col-md-3 col-sm-12"></div>
+        <div class="col-md-6 col-sm-12">
+            <header>
+                <h2>@ViewBag.Title</h2>
+            </header>
+            <form method="post" asp-controller="Account" asp-action="RegisterAsync" novalidate>
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <div>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <input asp-for="Email" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <div>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <input asp-for="Password" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TimeZone">Time zone</label>
+                    <div>
+                        <span asp-validation-for="TimeZone" class="text-danger"></span>
+                    </div>
+                    <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList, "Value", "Value"))" class="form-control">
+                    </select>
+                </div>
+                <button class="btn mainButtonBeforeLogin btn-block" type="submit">REGISTER</button>
+                <div>
+                    <h4>Already have an account?</h4></>
+                </div>
+                <a asp-action="Login" class="btn secondButtonBeforeLogin btn-block">LOG IN</a>
+            </form>
+            <script>
+                let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                document.getElementById("TimeZone").value = timeZone;
+            </script>
         </div>
-        <input asp-for="Email" class="form-control"/>
     </div>
-    <div class="form-group">
-        <label asp-for="Password">Password</label>
-        <div class="custom-danger">
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-        <input asp-for="Password" class="form-control"/>
-    </div>
-    <div class="form-group">
-        <label asp-for="TimeZone">Time zone</label>
-        <div class="custom-danger">
-            <span asp-validation-for="TimeZone" class="text-danger"></span>
-        </div>
-        <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList, "Value", "Value"))" class="form-control">
-        </select>
-    </div>
-    <div class="text-left">
-        <button class="btn btn-info btn-block" type="submit">Register</button>
-        <div class="beforeLoginLinks">Already have an account? <a asp-action="Login">Log In</a></div>
-    </div>
-</form>
-<script>
-    let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    document.getElementById("TimeZone").value = timeZone;
-</script>
+</div>

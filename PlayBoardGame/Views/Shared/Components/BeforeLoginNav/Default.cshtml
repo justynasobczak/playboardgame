@@ -1,0 +1,36 @@
+@model BeforeLoginNavViewModel
+
+<nav class="navbar mainMenu navbar-light navbar-expand-lg">
+    <div class="container">
+        <div class="navbar-brand">
+            <img src="~/lib/custom/img/logo-small.png" alt="logo"/>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
+                aria-controls="mainmenu" aria-expanded="false" aria-label="switch for navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainmenu">
+            <ul class="navbar-nav ml-auto">
+                @if (Model.PageName == BeforeLoginPageName.Login || Model.PageName == BeforeLoginPageName.Register)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="SendResetPasswordLink"> Forgotten Password? </a>
+                    </li>
+                }
+                @if (Model.PageName == BeforeLoginPageName.ResetPassword || Model.PageName == BeforeLoginPageName.Register)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Login"> Login </a>
+                    </li>
+                }
+                @if (Model.PageName == BeforeLoginPageName.ResetPassword || Model.PageName == BeforeLoginPageName.Login)
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Register"> Register </a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </div>
+</nav>

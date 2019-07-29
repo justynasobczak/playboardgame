@@ -18,12 +18,23 @@
     font-size: 15px;
 }
 
+.form-control:focus {
+    border: #138496 solid thin;
+    box-shadow: inset 0 1px 1px #138496, 0 0 1px #138496;
+}
+
 h1 {
     font-size: 20px;
     font-weight: 400;
     color: black;
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
 }
 
 h4 {
@@ -81,4 +92,31 @@ h4 {
 .icons {
     color: black;
     font-size: 18px;
+}
+
+.bodyBeforeLogin {
+    margin-top: 40px;
+    font-size: 16px;
+}
+
+.mainButtonBeforeLogin,
+.mainButtonBeforeLogin:hover{
+    margin-top: 20px;
+    margin-bottom: 30px;
+    background-color: #138496;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.secondButtonBeforeLogin,
+.secondButtonBeforeLogin:hover{
+    background-color: white;
+    border: #138496 solid thin;
+}
+
+.thirdButtonBeforeLogin,
+.thirdButtonBeforeLogin:hover{
+    background-color: white;
+    border: #646464 solid thin;
 }
