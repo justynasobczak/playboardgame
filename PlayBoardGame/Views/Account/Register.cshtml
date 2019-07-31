@@ -18,23 +18,24 @@
             <form method="post" asp-controller="Account" asp-action="RegisterAsync" novalidate>
                 <div class="form-group">
                     <label asp-for="Email">Email</label>
-                    <div>
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
+
+                    <span asp-validation-for="Email" class="text-danger"></span>
+
                     <input asp-for="Email" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <label asp-for="Password">Password</label>
-                    <div>
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
                     <input asp-for="Password" class="form-control"/>
                 </div>
                 <div class="form-group">
+                    <label asp-for="ConfirmPassword">Confirm password</label>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    <input asp-for="ConfirmPassword" class="form-control"/>
+                </div>
+                <div class="form-group">
                     <label asp-for="TimeZone">Time zone</label>
-                    <div>
-                        <span asp-validation-for="TimeZone" class="text-danger"></span>
-                    </div>
+                    <span asp-validation-for="TimeZone" class="text-danger"></span>
                     <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList, "Value", "Value"))" class="form-control">
                     </select>
                 </div>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlayBoardGame.Models.ViewModels
@@ -30,9 +31,15 @@ namespace PlayBoardGame.Models.ViewModels
         [UIHint("password")]
         public string OldPassword { get; set; }
 
-        [Required, MinLength(6)]
+        [Required]
         [Display(Name = "New password")]
         [UIHint("password")]
         public string NewPassword { get; set; }
+        
+        [Required]
+        [UIHint("password")]
+        [Display(Name = "Confirm password")]
+        [Compare("NewPassword")]
+        public string ConfirmPassword { get; set; }
     }
 }

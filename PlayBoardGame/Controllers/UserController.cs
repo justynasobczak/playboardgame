@@ -24,27 +24,28 @@ namespace PlayBoardGame.Controllers
         public async Task<IActionResult> UserProfileAsync()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (user != null)
+            if (user == null)
             {
-                var vm = new UserProfileViewModel
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                    TimeZoneList = ToolsExtensions.GetTimeZones(),
-                    TimeZone = user.TimeZone,
-                    Address = new AddressViewModels
-                    {
-                        Street = user.Street,
-                        City = user.City,
-                        Country = user.Country,
-                        PostalCode = user.PostalCode
-                    }
-                };
-                return View("UserProfile", vm);
+                _logger.LogCritical(Constants.UnknownId + " of user");
+                return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
-            _logger.LogCritical(Constants.UnknownId + " of user");
-            return RedirectToAction(nameof(ErrorController.Error), "Error");
+
+            var vm = new UserProfileViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                TimeZoneList = ToolsExtensions.GetTimeZones(),
+                TimeZone = user.TimeZone,
+                Address = new AddressViewModels
+                {
+                    Street = user.Street,
+                    City = user.City,
+                    Country = user.Country,
+                    PostalCode = user.PostalCode
+                }
+            };
+            return View("UserProfile", vm);
         }
 
         [HttpPost]
@@ -69,17 +70,16 @@ namespace PlayBoardGame.Controllers
                     if (result.Succeeded)
                     {
                         TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                        return RedirectToAction(nameof(ShelfController.List), "Shelf");
+                        return RedirectToAction(nameof(UserProfileAsync));
                     }
                 }
+
                 _logger.LogCritical(Constants.UnknownId + " of user");
                 return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
-            else
-            {
-                vm.TimeZoneList = ToolsExtensions.GetTimeZones();
-                return View("UserProfile", vm);
-            }
+
+            vm.TimeZoneList = ToolsExtensions.GetTimeZones();
+            return View("UserProfile", vm);
         }
 
         public IActionResult ChangePassword()
@@ -93,34 +93,35 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePasswordAsync(ChangePasswordViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(nameof(ChangePassword), vm);
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (user == null)
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                if (user != null)
-                {
-                    var isCorrectOld = await _userManager.CheckPasswordAsync(user, vm.OldPassword);
-                    if (isCorrectOld)
-                    {
-                        var result = await _userManager.ChangePasswordAsync(user, vm.OldPassword, vm.NewPassword);
-                        if (result.Succeeded)
-                        {
-                            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                            return RedirectToAction(nameof(ShelfController.List), "Shelf");
-                        }
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword), Constants.WrongOldPasswordMessage);
-                        return View("ChangePassword", vm);
-                    }
-                }
                 _logger.LogCritical(Constants.UnknownId + " of user");
                 return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
-            else
+
+            var isCorrectOld = await _userManager.CheckPasswordAsync(user, vm.OldPassword);
+            if (isCorrectOld)
             {
-                return View("ChangePassword", vm);
+                var result = await _userManager.ChangePasswordAsync(user, vm.OldPassword, vm.NewPassword);
+                if (result.Succeeded)
+                {
+                    TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+                    return View(nameof(ChangePassword));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(nameof(ChangePasswordViewModel.NewPassword), error.Description);
+                    _logger.LogError(error.Description);
+                    return View(nameof(ChangePassword), vm);
+                }
             }
+
+            ModelState.AddModelError(nameof(ChangePasswordViewModel.OldPassword),
+                Constants.WrongOldPasswordMessage);
+            return View(nameof(ChangePassword), vm);
         }
     }
 }

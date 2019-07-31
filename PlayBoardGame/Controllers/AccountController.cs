@@ -172,6 +172,7 @@ namespace PlayBoardGame.Controllers
                     return RedirectToAction(nameof(Login));
                 }
 
+                _logger.LogCritical(resetLink);
                 ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
                     Constants.GeneralSendEmailErrorMessage);
                 foreach (var error in response.Errors)
@@ -202,7 +203,7 @@ namespace PlayBoardGame.Controllers
                 if (!await _userManager.VerifyUserTokenAsync(user,
                     _userManager.Options.Tokens.PasswordResetTokenProvider, nameof(ResetPassword), vm.EmailToken))
                 {
-                    ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                    ModelState.AddModelError(nameof(ResetPasswordViewModel.Email),
                         Constants.NotValidTokenMessage);
                 }
                 else
@@ -214,17 +215,17 @@ namespace PlayBoardGame.Controllers
                         return RedirectToAction(nameof(Login));
                     }
 
-                    ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
-                        Constants.GeneralResetPasswordErrorMessage);
                     foreach (var error in result.Errors)
                     {
+                        ModelState.AddModelError(nameof(ResetPasswordViewModel.NewPassword),
+                            error.Description);
                         _logger.LogError(error.Description);
                     }
                 }
             }
             else
             {
-                ModelState.AddModelError(nameof(SendResetPasswordLinkViewModel.Email),
+                ModelState.AddModelError(nameof(ResetPasswordViewModel.Email),
                     Constants.LackOfEmailMatchMessage);
             }
 

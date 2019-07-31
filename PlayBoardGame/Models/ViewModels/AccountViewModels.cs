@@ -9,9 +9,15 @@ namespace PlayBoardGame.Models.ViewModels
         [Required, EmailAddress, MaxLength(256)]
         public string Email { get; set; }
 
-        [Required, MinLength(6)]
+        [Required]
         [UIHint("password")]
         public string Password { get; set; }
+        
+        [Required]
+        [UIHint("password")]
+        [Display(Name = "Confirm password")]
+        [Compare("Password")]
+        public string ConfirmPassword { get; set; }
         
         [Required]
         [Display(Name = "Time zone")]
@@ -43,10 +49,16 @@ namespace PlayBoardGame.Models.ViewModels
         [Required]
         public string Email { get; set; }
 
-        [Required, MinLength(6)]
+        [Required]
         [Display(Name = "New password")]
         [UIHint("password")]
         public string NewPassword { get; set; }
+        
+        [Required]
+        [UIHint("password")]
+        [Display(Name = "Confirm password")]
+        [Compare("NewPassword")]
+        public string ConfirmPassword { get; set; }
 
         public string EmailToken { get; set; }
     }
