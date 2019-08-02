@@ -79,15 +79,16 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Address.Street">Street</label>
+                        <a onclick="CopyAddress()"><i class="far fa-copy icons"></i></a>
                         <span asp-validation-for="Address.Street" class="text-danger"></span>
-                        <input asp-for="Address.Street" class="form-control"/>
+                        <input asp-for="Address.Street" class="form-control" id="Street"/>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Address.City">City</label>
                         <span asp-validation-for="Address.City" class="text-danger"></span>
-                        <input asp-for="Address.City" class="form-control"/>
+                        <input asp-for="Address.City" class="form-control" id="City"/>
                     </div>
                 </div>
             </div>
@@ -97,7 +98,7 @@
                     <div class="form-group">
                         <label asp-for="Address.PostalCode">Postal code</label>
                         <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
-                        <input asp-for="Address.PostalCode" class="form-control"/>
+                        <input asp-for="Address.PostalCode" class="form-control" id="Code"/>
                     </div>
                 </div>
 
@@ -105,7 +106,7 @@
                     <div class="form-group">
                         <label asp-for="Address.Country">Country</label>
                         <span asp-validation-for="Address.Country" class="text-danger"></span>
-                        <select asp-for="Address.Country" asp-items="Html.GetEnumSelectList<Country>()" class="form-control custom-select"></select>
+                        <select asp-for="Address.Country" asp-items="Html.GetEnumSelectList<Country>()" class="form-control custom-select" id="Country"></select>
                     </div>
                 </div>
             </div>
@@ -137,3 +138,35 @@
 
     </form>
 </div>
+
+
+
+<script>
+    let CopyAddress = function() {
+        $.ajax({
+            url: "/api/HomeAddress",
+            contentType: "application/json",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                $.each(data,
+                    function(index, element) {
+                        switch (index) {
+                        case "Street":
+                            document.getElementById("Street").value = element;
+                            break;
+                        case "City":
+                            document.getElementById("City").value = element;
+                            break;
+                        case "PostalCode":
+                            document.getElementById("Code").value = element;
+                            break;
+                        case "Country":
+                            document.getElementById("Country").value = element;
+                            break;
+                        }
+                    });
+            }
+        })
+    }
+</script>
