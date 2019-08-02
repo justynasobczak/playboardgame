@@ -25,7 +25,7 @@ namespace PlayBoardGame.Models
 
         public string PostalCode { get; set; }
 
-        public Country Country { get; set; }
+        public string Country { get; set; }
         
         public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
         

@@ -1,4 +1,5 @@
-﻿
+﻿using System.Collections.Generic;
+
 namespace PlayBoardGame.Models.ViewModels
 {
     public class AddressViewModels
@@ -9,6 +10,8 @@ namespace PlayBoardGame.Models.ViewModels
 
         public string PostalCode { get; set; }
 
-        public Country Country { get; set; }
+        public string Country { get; set; }
+
+        public Dictionary<string, string> Countries { get; set; } = Constants.Countries;
     }
 }

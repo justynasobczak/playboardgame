@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
+using PlayBoardGame;
 using PlayBoardGame.Migrations;
 using PlayBoardGame.Models;
 using Xunit;
@@ -30,7 +31,7 @@ namespace PlayBoardGames.Tests
                     City = "City",
                     Street = "Street",
                     PostalCode = "PostalCode",
-                    Country = Country.Togo,
+                    Country = "AU",
                     Notes = "notest test notest test"
                 };
 
@@ -88,7 +89,7 @@ namespace PlayBoardGames.Tests
                     City = "City2",
                     Street = "Street2",
                     PostalCode = "PostalCode2",
-                    Country = Country.None,
+                    Country = "PL",
                     Notes = "Notes2"
                 };
 
@@ -108,7 +109,7 @@ namespace PlayBoardGames.Tests
                         City = "City",
                         Street = "Street",
                         PostalCode = "PostalCode",
-                        Country = Country.Togo,
+                        Country = "PL",
                         Notes = "Notes"
                     });
                     context.SaveChanges();

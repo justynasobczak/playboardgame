@@ -163,7 +163,8 @@ namespace PlayBoardGame.Controllers
                 Games = _gameRepository.Games.ToList(),
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone),
-                IsEditable = true
+                IsEditable = true,
+                Address = new AddressViewModels()
             });
         }
 

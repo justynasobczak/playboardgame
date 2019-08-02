@@ -72,8 +72,9 @@
             <div class="form-group">
                 <label asp-for="Address.Country">Country</label>
                 <span asp-validation-for="Address.Country" class="text-danger"></span>
-                <select asp-for="Address.Country" asp-items="Html.GetEnumSelectList<Country>()" class="form-control 
-custom-select"></select>
+                <select asp-for="Address.Country" asp-items="@(new SelectList(Model.Address.Countries,
+                                                                   "Key", "Value"))" class="form-control custom-select">
+                </select>
             </div>
         </div>
     </div>
