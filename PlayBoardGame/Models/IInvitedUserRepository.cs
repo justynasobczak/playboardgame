@@ -9,7 +9,7 @@ namespace PlayBoardGame.Models
         
         IQueryable<AppUser> GetInvitedUsers(int meetingId);
 
-        Dictionary<string, InvitationStatus> GetInvitedUsersList(int meetingId);
+        IQueryable<MeetingInvitedUser> GetInvitedUsersList(int meetingId);
 
         void AddUserToMeeting(string userId, int meetingId, InvitationStatus status);
 

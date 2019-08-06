@@ -27,7 +27,7 @@ namespace PlayBoardGames.Tests
             var user4 = new AppUser {Id = "id4", UserName = "user4", Email = "user4@example.com"};
             var user5 = new AppUser {Id = "id5", UserName = "user5", Email = "user5@example.com"};
             var meeting = new Meeting {MeetingId = 1, Title = "meeting1"};
-            var result = new Dictionary<string, InvitationStatus>();
+            var result = new List<MeetingInvitedUser>();
 
             using (var factory = new SQLiteDbContextFactory())
             {
@@ -86,13 +86,13 @@ namespace PlayBoardGames.Tests
                 using (var context = factory.CreateContext())
                 {                
                     var invitedUserRepository = new EFInvitedUserRepository(context, GetMockUserManager().Object);
-                    result = invitedUserRepository.GetInvitedUsersList(meeting.MeetingId);
+                    result = invitedUserRepository.GetInvitedUsersList(meeting.MeetingId).OrderBy(mu => mu.UserId).ToList();
                     Assert.Equal(5, result.Count);
-                    Assert.Equal(InvitationStatus.Pending, result["id1"]);
-                    Assert.Equal(InvitationStatus.Accepted, result["id2"]);
-                    Assert.Equal(InvitationStatus.Rejected, result["id3"]);
-                    Assert.Equal(InvitationStatus.Cancelled, result["id4"]);
-                    Assert.Equal(InvitationStatus.Pending, result["id5"]);
+                    Assert.Equal(InvitationStatus.Pending, result[0].Status);
+                    Assert.Equal(InvitationStatus.Accepted, result[1].Status);
+                    Assert.Equal(InvitationStatus.Rejected, result[2].Status);
+                    Assert.Equal(InvitationStatus.Cancelled, result[3].Status);
+                    Assert.Equal(InvitationStatus.Pending, result[4].Status);
                 }
             }
         }

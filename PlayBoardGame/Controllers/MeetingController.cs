@@ -40,9 +40,10 @@ namespace PlayBoardGame.Controllers
             var meeting = _meetingRepository.GetMeeting(id);
             if (meeting == null)
             {
-                _logger.LogCritical(Constants.UnknownId + " of meeting");
+                _logger.LogCritical($"{Constants.UnknownId} of meeting");
                 return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
+
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
@@ -74,11 +75,13 @@ namespace PlayBoardGame.Controllers
             var startDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.StartDateTime, timeZone);
             var endDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone);
             var currentUserId = GetCurrentUserId().Result;
-            var overlappingMeetings = new List<Meeting>();
+            var overlappingMeetings = new List<string>();
 
             overlappingMeetings = vm.MeetingId == 0
-                ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId).ToList()
-                : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingId).ToList();
+                ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId)
+                    .Select(m => m.Title).ToList()
+                : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingId)
+                    .Select(m => m.Title).ToList();
 
             if (!ToolsExtensions.IsDateInFuture(startDateUTC))
             {
@@ -94,14 +97,10 @@ namespace PlayBoardGame.Controllers
 
             if (overlappingMeetings.Count > 0)
             {
-                var overlappingMeetingsTitle = ": ";
-                foreach (var meeting in overlappingMeetings)
-                {
-                    overlappingMeetingsTitle += meeting.Title + " ";
-                }
+                var overlappingMeetingsTitle = string.Join(", ", overlappingMeetings);
 
                 ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
-                    Constants.OverlappingMeetingsMessage + overlappingMeetingsTitle);
+                    $"{Constants.OverlappingMeetingsMessage}: {overlappingMeetingsTitle}");
             }
 
             if (ModelState.IsValid)
@@ -191,15 +190,10 @@ namespace PlayBoardGame.Controllers
 // OR
 //            return (from it in _meetingRepository.GetGamesFromMeeting(meetingId) select it.GameId).ToArray();
 
-            var games = _meetingRepository.GetGamesFromMeeting(meetingId).ToList();
-            var listOfIds = new List<int>();
-
-            foreach (var game in games)
-            {
-                listOfIds.Add(game.GameId);
-            }
-
-            return listOfIds.ToArray();
+            return _meetingRepository
+                .GetGamesFromMeeting(meetingId)
+                .Select(g => g.GameId)
+                .ToArray();
         }
     }
 }
