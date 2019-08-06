@@ -18,8 +18,7 @@ namespace PlayBoardGame.Models
 
         public IQueryable<AppUser> GetInvitedUsers(int meetingId)
         {
-            var invitedUsers = _userManager.Users.Where(u => u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId));
-            return invitedUsers;
+            return _userManager.Users.Where(u => u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId));
         }
 
         public Dictionary<string, InvitationStatus> GetInvitedUsersList(int meetingId)

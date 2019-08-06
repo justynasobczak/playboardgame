@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class HomeAddressController : Controller
     {
@@ -24,7 +26,7 @@ namespace PlayBoardGame.Controllers
                 {"Street", currentUser.Street},
                 {"City", currentUser.City},
                 {"PostalCode", currentUser.PostalCode},
-                {"Country", currentUser.Country.ToString()}
+                {"Country", currentUser.Country}
             };
 
             return address;

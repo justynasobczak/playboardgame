@@ -12,6 +12,6 @@ namespace PlayBoardGame.Models.ViewModels
 
         public string Country { get; set; }
 
-        public Dictionary<string, string> Countries { get; set; } = Constants.Countries;
+        public Dictionary<string, string> Countries { get; } = Constants.Countries;
     }
 }

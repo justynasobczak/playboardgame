@@ -79,7 +79,10 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Address.Street">Street</label>
-                        <a onclick="CopyAddress()"><i class="far fa-copy icons"></i></a>
+                        <button type="button" onclick="CopyAddress()" class="btn"
+                                data-toggle="copyAddressTooltip" title="Copy from profile">
+                            <i class="far fa-copy icons"></i>
+                        </button>
                         <span asp-validation-for="Address.Street" class="text-danger"></span>
                         <input asp-for="Address.Street" class="form-control" id="Street"/>
                     </div>
@@ -106,7 +109,10 @@
                     <div class="form-group">
                         <label asp-for="Address.Country">Country</label>
                         <span asp-validation-for="Address.Country" class="text-danger"></span>
-                        <select asp-for="Address.Country" asp-items="@(new SelectList(Model.Address.Countries, "Key", "Value"))" class="form-control custom-select" id="Country"></select>
+                        <select asp-for="Address.Country" asp-items="@(new SelectList(Model.Address.Countries, "Key", "Value"))"
+                                class="form-control custom-select" id="Country">
+                            <option disabled selected>--- SELECT ---</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -139,9 +145,10 @@
     </form>
 </div>
 
-
-
 <script>
+    $(document).ready(function() {
+        $('[data-toggle="copyAddressTooltip"]').tooltip();
+    });
     let CopyAddress = function() {
         $.ajax({
             url: "/api/HomeAddress",
