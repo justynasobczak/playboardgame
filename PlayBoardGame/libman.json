@@ -1,26 +1,31 @@
 {
-    "version": "1.0",
-    "defaultProvider": "unpkg",
-    "libraries": [
-        {
-            "provider": "cdnjs",
-            "library": "jquery@3.3.1",
-            "destination": "wwwroot/lib/jquery/"
-        },
-        {
-            "provider": "cdnjs",
-            "library": "popper.js@1.14.7",
-            "destination": "wwwroot/lib/popper.js/"
-        },
-        {
-            "provider": "cdnjs",
-            "library": "twitter-bootstrap@4.3.1",
-            "destination": "wwwroot/lib/twitter-bootstrap/"
-        },
-        {
-            "provider": "cdnjs",
-            "library": "fullcalendar@3.10.0",
-            "destination": "wwwroot/lib/fullcalendar/"
-        }
-    ]
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "jquery@3.3.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "popper.js@1.14.7",
+      "destination": "wwwroot/lib/popper.js/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "twitter-bootstrap@4.3.1",
+      "destination": "wwwroot/lib/twitter-bootstrap/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "fullcalendar@3.10.0",
+      "destination": "wwwroot/lib/fullcalendar/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-datetimepicker@2.5.20",
+      "destination": "wwwroot/lib/jquery-datetimepicker/"
+    }
+  ]
 }

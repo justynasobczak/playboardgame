@@ -50,14 +50,14 @@
                     <div class="form-group">
                         <label asp-for="StartDateTime">Start date and time</label>
                         <span asp-validation-for="StartDateTime" class="text-danger"></span>
-                        <input type="datetime-local" asp-for="StartDateTime" class="form-control"/>
+                        <input id="startDatetimepicker" type="text" asp-for="StartDateTime" class="form-control"/>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="EndDateTime">End date and time</label>
                         <span asp-validation-for="EndDateTime" class="text-danger"></span>
-                        <input type="datetime-local" asp-for="EndDateTime" class="form-control"/>
+                        <input id="endDatetimepicker" type="text" asp-for="EndDateTime" class="form-control"/>
                     </div>
                 </div>
             </div>
@@ -148,6 +148,12 @@
 <script>
     $(document).ready(function() {
         $('[data-toggle="copyAddressTooltip"]').tooltip();
+        $('#startDatetimepicker').datetimepicker(/*{
+            format: 'DD/MM/YYYY hh:mm a',
+            formatDate: 'DD/MM/YYYY',
+            formatTime: 'hh:mm a'
+        }*/);
+        $('#endDatetimepicker').datetimepicker();
     });
     let CopyAddress = function() {
         $.ajax({

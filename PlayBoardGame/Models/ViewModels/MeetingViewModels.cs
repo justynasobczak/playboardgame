@@ -15,11 +15,11 @@ namespace PlayBoardGame.Models.ViewModels
             
             [Required]
             [Display(Name = "Start date and time")]
-            public DateTime StartDateTime { get; set; }
+            public string StartDateTime { get; set; }
         
             [Required]
             [Display(Name = "End date and time")]
-            public DateTime EndDateTime { get; set; }
+            public string EndDateTime { get; set; }
             
             public string OrganizerId { get; set; }
             

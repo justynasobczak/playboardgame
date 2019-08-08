@@ -18,13 +18,16 @@ namespace PlayBoardGame
         public const string FutureDateInPastMessage = "Please enter a date in the future.";
         public const string EndDateBeforeStartMessage = "Please enter a date later than start date.";
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
+        public const string WrongDateTimeFormat = "Please enter a date in format: yyyy/MM/dd HH:mm";
 
         //Logs
         public const string UnknownId = "Unknown Id";
         public const string UnknownError = "Unknown error occurred";
 
+        //Consts
+        public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
         
-        public static Dictionary<string, string> Countries = new Dictionary<string, string>
+        public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>
         {
             {"AF", "Afghanistan"},
             {"AL", "Albania"},

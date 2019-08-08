@@ -1,7 +1,13 @@
-﻿body {
+﻿html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
     font-size: 15px;
     background-color: #FAFAFA;
     font-family: 'Open Sans', sans-serif;
+    margin-bottom: 45px;
 }
 
 .mainMenu {
@@ -73,7 +79,7 @@ h4 {
 }
 
 .footer {
-    position: fixed;
+    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
@@ -81,6 +87,7 @@ h4 {
     text-align: center;
     border: 1px solid #d2d2d2;
     padding-top: 10px;
+    height: 45px;
 }
 
 .messageFooter {

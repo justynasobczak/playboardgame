@@ -50,8 +50,10 @@ namespace PlayBoardGame.Controllers
                 OrganizerId = meeting.Organizer.Id,
                 Title = meeting.Title,
                 MeetingId = meeting.MeetingId,
-                StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone),
-                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone),
+                StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone)
+                    .ToString(Constants.DateTimeFormat),
+                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone)
+                    .ToString(Constants.DateTimeFormat),
                 Notes = meeting.Notes,
                 Games = _gameRepository.Games.ToList(),
                 SelectedGames = GetGameIdsFromMeeting(id),
@@ -71,38 +73,55 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MeetingViewModels.CreateEditMeetingViewModel vm)
         {
-            var timeZone = GetTimeZoneOfCurrentUser();
-            var startDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.StartDateTime, timeZone);
-            var endDateUTC = TimeZoneInfo.ConvertTimeToUtc(vm.EndDateTime, timeZone);
+            var startDateUTC = new DateTime();
+            var endDateUTC = new DateTime();
             var currentUserId = GetCurrentUserId().Result;
-            var overlappingMeetings = new List<string>();
-
-            overlappingMeetings = vm.MeetingId == 0
-                ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId)
-                    .Select(m => m.Title).ToList()
-                : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingId)
-                    .Select(m => m.Title).ToList();
-
-            if (!ToolsExtensions.IsDateInFuture(startDateUTC))
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.StartDateTime),
-                    Constants.FutureDateInPastMessage);
+                var timeZone = GetTimeZoneOfCurrentUser();
+
+                if (DateTime.TryParse(vm.StartDateTime, out var startDate) &&
+                    DateTime.TryParse(vm.EndDateTime, out var endDate))
+                {
+                    startDateUTC = TimeZoneInfo.ConvertTimeToUtc(startDate, timeZone);
+                    endDateUTC = TimeZoneInfo.ConvertTimeToUtc(endDate, timeZone);
+                    var overlappingMeetings = new List<string>();
+
+                    overlappingMeetings = vm.MeetingId == 0
+                        ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId)
+                            .Select(m => m.Title).ToList()
+                        : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingId)
+                            .Select(m => m.Title).ToList();
+
+                    if (!ToolsExtensions.IsDateInFuture(startDateUTC))
+                    {
+                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.StartDateTime),
+                            Constants.FutureDateInPastMessage);
+                    }
+
+                    if (!ToolsExtensions.IsStartDateBeforeEndDate(startDateUTC, endDateUTC))
+                    {
+                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.EndDateTime),
+                            Constants.EndDateBeforeStartMessage);
+                    }
+
+                    if (overlappingMeetings.Count > 0)
+                    {
+                        var overlappingMeetingsTitle = string.Join(", ", overlappingMeetings);
+
+                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
+                            $"{Constants.OverlappingMeetingsMessage}: {overlappingMeetingsTitle}");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.StartDateTime),
+                        Constants.WrongDateTimeFormat);
+                    ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.EndDateTime),
+                        Constants.WrongDateTimeFormat);
+                }
             }
-
-            if (!ToolsExtensions.IsStartDateBeforeEndDate(startDateUTC, endDateUTC))
-            {
-                ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.EndDateTime),
-                    Constants.EndDateBeforeStartMessage);
-            }
-
-            if (overlappingMeetings.Count > 0)
-            {
-                var overlappingMeetingsTitle = string.Join(", ", overlappingMeetings);
-
-                ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
-                    $"{Constants.OverlappingMeetingsMessage}: {overlappingMeetingsTitle}");
-            }
-
+            
             if (ModelState.IsValid)
             {
                 var organizer = await _userManager.FindByIdAsync(currentUserId);
@@ -160,8 +179,10 @@ namespace PlayBoardGame.Controllers
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,
                 Games = _gameRepository.Games.ToList(),
-                StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone),
-                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone),
+                StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone)
+                    .ToString(Constants.DateTimeFormat),
+                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone)
+                    .ToString(Constants.DateTimeFormat),
                 IsEditable = true,
                 Address = new AddressViewModels()
             });
