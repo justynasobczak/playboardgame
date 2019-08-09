@@ -109,7 +109,7 @@
                     <div class="form-group">
                         <label asp-for="Address.Country">Country</label>
                         <span asp-validation-for="Address.Country" class="text-danger"></span>
-                        <select asp-for="Address.Country" asp-items="@(new SelectList(Model.Address.Countries, "Key", "Value"))"
+                        <select asp-for="Address.Country" asp-items="@(new SelectList(Model.Address.Countries.OrderBy(v => v.Value), "Key", "Value"))"
                                 class="form-control custom-select" id="Country">
                             <option disabled selected>--- SELECT ---</option>
                         </select>
@@ -148,11 +148,7 @@
 <script>
     $(document).ready(function() {
         $('[data-toggle="copyAddressTooltip"]').tooltip();
-        $('#startDatetimepicker').datetimepicker(/*{
-            format: 'DD/MM/YYYY hh:mm a',
-            formatDate: 'DD/MM/YYYY',
-            formatTime: 'hh:mm a'
-        }*/);
+        $('#startDatetimepicker').datetimepicker();
         $('#endDatetimepicker').datetimepicker();
     });
     let CopyAddress = function() {
@@ -180,6 +176,6 @@
                         }
                     });
             }
-        })
-    }
+        });
+    };
 </script>

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using PlayBoardGame.Models.ViewModels;
@@ -51,9 +53,9 @@ namespace PlayBoardGame.Controllers
                 Title = meeting.Title,
                 MeetingId = meeting.MeetingId,
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone)
-                    .ToString(Constants.DateTimeFormat),
+                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone)
-                    .ToString(Constants.DateTimeFormat),
+                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 Notes = meeting.Notes,
                 Games = _gameRepository.Games.ToList(),
                 SelectedGames = GetGameIdsFromMeeting(id),
@@ -109,19 +111,26 @@ namespace PlayBoardGame.Controllers
                     {
                         var overlappingMeetingsTitle = string.Join(", ", overlappingMeetings);
 
-                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.OrganizerId),
+                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.Title),
                             $"{Constants.OverlappingMeetingsMessage}: {overlappingMeetingsTitle}");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.StartDateTime),
-                        Constants.WrongDateTimeFormat);
-                    ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.EndDateTime),
-                        Constants.WrongDateTimeFormat);
+                    if (!DateTime.TryParse(vm.StartDateTime, out startDate))
+                    {
+                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.StartDateTime),
+                            Constants.WrongDateTimeFormat);
+                    }
+
+                    if (!DateTime.TryParse(vm.EndDateTime, out endDate))
+                    {
+                        ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.EndDateTime),
+                            Constants.WrongDateTimeFormat);
+                    }
                 }
             }
-            
+
             if (ModelState.IsValid)
             {
                 var organizer = await _userManager.FindByIdAsync(currentUserId);
@@ -174,15 +183,16 @@ namespace PlayBoardGame.Controllers
         {
             var timeZone = GetTimeZoneOfCurrentUser();
             var currentUserId = GetCurrentUserId().Result;
+
             return View(nameof(Edit), new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,
                 Games = _gameRepository.Games.ToList(),
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone)
-                    .ToString(Constants.DateTimeFormat),
+                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone)
-                    .ToString(Constants.DateTimeFormat),
+                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 IsEditable = true,
                 Address = new AddressViewModels()
             });

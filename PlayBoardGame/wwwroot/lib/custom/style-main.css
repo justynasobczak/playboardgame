@@ -26,7 +26,9 @@ body {
 
 .form-control:focus {
     border: #138496 solid thin;
-    box-shadow: inset 0 1px 1px #138496, 0 0 1px #138496;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
 
 h1 {
