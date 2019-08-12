@@ -7,12 +7,16 @@
                asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId"> Details </a>
         </li>
         <li class="nav-item">
-            <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Users ? "active" : "tab-links"))" 
-               asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> Users </a>
+            <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.People ? "active" : "tab-links"))" 
+               asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> People </a>
         </li>
         <li class="nav-item">
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Messages ? "active" : "tab-links"))" 
                asp-controller="Message" asp-action="List" asp-route-id="@Model.MeetingId"> Messages </a>
+        </li>
+        <li class="nav-item">
+            <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Description ? "active" : "tab-links"))" 
+               asp-controller="MeetingDescription" asp-action="Edit" asp-route-id="@Model.MeetingId"> Description </a>
         </li>
     </ul>
 </div>

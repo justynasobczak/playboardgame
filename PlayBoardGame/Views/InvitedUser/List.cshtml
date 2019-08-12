@@ -1,10 +1,10 @@
 @model InvitedUserViewModel.InvitedUserListViewModel
 @{
-    ViewBag.Title = "Invited users";
+    ViewBag.Title = "Meeting";
 }
 @await Component.InvokeAsync("MeetingTabs", new
 {
-    meetingId = Model.MeetingId, tabName = MeetingTabName.Users,
+    meetingId = Model.MeetingId, tabName = MeetingTabName.People,
     isCreateMode = false
 })
 

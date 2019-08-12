@@ -9,11 +9,15 @@ namespace PlayBoardGame.Models
         
         Meeting GetMeeting(int meetingId);
 
+        string GetDescriptionFromMeeting(int meetingId);
+
         IQueryable<Meeting> GetMeetingsForUser(string userId);
         
         void SaveMeeting(Meeting meeting);
         
         void AddGameToMeeting(MeetingGame gameInMeeting);
+        
+        void SaveDescriptionForMeeting(string description, int meetingId);
 
         MeetingGame RemoveGameFromMeeting(int gameId, int meetingId);
 

@@ -25,6 +25,11 @@ namespace PlayBoardGame.Models
             return Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
         }
 
+        public string GetDescriptionFromMeeting(int meetingId)
+        {
+            return Meetings.Where(m => m.MeetingId == meetingId).Select(m => m.Description).FirstOrDefault();
+        }
+
         public IQueryable<Meeting> GetMeetingsForUser(string userId)
         {
             return Meetings.Where(m => m.Organizer.Id == userId ||
@@ -63,6 +68,16 @@ namespace PlayBoardGame.Models
         {
             _applicationDBContext.MeetingGame.Add(gameInMeeting);
             _applicationDBContext.SaveChanges();
+        }
+
+        public void SaveDescriptionForMeeting(string description, int meetingId)
+        {
+            var dbEntry = Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
+            if (dbEntry != null)
+            {
+                dbEntry.Description = description;
+                _applicationDBContext.SaveChanges();
+            }
         }
 
         // bozy: Refactor it to make 1-2 linq queries instead of playing with lists

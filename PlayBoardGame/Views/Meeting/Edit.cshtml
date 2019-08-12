@@ -2,7 +2,7 @@
 @model MeetingViewModels.CreateEditMeetingViewModel
 
 @{
-    ViewBag.Title = "Create/edit meeting";
+    ViewBag.Title = "Meeting";
 }
 
 @await Component.InvokeAsync("MeetingTabs", new
@@ -26,14 +26,30 @@
             }
         >
             <div class="form-row">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="form-group">
                         <label asp-for="Title">Title</label>
                         <span asp-validation-for="Title" class="text-danger"></span>
                         <input asp-for="Title" class="form-control"/>
                     </div>
                 </div>
+            </div>
 
+            <div class="form-row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="StartDateTime">Start date and time</label>
+                        <span asp-validation-for="StartDateTime" class="text-danger"></span>
+                        <input id="startDatetimepicker" type="text" asp-for="StartDateTime" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="EndDateTime">End date and time</label>
+                        <span asp-validation-for="EndDateTime" class="text-danger"></span>
+                        <input id="endDatetimepicker" type="text" asp-for="EndDateTime" class="form-control"/>
+                    </div>
+                </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label asp-for="OrganizerId">Organizer</label>
@@ -41,23 +57,6 @@
                         <select asp-for="OrganizerId" asp-items="@(new SelectList(Model.Organizers, "Id", "UserName"))"
                                 class="form-control custom-select" disabled="disabled">
                         </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="StartDateTime">Start date and time</label>
-                        <span asp-validation-for="StartDateTime" class="text-danger"></span>
-                        <input id="startDatetimepicker" type="text" asp-for="StartDateTime" class="form-control"/>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="EndDateTime">End date and time</label>
-                        <span asp-validation-for="EndDateTime" class="text-danger"></span>
-                        <input id="endDatetimepicker" type="text" asp-for="EndDateTime" class="form-control"/>
                     </div>
                 </div>
             </div>

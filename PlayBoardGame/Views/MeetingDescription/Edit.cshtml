@@ -1,0 +1,30 @@
+@model MeetingDescriptionViewModel
+@{
+    ViewBag.Title = "Meeting";
+}
+
+@await Component.InvokeAsync("MeetingTabs", new
+{
+    meetingId = Model.MeetingId, tabName = MeetingTabName.Description,
+    isCreateMode = false
+})
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="MeetingId" />
+    <div class="form-group">
+        <textarea asp-for="Description" id="meetingDescription"></textarea>
+    </div>
+    <div class="text-left">
+        <button class="btn btn-info" type="submit">Save</button>
+        <a asp-controller="Meeting" asp-action="List" class="btn btn-secondary ml-1">Cancel</a>
+    </div>
+</form>
+
+<script>
+    var editor = new Editor({
+        element: document.getElementById("meetingDescription")
+    });
+
+    editor.render();
+
+</script>

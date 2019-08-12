@@ -12,7 +12,8 @@ namespace PlayBoardGame.Models.ViewModels
     public enum MeetingTabName
     {
         Details,
-        Users,
-        Messages
+        People,
+        Messages,
+        Description
     }
 }

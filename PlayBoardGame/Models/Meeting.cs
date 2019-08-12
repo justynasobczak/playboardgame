@@ -34,5 +34,7 @@ namespace PlayBoardGame.Models
         public IEnumerable<MeetingGame> MeetingGame { get; set; }
         
         public IEnumerable<Message> Messages { get; set; }
+        
+        public string Description { get; set; }
     }
 }
