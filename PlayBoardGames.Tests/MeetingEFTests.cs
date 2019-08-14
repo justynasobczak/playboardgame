@@ -188,6 +188,44 @@ namespace PlayBoardGames.Tests
                 }
             }
         }
+        
+        [Fact]
+        public void Can_Save_Description_For_Meeting()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                var description = "some test description some test description some test description some test description some test description some test description " +
+                                  "some test description some test description some test description some test description some test description some test description " +
+                                  "some test description some test description some test description some test description some test description some test description ";
+
+                var meeting = new Meeting
+                {
+                    MeetingId = 1,
+                    Title = "TestToAddDescription"
+                };
+
+                using (var context = factory.CreateContext())
+                {
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    meetingRepository.SaveDescriptionForMeeting(description, 1);
+                }
+
+                //Assert
+                using (var context = factory.CreateContext())
+                {
+                    var meetings = context.Meetings
+                        .ToList();
+                    Assert.Single(meetings);
+                    Assert.Equal(meeting.MeetingId, meetings.Single().MeetingId);
+                    Assert.Equal(description, meetings.Single().Description);
+                }
+            }
+        }
 
         [Fact]
         public void Can_Remove_Game_From_Meeting()
@@ -758,6 +796,47 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(10, invitedUsers.Count);
                     Assert.Equal(expectedResultList.Count, result.Count);
                     Assert.Equal(expectedResultList.OrderBy(m => m.MeetingId), result.OrderBy(m => m.MeetingId));
+                }
+            }
+        }
+        
+        [Fact]
+        public void Can_Get_Description_From_Meeting()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                var description = "some test description some test description some test description some test description some test description some test description " +
+                                  "some test description some test description some test description some test description some test description some test description " +
+                                  "some test description some test description some test description some test description some test description some test description ";
+
+                var meeting = new Meeting
+                {
+                    MeetingId = 1,
+                    Title = "TestToAddDescription",
+                    Description = description
+                };
+
+                string result;
+
+                using (var context = factory.CreateContext())
+                {
+                    context.Meetings.Add(meeting);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    result = meetingRepository.GetDescriptionFromMeeting(1);
+                }
+
+                //Assert
+                using (var context = factory.CreateContext())
+                {
+                    var meetings = context.Meetings
+                        .ToList();
+                    Assert.Single(meetings);
+                    Assert.Equal(meeting.MeetingId, meetings.Single().MeetingId);
+                    Assert.Equal(description, result);
                 }
             }
         }
