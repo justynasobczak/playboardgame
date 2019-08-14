@@ -6,7 +6,7 @@ namespace PlayBoardGame.Models
     {
         IQueryable<Message> Messages { get; }
         
-        IQueryable<Message> GetMessagesList(int meetingId);
+        IQueryable<Message> GetMessagesForMeeting(int meetingId);
 
         void SaveMessage(Message message);
 

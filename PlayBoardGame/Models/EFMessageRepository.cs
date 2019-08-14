@@ -16,7 +16,7 @@ namespace PlayBoardGame.Models
             .Include(m => m.Author)
             .Include(m => m.Meeting);
 
-        public IQueryable<Message> GetMessagesList(int meetingId)
+        public IQueryable<Message> GetMessagesForMeeting(int meetingId)
         {
             return Messages.Where(m => m.MeetingId == meetingId);
         }

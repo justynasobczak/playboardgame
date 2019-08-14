@@ -37,7 +37,7 @@ namespace PlayBoardGame.Controllers
             var currentUserTimeZone = currentUser.TimeZone;
             var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
 
-            var messages = GetMessagesWithDates(_messageRepository.GetMessagesList(id), timeZone);
+            var messages = GetMessagesWithDates(_messageRepository.GetMessagesForMeeting(id), timeZone);
             return View(new MessagesListViewModel {Messages = messages, MeetingId = id});
         }
 
