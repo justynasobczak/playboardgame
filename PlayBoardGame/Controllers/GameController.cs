@@ -19,12 +19,12 @@ namespace PlayBoardGame.Controllers
             _logger = logger;
         }
 
-        public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games});
+        public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games.AsQueryable()});
 
         public IActionResult Edit(int id)
         {
             // bozy: linq: var game1 = (from item in _gameRepository.Games where item.GameId == id select item).FirstOrDefault();
-            var game = _gameRepository.Games.FirstOrDefault(g => g.GameId == id);
+            var game = _gameRepository.GetGame(id);
             if (game != null)
             {
                 var vm = new CreateEditGameViewModel
@@ -34,6 +34,7 @@ namespace PlayBoardGame.Controllers
                 };
                 return View(vm);
             }
+
             _logger.LogCritical(Constants.UnknownId + " of game");
             return RedirectToAction(nameof(ErrorController.Error), "Error");
         }
@@ -59,6 +60,7 @@ namespace PlayBoardGame.Controllers
             {
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
+
             return RedirectToAction(nameof(List));
         }
     }

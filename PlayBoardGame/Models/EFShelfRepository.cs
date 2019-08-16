@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -11,15 +12,14 @@ namespace PlayBoardGame.Models
             _applicationDBContext = applicationDBContext;
         }
 
-        public IQueryable<Game> GetShelfForUser(string userId)
+        public IEnumerable<Game> GetShelfForUser(string userId)
         {
             return _applicationDBContext.Games.Where(g => g.GameAppUser.Any(gu => gu.AppUser.Id == userId));
         }
 
-        public IQueryable<Game> GetAvailableGamesForUser(string userId)
+        public IEnumerable<Game> GetAvailableGamesForUser(string userId)
         {
-            var shelf = GetShelfForUser(userId);
-            return _applicationDBContext.Games.Except(shelf);
+            return _applicationDBContext.Games.Where(g => g.GameAppUser.All(gu => gu.AppUser.Id != userId));
         }
 
         public void AddToShelf(GameAppUser gameAppUser)

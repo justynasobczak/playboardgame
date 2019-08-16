@@ -9,7 +9,7 @@
     isCreateMode = false
 })
 
-@if (Model.Messages.Count() == 0)
+@if (!Model.Messages.Any())
 {
     <p>No messages</p>
 }

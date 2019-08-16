@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace PlayBoardGame.Models.ViewModels
 {
     public class GamesListViewModel
     {
-        public IEnumerable<Game> Games { get; set; }
+        public IQueryable<Game> Games { get; set; }
     }
 
     public class CreateEditGameViewModel

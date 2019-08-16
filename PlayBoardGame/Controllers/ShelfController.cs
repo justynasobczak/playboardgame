@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace PlayBoardGame.Controllers
         public ViewResult List()
         {
             var currentUserId = GetCurrentUserId().Result;
-            return View(new ShelfListViewModel {Shelf = _shelfRepository.GetShelfForUser(currentUserId)});
+            return View(new ShelfListViewModel {Shelf = _shelfRepository.GetShelfForUser(currentUserId).AsQueryable()});
         }
 
         public ViewResult Edit()
@@ -30,8 +31,8 @@ namespace PlayBoardGame.Controllers
             var currentUserId = GetCurrentUserId().Result;
             var mv = new ShelfEditViewModel
             {
-                Shelf = _shelfRepository.GetShelfForUser(currentUserId),
-                AvailableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId)
+                Shelf = _shelfRepository.GetShelfForUser(currentUserId).AsQueryable(),
+                AvailableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId).AsQueryable()
             };
             return View(mv);
         }

@@ -7,13 +7,13 @@
 <form asp-action="Edit" method="post">
     <h6 class="bg-info p-2 text-white">Add to my shelf</h6>
     <table class="table table-bordered table-sm">
-        @if (Model.AvailableGames.Count() == 0)
+        @if (!Model.AvailableGames.Any())
         {
             <tr><td colspan="2">You have all games</td></tr>
         }
         else
         {
-            foreach (Game game in Model.AvailableGames)
+            foreach (var game in Model.AvailableGames)
             {
                 <tr>
                     <td>@game.Title</td>
@@ -25,13 +25,13 @@
 
     <h6 class="bg-info p-2 text-white">Remove from my shelf</h6>
     <table class="table table-bordered table-sm">
-        @if (Model.Shelf.Count() == 0)
+        @if (!Model.Shelf.Any())
         {
             <tr><td colspan="2">No games on your shelf</td></tr>
         }
         else
         {
-            foreach (Game game in Model.Shelf)
+            foreach (var game in Model.Shelf)
             {
                 <tr>
                     <td>@game.Title</td>

@@ -8,7 +8,7 @@
         <th class="text-left">Action</th>
     </tr>
 
-    @if (Model.Games.Count() == 0)
+    @if (!Model.Games.Any())
     {
         <tr><td colspan="2" class="text-center">No games</td></tr>
     }

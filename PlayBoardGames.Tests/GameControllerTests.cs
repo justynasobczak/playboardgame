@@ -15,40 +15,53 @@ namespace PlayBoardGames.Tests
         public void Can_Edit_Game()
         {
             //Arrange
+            var game1 = new Game {GameId = 1, Title = "Game1"};
+            var game2 = new Game {GameId = 2, Title = "Game2"};
+            var game3 = new Game {GameId = 3, Title = "Game3"};
             var mockRepo = new Mock<IGameRepository>();
             mockRepo.Setup(g => g.Games).Returns(new []
-            {   new Game {GameId = 1, Title = "Game1"},
-                new Game {GameId = 2, Title = "Game2"},
-                new Game {GameId = 3, Title = "Game3"}
-            }.AsQueryable);
+            {   game1,
+                game2,
+                game3
+            }.AsEnumerable);
+            mockRepo.Setup(g => g.GetGame(game1.GameId)).Returns(game1);
+            mockRepo.Setup(g => g.GetGame(game2.GameId)).Returns(game2);
+            mockRepo.Setup(g => g.GetGame(game3.GameId)).Returns(game3);
             var mockLogger = new Mock<ILogger<GameController>>();
             
             var controller = new GameController(mockRepo.Object, mockLogger.Object);
 
             //Act
-            var g1 = GetViewModel<CreateEditGameViewModel>(controller.Edit(1));
-            var g2 = GetViewModel<CreateEditGameViewModel>(controller.Edit(2));
-            var g3 = GetViewModel<CreateEditGameViewModel>(controller.Edit(3));
+            var g1 = GetViewModel<CreateEditGameViewModel>(controller.Edit(game1.GameId));
+            var g2 = GetViewModel<CreateEditGameViewModel>(controller.Edit(game2.GameId));
+            var g3 = GetViewModel<CreateEditGameViewModel>(controller.Edit(game3.GameId));
 
             //Assert
-            Assert.Equal(1, g1.GameId);
-            Assert.Equal("Game1", g1.Title);
-            Assert.Equal(2, g2.GameId);
-            Assert.Equal("Game2", g2.Title);
-            Assert.Equal(3, g3.GameId);
-            Assert.Equal("Game3", g3.Title);
+            Assert.Equal(game1.GameId, g1.GameId);
+            Assert.Equal(game1.Title, g1.Title);
+            Assert.Equal(game2.GameId, g2.GameId);
+            Assert.Equal(game2.Title, g2.Title);
+            Assert.Equal(game3.GameId, g3.GameId);
+            Assert.Equal(game3.Title, g3.Title);
         }
 
         [Fact]
         public void Cannot_Edit_NonExistedGame()
         {
             //Arrange
+            var game1 = new Game {GameId = 1, Title = "Game1"};
+            var game2 = new Game {GameId = 2, Title = "Game2"};
+            var game3 = new Game {GameId = 3, Title = "Game3"};
             var mockRepo = new Mock<IGameRepository>();
             mockRepo.Setup(g => g.Games).Returns(new []
-            {   new Game {GameId = 1, Title = "Game1"},
-                new Game {GameId = 2, Title = "Game2"},
-                new Game {GameId = 3, Title = "Game3"}
-            }.AsQueryable);
+            {   game1,
+                game2,
+                game3
+            }.AsEnumerable);
+            mockRepo.Setup(g => g.GetGame(game1.GameId)).Returns(game1);
+            mockRepo.Setup(g => g.GetGame(game2.GameId)).Returns(game2);
+            mockRepo.Setup(g => g.GetGame(game3.GameId)).Returns(game3);
+            
             var mockLogger = new Mock<ILogger<GameController>>();
 
             var controller = new GameController(mockRepo.Object, mockLogger.Object);
@@ -68,8 +81,8 @@ namespace PlayBoardGames.Tests
             mockRepo.Setup(m => m.Games).Returns(new [] {
             new Game {GameId = 1, Title = "P1" },
             game,
-            new Game { GameId = 3, Title = "P3"},
-            }.AsQueryable);
+            new Game { GameId = 3, Title = "P3"}
+            }.AsEnumerable);
             var mockLogger = new Mock<ILogger<GameController>>();
             
             var controller = new GameController(mockRepo.Object, mockLogger.Object);

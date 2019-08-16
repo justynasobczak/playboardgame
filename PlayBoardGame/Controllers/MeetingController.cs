@@ -48,6 +48,7 @@ namespace PlayBoardGame.Controllers
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizers = _userManager.Users.ToList(),
+                //TODO - save new with validation
                 OrganizerId = meeting.Organizer.Id,
                 Title = meeting.Title,
                 MeetingId = meeting.MeetingId,

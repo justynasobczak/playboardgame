@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,22 +12,20 @@ namespace PlayBoardGame.Models
         {
             _applicationDBContext = applicationDbContext;
         }
-        
-        public IQueryable<Message> Messages => _applicationDBContext.Messages
-            .Include(m => m.Author)
-            .Include(m => m.Meeting);
 
-        public IQueryable<Message> GetMessagesForMeeting(int meetingId)
+        public IEnumerable<Message> GetMessagesForMeeting(int meetingId)
         {
-            return Messages.Where(m => m.MeetingId == meetingId);
+            return _applicationDBContext.Messages
+                .Include(m => m.Author).Where(m => m.MeetingId == meetingId);
         }
-        
+
         public void SaveMessage(Message message)
         {
             if (message.MessageId == 0)
             {
                 _applicationDBContext.Messages.Add(message);
-            } else
+            }
+            else
             {
                 var dbEntry = _applicationDBContext.Messages.FirstOrDefault(m => m.MessageId == message.MessageId);
                 if (dbEntry != null)
@@ -34,6 +33,7 @@ namespace PlayBoardGame.Models
                     dbEntry.Text = message.Text;
                 }
             }
+
             _applicationDBContext.SaveChanges();
         }
 
@@ -47,8 +47,9 @@ namespace PlayBoardGame.Models
             var dbEntry = _applicationDBContext.Messages.FirstOrDefault(m => m.MessageId == messageId);
             if (dbEntry != null)
             {
-                _applicationDBContext.Messages.Remove(dbEntry);  
+                _applicationDBContext.Messages.Remove(dbEntry);
             }
+
             _applicationDBContext.SaveChanges();
             return dbEntry;
         }

@@ -1,10 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace PlayBoardGame.Models
 {
     public interface IGameRepository
     {
-        IQueryable<Game> Games { get; }
+        IEnumerable<Game> Games { get; }
         
         Game GetGame(int gameId);
 

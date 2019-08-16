@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayBoardGame.Models.ViewModels
 {
     public class ShelfListViewModel
     {
-        public IEnumerable<Game> Shelf { get; set; }
+        public IQueryable<Game> Shelf { get; set; }
     }
 
     public class ShelfEditViewModel
     {
-        public IEnumerable<Game> Shelf { get; set; }
-        public IEnumerable<Game> AvailableGames { get; set; }
+        public IQueryable<Game> Shelf { get; set; }
+        public IQueryable<Game> AvailableGames { get; set; }
     }
 
     public class ShelfModificationViewModel

@@ -1,11 +1,11 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace PlayBoardGame.Models.ViewModels
 {
     public class MessagesListViewModel
     {
-        public IEnumerable<Message> Messages { get; set; }
+        public IQueryable<Message> Messages { get; set; }
 
         [Required] public string Text { get; set; }
         

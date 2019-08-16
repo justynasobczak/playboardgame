@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +38,7 @@ namespace PlayBoardGame.Controllers
             var currentUserTimeZone = currentUser.TimeZone;
             var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
 
-            var messages = GetMessagesWithDates(_messageRepository.GetMessagesForMeeting(id), timeZone);
+            var messages = GetMessagesWithDates(_messageRepository.GetMessagesForMeeting(id), timeZone).AsQueryable();
             return View(new MessagesListViewModel {Messages = messages, MeetingId = id});
         }
 
@@ -104,7 +105,7 @@ namespace PlayBoardGame.Controllers
             return user.Id;
         }
 
-        private IQueryable<Message> GetMessagesWithDates(IQueryable<Message> messages, TimeZoneInfo timeZone)
+        private IEnumerable<Message> GetMessagesWithDates(IEnumerable<Message> messages, TimeZoneInfo timeZone)
         {
             foreach (var message in messages)
             {

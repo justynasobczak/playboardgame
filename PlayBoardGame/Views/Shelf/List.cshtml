@@ -7,7 +7,7 @@
         <th class="text-left">Title</th>
     </tr>
 
-    @if (Model.Shelf.Count() == 0)
+    @if (!Model.Shelf.Any())
     {
         <tr><td colspan="1" class="text-center">No games</td></tr>
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -11,9 +12,10 @@ namespace PlayBoardGame.Models
             _applicationDBContext = applicationDBContext;
         }
         // bozy Remember about paging to prevent fetching large number of records and causing memory usage bloating.
-        public IQueryable<Game> Games => _applicationDBContext.Games;
+        //TODO paging
+        public IEnumerable<Game> Games => _applicationDBContext.Games;
 
-        public Game GetGame(int gameId) => Games.FirstOrDefault(g => g.GameId == gameId);
+        public Game GetGame(int gameId) => _applicationDBContext.Games.FirstOrDefault(g => g.GameId == gameId);
 
         public void SaveGame(Game game)
         {
