@@ -57,7 +57,7 @@ namespace PlayBoardGame.Controllers
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 Notes = meeting.Notes,
-                Games = _gameRepository.Games.ToList(),
+                Games = _gameRepository.Games,
                 SelectedGames = GetGameIdsFromMeeting(id),
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name,
                 Address = new AddressViewModels
@@ -175,7 +175,7 @@ namespace PlayBoardGame.Controllers
             }
 
             vm.Organizers = _userManager.Users.ToList();
-            vm.Games = _gameRepository.Games.ToList();
+            vm.Games = _gameRepository.Games;
             return View(vm);
         }
 
@@ -188,7 +188,7 @@ namespace PlayBoardGame.Controllers
             {
                 Organizers = _userManager.Users.ToList(),
                 OrganizerId = currentUserId,
-                Games = _gameRepository.Games.ToList(),
+                Games = _gameRepository.Games,
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone)

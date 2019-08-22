@@ -32,7 +32,7 @@ namespace PlayBoardGame.Models.ViewModels
             
             public int[] SelectedGames { get; set; }
             
-            public List<Game> Games { get; set; }
+            public IEnumerable<Game> Games { get; set; }
         }
     }
 }

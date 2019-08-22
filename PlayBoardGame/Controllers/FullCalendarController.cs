@@ -32,24 +32,20 @@ namespace PlayBoardGame.Controllers
             var currentUser = _userManager.FindByIdAsync(currentUserId).Result;
             var currentUserTimeZone = currentUser.TimeZone;
             var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
-            var meetings = _meetingRepository.GetMeetingsForUser(currentUserId);
-            return GetMeetingsWithDates(meetings, timeZone);
+            var list = _meetingRepository.GetMeetingsForUser(currentUserId).ToList();
+            foreach (var meeting in list)
+            {
+                meeting.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone);
+                meeting.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone);
+            }
+
+            return list.AsEnumerable();
         }
 
         private async Task<string> GetCurrentUserId()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             return user.Id;
-        }
-
-        private IQueryable<Meeting> GetMeetingsWithDates(IQueryable<Meeting> meetings, TimeZoneInfo timeZone)
-        {
-          foreach (var meeting in meetings)
-            {
-                meeting.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone);
-                meeting.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone);
-            }
-            return meetings;
         }
     }
 }

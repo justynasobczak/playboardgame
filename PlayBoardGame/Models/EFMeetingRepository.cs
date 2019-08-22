@@ -13,29 +13,26 @@ namespace PlayBoardGame.Models
             _applicationDBContext = applicationDBContext;
         }
 
-        public IQueryable<Meeting> Meetings => _applicationDBContext.Meetings;
-
-        public IQueryable<Game> GetGamesFromMeeting(int meetingId)
+        public IEnumerable<Game> GetGamesFromMeeting(int meetingId)
         {
             return _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId));
         }
 
         public Meeting GetMeeting(int meetingId)
         {
-            return Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
+            return _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
         }
 
         public string GetDescriptionFromMeeting(int meetingId)
         {
-            return Meetings.Where(m => m.MeetingId == meetingId).Select(m => m.Description).FirstOrDefault();
+            return _applicationDBContext.Meetings.Where(m => m.MeetingId == meetingId).Select(m => m.Description).FirstOrDefault();
         }
 
-        public IQueryable<Meeting> GetMeetingsForUser(string userId)
+        public IEnumerable<Meeting> GetMeetingsForUser(string userId)
         {
-            return Meetings.Where(m => m.Organizer.Id == userId ||
+            return _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId ||
                                        m.MeetingInvitedUser.Any(mu => mu.UserId == userId))
-                .Distinct()
-                .AsQueryable();
+                .Distinct();
         }
 
         public void SaveMeeting(Meeting meeting)
@@ -46,7 +43,7 @@ namespace PlayBoardGame.Models
             }
             else
             {
-                var dbEntry = Meetings.FirstOrDefault(m => m.MeetingId == meeting.MeetingId);
+                var dbEntry = _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingId == meeting.MeetingId);
                 if (dbEntry != null)
                 {
                     dbEntry.Title = meeting.Title;
@@ -72,12 +69,10 @@ namespace PlayBoardGame.Models
 
         public void SaveDescriptionForMeeting(string description, int meetingId)
         {
-            var dbEntry = Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
-            if (dbEntry != null)
-            {
-                dbEntry.Description = description;
-                _applicationDBContext.SaveChanges();
-            }
+            var dbEntry = _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
+            if (dbEntry == null) return;
+            dbEntry.Description = description;
+            _applicationDBContext.SaveChanges();
         }
 
         // bozy: Refactor it to make 1-2 linq queries instead of playing with lists
@@ -95,16 +90,15 @@ namespace PlayBoardGame.Models
             return dbEntry;
         }
 
-        public IQueryable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId)
+        public IEnumerable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId)
         {
-            return Meetings.Where(m => startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
+            return _applicationDBContext.Meetings.Where(m => startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
                                        (m.Organizer.Id == userId ||
                                         m.MeetingInvitedUser.Any(mu => mu.UserId == userId)))
-                .Distinct()
-                .AsQueryable();
+                .Distinct();
         }
 
-        public IQueryable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId)
+        public IEnumerable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId)
         {
             var checkedUsers = _applicationDBContext.Users
                 .Where(u => u.OrganizedMeetings.Any(m => m.MeetingId == meetingId) ||
@@ -113,7 +107,7 @@ namespace PlayBoardGame.Models
             var overlappingMeetings = new List<Meeting>();
             foreach (var user in checkedUsers)
             {
-                var meetingsForUser = Meetings.Where(m =>
+                var meetingsForUser = _applicationDBContext.Meetings.Where(m =>
                     startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
                     m.MeetingId != meetingId &&
                     (m.Organizer.Id == user.Id ||
@@ -125,7 +119,7 @@ namespace PlayBoardGame.Models
                 }
             }
 
-            return overlappingMeetings.Distinct().AsQueryable();
+            return overlappingMeetings.Distinct();
         }
     }
 }
