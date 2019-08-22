@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace PlayBoardGame.Models
 {
@@ -20,18 +21,21 @@ namespace PlayBoardGame.Models
 
         public Meeting GetMeeting(int meetingId)
         {
-            return _applicationDBContext.Meetings.FirstOrDefault(m => m.MeetingId == meetingId);
+            return _applicationDBContext.Meetings
+                .Include(m => m.Organizer)
+                .FirstOrDefault(m => m.MeetingId == meetingId);
         }
 
         public string GetDescriptionFromMeeting(int meetingId)
         {
-            return _applicationDBContext.Meetings.Where(m => m.MeetingId == meetingId).Select(m => m.Description).FirstOrDefault();
+            return _applicationDBContext.Meetings.Where(m => m.MeetingId == meetingId).Select(m => m.Description)
+                .FirstOrDefault();
         }
 
         public IEnumerable<Meeting> GetMeetingsForUser(string userId)
         {
             return _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId ||
-                                       m.MeetingInvitedUser.Any(mu => mu.UserId == userId))
+                                                             m.MeetingInvitedUser.Any(mu => mu.UserId == userId))
                 .Distinct();
         }
 
@@ -93,12 +97,13 @@ namespace PlayBoardGame.Models
         public IEnumerable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId)
         {
             return _applicationDBContext.Meetings.Where(m => startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
-                                       (m.Organizer.Id == userId ||
-                                        m.MeetingInvitedUser.Any(mu => mu.UserId == userId)))
+                                                             (m.Organizer.Id == userId ||
+                                                              m.MeetingInvitedUser.Any(mu => mu.UserId == userId)))
                 .Distinct();
         }
 
-        public IEnumerable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId)
+        public IEnumerable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate,
+            int meetingId)
         {
             var checkedUsers = _applicationDBContext.Users
                 .Where(u => u.OrganizedMeetings.Any(m => m.MeetingId == meetingId) ||

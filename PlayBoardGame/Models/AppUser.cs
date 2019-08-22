@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using StackExchange.Profiling.Internal;
 
 namespace PlayBoardGame.Models
 {
@@ -17,15 +19,17 @@ namespace PlayBoardGame.Models
         public string PostalCode { get; set; }
 
         public string Country { get; set; }
-        
+
         public string TimeZone { get; set; }
 
         public IEnumerable<GameAppUser> GameAppUser { get; set; }
-        
+
         public IEnumerable<Meeting> OrganizedMeetings { get; set; }
-        
+
         public IEnumerable<Message> WrittenMessages { get; set; }
-        
+
         public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
+
+        [NotMapped] public string FullName => LastName.IsNullOrWhiteSpace() ? Email : $"{LastName} {FirstName}";
     }
 }

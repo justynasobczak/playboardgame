@@ -47,9 +47,7 @@ namespace PlayBoardGame.Controllers
 
             var vm = new MeetingViewModels.CreateEditMeetingViewModel
             {
-                Organizers = _userManager.Users.ToList(),
-                //TODO - save new with validation
-                OrganizerId = meeting.Organizer.Id,
+                Organizer = meeting.Organizer.FullName,
                 Title = meeting.Title,
                 MeetingId = meeting.MeetingId,
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone)
@@ -174,7 +172,6 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction(nameof(Edit), new {id = meeting.MeetingId});
             }
 
-            vm.Organizers = _userManager.Users.ToList();
             vm.Games = _gameRepository.Games;
             return View(vm);
         }
@@ -182,12 +179,11 @@ namespace PlayBoardGame.Controllers
         public IActionResult Create()
         {
             var timeZone = GetTimeZoneOfCurrentUser();
-            var currentUserId = GetCurrentUserId().Result;
+            var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
 
             return View(nameof(Edit), new MeetingViewModels.CreateEditMeetingViewModel
             {
-                Organizers = _userManager.Users.ToList(),
-                OrganizerId = currentUserId,
+                Organizer = currentUser.FullName,
                 Games = _gameRepository.Games,
                 StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
@@ -204,6 +200,7 @@ namespace PlayBoardGame.Controllers
             return user.Id;
         }
 
+        //TODO GetTimeZoneOfUser based on Name or Id not current user, to avoid many queries to DB
         private TimeZoneInfo GetTimeZoneOfCurrentUser()
         {
             var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;

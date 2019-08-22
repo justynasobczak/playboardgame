@@ -14,7 +14,6 @@
 <div>
     <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="MeetingId"/>
-        <input type="hidden" asp-for="Organizers"/>
         <input type="hidden" asp-for="IsEditable"/>
 
         <fieldset
@@ -52,11 +51,9 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="OrganizerId">Organizer</label>
-                        <span asp-validation-for="OrganizerId" class="text-danger"></span>
-                        <select asp-for="OrganizerId" asp-items="@(new SelectList(Model.Organizers, "Id", "UserName"))"
-                                class="form-control custom-select" disabled="disabled">
-                        </select>
+                        <label asp-for="Organizer">Organizer</label>
+                        <span asp-validation-for="Organizer" class="text-danger"></span>
+                        <input asp-for="Organizer" readonly="readonly" class="form-control"/>
                     </div>
                 </div>
             </div>
