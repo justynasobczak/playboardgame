@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,32 +8,23 @@ namespace PlayBoardGame.Models
     public class EFInvitedUserRepository : IInvitedUserRepository
     {
         private readonly ApplicationDBContext _applicationDbContext;
-        private readonly UserManager<AppUser> _userManager;
 
-        public EFInvitedUserRepository(ApplicationDBContext applicationDbContext,
-            UserManager<AppUser> userManager)
+        public EFInvitedUserRepository(ApplicationDBContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
-            _userManager = userManager;
         }
 
-        public IQueryable<AppUser> GetInvitedUsers(int meetingId)
-        {
-            return _userManager.Users.Where(u => u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId));
-        }
-        
-        public IQueryable<MeetingInvitedUser> GetInvitedUsersList(int meetingId)
+        public IEnumerable<MeetingInvitedUser> GetInvitedUsersList(int meetingId)
         {
             return _applicationDbContext.MeetingInvitedUser.Where(mu => mu.MeetingId == meetingId)
                 .Include(mu => mu.AppUser)
                 .Include(mu => mu.Meeting);
         }
 
-        public IQueryable<AppUser> GetAvailableUsers(int meetingId)
+        public IEnumerable<AppUser> GetAvailableUsers(int meetingId)
         {
-            var invitedUsers = GetInvitedUsers(meetingId);
-            var availableUsers = _applicationDbContext.Users.Except(invitedUsers);
-            return availableUsers;
+            return _applicationDbContext.Users.Where(u => u.MeetingInvitedUser.All(mu => mu.MeetingId != meetingId))
+                .Where(u => u.OrganizedMeetings.All(m => m.MeetingId != meetingId));
         }
 
         public void AddUserToMeeting(string userId, int meetingId, InvitationStatus status)
@@ -51,11 +43,9 @@ namespace PlayBoardGame.Models
         {
             var dbEntry = _applicationDbContext.MeetingInvitedUser.FirstOrDefault
                 (mu => mu.MeetingId == meetingId && mu.UserId == userId);
-            if (dbEntry != null)
-            {
-                _applicationDbContext.MeetingInvitedUser.Remove(dbEntry);
-                _applicationDbContext.SaveChanges();
-            }
+            if (dbEntry == null) return dbEntry;
+            _applicationDbContext.MeetingInvitedUser.Remove(dbEntry);
+            _applicationDbContext.SaveChanges();
 
             return dbEntry;
         }

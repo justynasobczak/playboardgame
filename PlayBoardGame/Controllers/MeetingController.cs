@@ -37,7 +37,8 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult Edit(int id)
         {
-            var timeZone = GetTimeZoneOfCurrentUser();
+            var currentUserId = GetCurrentUserId().Result;
+            var timeZone = GetTimeZoneOfUser(currentUserId);
             var meeting = _meetingRepository.GetMeeting(id);
             if (meeting == null)
             {
@@ -78,7 +79,7 @@ namespace PlayBoardGame.Controllers
             var currentUserId = GetCurrentUserId().Result;
             if (ModelState.IsValid)
             {
-                var timeZone = GetTimeZoneOfCurrentUser();
+                var timeZone = GetTimeZoneOfUser(currentUserId);
 
                 if (DateTime.TryParse(vm.StartDateTime, out var startDate) &&
                     DateTime.TryParse(vm.EndDateTime, out var endDate))
@@ -178,8 +179,8 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult Create()
         {
-            var timeZone = GetTimeZoneOfCurrentUser();
             var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
+            var timeZone = GetTimeZoneOfUser(currentUser.Id);
 
             return View(nameof(Edit), new MeetingViewModels.CreateEditMeetingViewModel
             {
@@ -200,12 +201,11 @@ namespace PlayBoardGame.Controllers
             return user.Id;
         }
 
-        //TODO GetTimeZoneOfUser based on Name or Id not current user, to avoid many queries to DB
-        private TimeZoneInfo GetTimeZoneOfCurrentUser()
+        private TimeZoneInfo GetTimeZoneOfUser(string id)
         {
-            var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            var currentUserTimeZone = currentUser.TimeZone;
-            return ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
+            var user = _userManager.FindByIdAsync(id).Result;
+            var userTimeZone = user.TimeZone;
+            return ToolsExtensions.ConvertTimeZone(userTimeZone, _logger);
         }
 
         private int[] GetGameIdsFromMeeting(int meetingId)

@@ -1,15 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PlayBoardGame.Models
 {
     public interface IInvitedUserRepository
     {
-        IQueryable<AppUser> GetAvailableUsers(int meetingId);
-        
-        IQueryable<AppUser> GetInvitedUsers(int meetingId);
+        IEnumerable<AppUser> GetAvailableUsers(int meetingId);
 
-        IQueryable<MeetingInvitedUser> GetInvitedUsersList(int meetingId);
+        IEnumerable<MeetingInvitedUser> GetInvitedUsersList(int meetingId);
 
         void AddUserToMeeting(string userId, int meetingId, InvitationStatus status);
 

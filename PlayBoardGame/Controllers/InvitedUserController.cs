@@ -31,8 +31,7 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction(nameof(MeetingController.List), "Meeting");
             }
 
-            var invitedUsersList = new List<MeetingInvitedUser>();
-            invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id).ToList();
+            var invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id).ToList();
 
             var list = new List<InvitedUserViewModel.InvitedUsersList>();
 
@@ -42,8 +41,8 @@ namespace PlayBoardGame.Controllers
                 {
                     // bozy Use string interpolation
                     // DisplayedUserName = $"{user.UserName} {user.FirstName} {user.LastName}";
-                    //Changed
-                    DisplayedUserName = $"{item.AppUser.UserName} {item.AppUser.FirstName} {item.AppUser.LastName}",
+                    //Changed in AppUser
+                    DisplayedUserName = item.AppUser.FullName,
                     UserName = item.AppUser.UserName,
                     Status = item.Status,
                     Id = item.AppUser.Id
@@ -53,9 +52,10 @@ namespace PlayBoardGame.Controllers
             var meeting = _meetingRepository.GetMeeting(id);
             var vm = new InvitedUserViewModel.InvitedUserListViewModel
             {
-                InvitedUsers = _invitedUserRepository.GetInvitedUsers(id),
                 MeetingId = id,
-                AvailableUsers = _invitedUserRepository.GetAvailableUsers(id).ToList(),
+                AvailableUsers = _invitedUserRepository.GetAvailableUsers(id)
+                    .AsQueryable()
+                    .OrderBy(u => u.LastName).ThenBy(u => u.Email),
                 InvitedUsersList = list,
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name
             };
@@ -93,7 +93,7 @@ namespace PlayBoardGame.Controllers
             {
                 // use string.Join() instead of foreach.
                 var overlappingMeetingsTitle = string.Join(", ", overlappingMeetings);
-                
+
                 TempData["ErrorMessage"] = $"{Constants.OverlappingMeetingsMessage}: {overlappingMeetingsTitle}";
                 return RedirectToAction(nameof(List), new {id = meetingId});
             }

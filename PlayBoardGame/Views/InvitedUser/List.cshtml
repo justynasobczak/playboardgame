@@ -15,7 +15,7 @@
         <th class="text-left">Actions</th>
     </tr>
 
-    @if (Model.InvitedUsers.Count() == 0)
+    @if (!Model.InvitedUsersList.Any())
     {
         <tr>
             <td colspan="3" class="text-center">No invited users</td>
@@ -70,7 +70,7 @@
     <form class="form-inline" asp-action="Add" method="post">
         <label class="mr-sm-2 mb-0">Select user:</label>
         <select class="form-control mr-sm-2 mb-2 mb-sm-0 custom-select" asp-for="SelectedToInviteUserId"
-                asp-items="@(new SelectList(Model.AvailableUsers, "Id", "UserName"))">
+                asp-items="@(new SelectList(Model.AvailableUsers, "Id", "FullName"))">
         </select>
         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
         @if (Model.IsEditable)
