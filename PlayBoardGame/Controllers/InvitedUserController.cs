@@ -31,32 +31,25 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction(nameof(MeetingController.List), "Meeting");
             }
 
-            var invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id).ToList();
-
-            var list = new List<InvitedUserViewModel.InvitedUsersList>();
-
-            foreach (var item in invitedUsersList)
-            {
-                list.Add(new InvitedUserViewModel.InvitedUsersList
+            var invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id)
+                .Select(item => new InvitedUserViewModel.InvitedUsersList
                 {
                     // bozy Use string interpolation
                     // DisplayedUserName = $"{user.UserName} {user.FirstName} {user.LastName}";
                     //Changed in AppUser
-                    DisplayedUserName = item.AppUser.FullName,
-                    UserName = item.AppUser.UserName,
-                    Status = item.Status,
+                    DisplayedUserName = item.AppUser.FullName, UserName = item.AppUser.UserName, Status = item.Status,
                     Id = item.AppUser.Id
-                });
-            }
+                })
+                .ToList();
 
             var meeting = _meetingRepository.GetMeeting(id);
             var vm = new InvitedUserViewModel.InvitedUserListViewModel
             {
                 MeetingId = id,
                 AvailableUsers = _invitedUserRepository.GetAvailableUsers(id)
-                    .AsQueryable()
-                    .OrderBy(u => u.LastName).ThenBy(u => u.Email),
-                InvitedUsersList = list,
+                    .OrderBy(u => u.LastName).ThenBy(u => u.Email)
+                    .ToList(),
+                InvitedUsersList = invitedUsersList,
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name
             };
             return View(vm);

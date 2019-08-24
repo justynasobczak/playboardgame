@@ -9,7 +9,7 @@ namespace PlayBoardGame.Models.ViewModels
         {
             public int MeetingId { get; set; }
 
-            public IQueryable<AppUser> AvailableUsers { get; set; }
+            public List<AppUser> AvailableUsers { get; set; }
 
             public string SelectedToInviteUserId { get; set; }
 
