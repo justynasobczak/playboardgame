@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Internal;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -20,7 +19,7 @@ namespace PlayBoardGame.Models.ViewModels
         
         public string TimeZone { get; set; }
         
-        public SelectListItem[] TimeZoneList { get; set; }
+        public List<KeyValuePair<string, string>> TimeZoneList { get; set; }
         
     }
 

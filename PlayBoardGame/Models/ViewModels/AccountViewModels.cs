@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -25,7 +25,7 @@ namespace PlayBoardGame.Models.ViewModels
         
         // bozy in ViewModels you have properties declared 3 ways:
         // Array, IEnumerable<> and List. Please decide for one. And IEnumerable is preferred one.
-        public SelectListItem[] TimeZoneList { get; set; }
+        public List<KeyValuePair<string, string>> TimeZoneList { get; set; }
     }
 
     public class LoginViewModel

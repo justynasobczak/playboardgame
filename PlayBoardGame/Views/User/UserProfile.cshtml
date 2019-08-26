@@ -38,7 +38,8 @@
             <div class="form-group">
                 <label asp-for="TimeZone">Time zone</label>
                 <span asp-validation-for="TimeZone" class="text-danger"></span>
-                <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList, "Value", "Value"))"
+                <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList.
+                                                            OrderBy(i => i.Value), "Value", "Value"))"
                         class="form-control custom-select">
                 </select>
             </div>
