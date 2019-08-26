@@ -23,7 +23,7 @@ namespace PlayBoardGame.Controllers
         public ViewResult List()
         {
             var currentUserId = GetCurrentUserId().Result;
-            return View(new ShelfListViewModel {Shelf = _shelfRepository.GetShelfForUser(currentUserId).AsQueryable()});
+            return View(new ShelfListViewModel {Shelf = _shelfRepository.GetShelfForUser(currentUserId).ToList()});
         }
 
         public ViewResult Edit()
@@ -31,8 +31,8 @@ namespace PlayBoardGame.Controllers
             var currentUserId = GetCurrentUserId().Result;
             var mv = new ShelfEditViewModel
             {
-                Shelf = _shelfRepository.GetShelfForUser(currentUserId).AsQueryable(),
-                AvailableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId).AsQueryable()
+                Shelf = _shelfRepository.GetShelfForUser(currentUserId).ToList(),
+                AvailableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId).ToList()
             };
             return View(mv);
         }

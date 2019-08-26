@@ -19,7 +19,8 @@ namespace PlayBoardGame.Controllers
             _logger = logger;
         }
 
-        public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games.AsQueryable()});
+        //TODO paging
+        public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games.ToList()});
 
         public IActionResult Edit(int id)
         {

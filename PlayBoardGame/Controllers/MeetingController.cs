@@ -56,7 +56,7 @@ namespace PlayBoardGame.Controllers
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 Notes = meeting.Notes,
-                Games = _gameRepository.Games,
+                Games = _gameRepository.Games.OrderBy(g => g.Title),
                 SelectedGames = GetGameIdsFromMeeting(id),
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name,
                 Address = new AddressViewModels
@@ -148,7 +148,7 @@ namespace PlayBoardGame.Controllers
                 };
                 _meetingRepository.SaveMeeting(meeting);
                 var savedGames = GetGameIdsFromMeeting(meeting.MeetingId);
-                var selectedGames = vm.SelectedGames ?? new int[0];
+                var selectedGames = vm.SelectedGames ?? new List<int>();
                 var gamesToAdd = selectedGames.Except(savedGames).ToList();
                 var gamesToRemove = savedGames.Except(selectedGames).ToList();
 
@@ -208,7 +208,7 @@ namespace PlayBoardGame.Controllers
             return ToolsExtensions.ConvertTimeZone(userTimeZone, _logger);
         }
 
-        private int[] GetGameIdsFromMeeting(int meetingId)
+        private List<int> GetGameIdsFromMeeting(int meetingId)
         {
             // bozy use extension methods or linq or both
 //            return _meetingRepository
@@ -221,7 +221,7 @@ namespace PlayBoardGame.Controllers
             return _meetingRepository
                 .GetGamesFromMeeting(meetingId)
                 .Select(g => g.GameId)
-                .ToArray();
+                .ToList();
         }
     }
 }

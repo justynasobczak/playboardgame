@@ -27,7 +27,7 @@ namespace PlayBoardGame.Models.ViewModels
 
             public AddressViewModels Address { get; set; }
 
-            public int[] SelectedGames { get; set; }
+            public List<int> SelectedGames { get; set; }
 
             public IEnumerable<Game> Games { get; set; }
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -33,12 +32,18 @@ namespace PlayBoardGame.Controllers
             {
                 return RedirectToAction(nameof(MeetingController.List), "Meeting");
             }
+
             var currentUserId = GetCurrentUserId().Result;
             var currentUser = _userManager.FindByIdAsync(currentUserId).Result;
             var currentUserTimeZone = currentUser.TimeZone;
             var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
 
-            var messages = GetMessagesWithDates(_messageRepository.GetMessagesForMeeting(id), timeZone).AsQueryable();
+            var messages = _messageRepository.GetMessagesForMeeting(id).ToList();
+            foreach (var message in messages)
+            {
+                message.Created = TimeZoneInfo.ConvertTimeFromUtc(message.Created, timeZone);
+            }
+
             return View(new MessagesListViewModel {Messages = messages, MeetingId = id});
         }
 
@@ -57,7 +62,8 @@ namespace PlayBoardGame.Controllers
                 };
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 _messageRepository.SaveMessage(message);
-            } 
+            }
+
             return RedirectToAction(nameof(List), new {id = vm.MeetingId});
         }
 
@@ -68,7 +74,7 @@ namespace PlayBoardGame.Controllers
             var vm = new EditMessageViewModel {Text = message.Text, MessageId = message.MessageId};
             return PartialView("MessagePopup", vm);
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(EditMessageViewModel vm)
@@ -83,6 +89,7 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
                 _messageRepository.SaveMessage(message);
             }
+
             return RedirectToAction(nameof(List));
         }
 
@@ -103,16 +110,6 @@ namespace PlayBoardGame.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             return user.Id;
-        }
-
-        private IEnumerable<Message> GetMessagesWithDates(IEnumerable<Message> messages, TimeZoneInfo timeZone)
-        {
-            foreach (var message in messages)
-            {
-                message.Created = TimeZoneInfo.ConvertTimeFromUtc(message.Created, timeZone);
-            }
-
-            return messages;
         }
     }
 }
