@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlayBoardGame.Models;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Protocols;
 using Newtonsoft.Json;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
