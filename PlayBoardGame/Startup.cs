@@ -28,7 +28,7 @@ namespace PlayBoardGame
                     options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 );
             services.AddDbContext<ApplicationDBContext>(options =>
-                options.UseSqlServer(_configuration["PlayBoardGame:ConnectionString"]));
+                options.UseSqlServer(_configuration["sql1"]));
             services.AddTransient<IGameRepository, EFGameRepository>();
             services.AddTransient<IShelfRepository, EFShelfRepository>();
             services.AddTransient<IMeetingRepository, EFMeetingRepository>();
