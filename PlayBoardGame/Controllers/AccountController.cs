@@ -65,7 +65,7 @@ namespace PlayBoardGame.Controllers
                     {
                         IsHTML = true,
                         //ToEmail = user.Email,
-                        ToEmail = "justyn.szczepan@gmail.com", // bozy: huh?
+                        ToEmail = "gameetportal@gmail.com", // bozy: huh?
                         Subject = "Welcome to Let's play board game"
                     }, "Welcome to Let's play board game", "This is content", "This is button", "www.test.pl");
 
