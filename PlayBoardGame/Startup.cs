@@ -16,9 +16,15 @@ namespace PlayBoardGame
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) => _configuration = configuration;
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        {
+            _configuration = configuration;
+            _environment = env;
+        }
 
         public IConfiguration _configuration { get; }
+        public IHostingEnvironment _environment { get; }
+        public string _connectionString { get; set; }
 
 
         public void ConfigureServices(IServiceCollection services)
@@ -27,8 +33,18 @@ namespace PlayBoardGame
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 );
+            if (_environment.IsDevelopment())
+            {
+                _connectionString = _configuration["PlayBoardGame:ConnectionString"];
+            }
+
+            if (_environment.IsProduction())
+            {
+                _connectionString = _configuration["GameetProd:ConnectionString"];
+            }
+
             services.AddDbContext<ApplicationDBContext>(options =>
-                options.UseSqlServer(_configuration["sql1"]));
+                options.UseSqlServer(_connectionString));
             services.AddTransient<IGameRepository, EFGameRepository>();
             services.AddTransient<IShelfRepository, EFShelfRepository>();
             services.AddTransient<IMeetingRepository, EFMeetingRepository>();
@@ -55,6 +71,7 @@ namespace PlayBoardGame
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            //_connectionString = env.IsDevelopment() ? _configuration["PlayBoardGame:ConnectionString"] : _configuration["PlayBoardGameProd:ConnectionString"];
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

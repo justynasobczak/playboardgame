@@ -25,35 +25,70 @@ namespace PlayBoardGame.Migrations
             migrationBuilder.RenameColumn(
                 name: "MeetingID",
                 table: "Meetings",
+                newName: "MeetingIdMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "MeetingIdMangle",
+                table: "Meetings",
                 newName: "MeetingId");
 
             migrationBuilder.RenameColumn(
                 name: "MeetingID",
+                table: "MeetingInvitedUser",
+                newName: "MeetingIdMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "MeetingIdMangle",
                 table: "MeetingInvitedUser",
                 newName: "MeetingId");
 
             migrationBuilder.RenameColumn(
                 name: "MeetingID",
                 table: "MeetingGame",
+                newName: "MeetingIdMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "MeetingIdMangle",
+                table: "MeetingGame",
                 newName: "MeetingId");
 
             migrationBuilder.RenameColumn(
                 name: "GameID",
+                table: "MeetingGame",
+                newName: "GameIdMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "GameIdMangle",
                 table: "MeetingGame",
                 newName: "GameId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_MeetingGame_MeetingID",
                 table: "MeetingGame",
+                newName: "IX_MeetingGame_MeetingIdMangle");
+            
+            migrationBuilder.RenameIndex(
+                name: "IX_MeetingGame_MeetingIDMangle",
+                table: "MeetingGame",
                 newName: "IX_MeetingGame_MeetingId");
 
             migrationBuilder.RenameColumn(
                 name: "GameID",
                 table: "Games",
+                newName: "GameIdMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "GameIdMangle",
+                table: "Games",
                 newName: "GameId");
 
             migrationBuilder.RenameColumn(
                 name: "GameID",
+                table: "GameAppUser",
+                newName: "GameIdMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "GameIdMangle",
                 table: "GameAppUser",
                 newName: "GameId");
 
@@ -111,35 +146,70 @@ namespace PlayBoardGame.Migrations
             migrationBuilder.RenameColumn(
                 name: "MeetingId",
                 table: "Meetings",
+                newName: "MeetingIDMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "MeetingIDMangle",
+                table: "Meetings",
                 newName: "MeetingID");
 
             migrationBuilder.RenameColumn(
                 name: "MeetingId",
+                table: "MeetingInvitedUser",
+                newName: "MeetingIDMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "MeetingIDMangle",
                 table: "MeetingInvitedUser",
                 newName: "MeetingID");
 
             migrationBuilder.RenameColumn(
                 name: "MeetingId",
                 table: "MeetingGame",
+                newName: "MeetingIDMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "MeetingIDMangle",
+                table: "MeetingGame",
                 newName: "MeetingID");
 
             migrationBuilder.RenameColumn(
                 name: "GameId",
+                table: "MeetingGame",
+                newName: "GameIDMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "GameIDMangle",
                 table: "MeetingGame",
                 newName: "GameID");
 
             migrationBuilder.RenameIndex(
                 name: "IX_MeetingGame_MeetingId",
                 table: "MeetingGame",
+                newName: "IX_MeetingGame_MeetingIDMangle");
+            
+            migrationBuilder.RenameIndex(
+                name: "IX_MeetingGame_MeetingIDMangle",
+                table: "MeetingGame",
                 newName: "IX_MeetingGame_MeetingID");
 
             migrationBuilder.RenameColumn(
                 name: "GameId",
                 table: "Games",
+                newName: "GameIDMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "GameIDMangle",
+                table: "Games",
                 newName: "GameID");
 
             migrationBuilder.RenameColumn(
                 name: "GameId",
+                table: "GameAppUser",
+                newName: "GameIDMangle");
+            
+            migrationBuilder.RenameColumn(
+                name: "GameIDMangle",
                 table: "GameAppUser",
                 newName: "GameID");
 
