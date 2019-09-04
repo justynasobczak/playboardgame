@@ -37,12 +37,12 @@
                     <label asp-for="TimeZone">Time zone</label>
                     <span asp-validation-for="TimeZone" class="text-danger"></span>
                     <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList
-                                                                .OrderBy(i => i.Value), "Value", "Value"))" class="form-control">
+                                                                .OrderBy(i => i.Value), "Key", "Value"))" class="form-control">
                     </select>
                 </div>
                 <button class="btn mainButtonBeforeLogin btn-block" type="submit">REGISTER</button>
                 <div>
-                    <h4>Already have an account?</h4></>
+                    <h4>Already have an account?</h4>
                 </div>
                 <a asp-action="Login" class="btn secondButtonBeforeLogin btn-block">LOG IN</a>
             </form>
