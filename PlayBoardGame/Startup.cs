@@ -40,7 +40,7 @@ namespace PlayBoardGame
 
             if (_environment.IsProduction())
             {
-                _connectionString = _configuration["GameetProd:ConnectionString"];
+                _connectionString = _configuration.GetConnectionString("GameetProd");
             }
 
             services.AddDbContext<ApplicationDBContext>(options =>
