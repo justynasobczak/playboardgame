@@ -72,11 +72,13 @@ namespace PlayBoardGame
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             //_connectionString = env.IsDevelopment() ? _configuration["PlayBoardGame:ConnectionString"] : _configuration["PlayBoardGameProd:ConnectionString"];
-            if (env.IsDevelopment())
+            /*if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
-            }
+            }*/
+            app.UseDeveloperExceptionPage();
+            app.UseStatusCodePages();
 
             app.UseMiniProfiler();
             app.UseAuthentication();
