@@ -68,7 +68,7 @@ namespace PlayBoardGame.Infrastructure
 
         public static TimeZoneInfo ConvertTimeZone(string userTimeZone, ILogger logger)
         {
-            TimeZoneInfo timeZone;
+            /*TimeZoneInfo timeZone;
             var tzs = TimeZoneInfo.GetSystemTimeZones();
             try
             {
@@ -85,6 +85,27 @@ namespace PlayBoardGame.Infrastructure
                 logger.LogError("Registry data on the {0} zone has been corrupted.", userTimeZone);
                 timeZone = tzs.First();
             }
+
+            return timeZone;*/
+            TimeZoneInfo timeZone;
+            var timeZones = GetTimeZones();
+            var userTz = timeZones.FirstOrDefault(id => id.Key == userTimeZone).Key;
+            try
+            {
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(userTz);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                logger.LogError("Unable to find the {0} zone in the registry.", userTimeZone);
+                timeZone = TimeZoneInfo.GetSystemTimeZones().First();
+            }
+
+            catch (InvalidTimeZoneException)
+            {
+                logger.LogError("Registry data on the {0} zone has been corrupted.", userTimeZone);
+                timeZone = TimeZoneInfo.GetSystemTimeZones().First();
+            }
+            
 
             return timeZone;
         }
