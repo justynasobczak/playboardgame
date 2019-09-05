@@ -191,7 +191,8 @@ namespace PlayBoardGame.Controllers
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 IsEditable = true,
-                Address = new AddressViewModels()
+                Address = new AddressViewModels(),
+                TimeZone = timeZone.Id
             });
         }
 
