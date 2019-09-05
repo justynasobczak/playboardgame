@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
+using NodaTime;
+using NodaTime.TimeZones;
 
 namespace PlayBoardGame.Infrastructure
 {
@@ -37,14 +39,31 @@ namespace PlayBoardGame.Infrastructure
 
         public static List<KeyValuePair<string, string>> GetTimeZones()
         {
-            var tzs = TimeZoneInfo.GetSystemTimeZones();
+            /*var tzs = TimeZoneInfo.GetSystemTimeZones();
             var timeZones = new List<KeyValuePair<string, string>>();
             foreach (var item in tzs)
             {
                 timeZones.Add(new KeyValuePair<string, string>(item.DisplayName, item.Id));
             }
 
-            return timeZones;
+            return timeZones;*/
+            var timeZones2 = new List<KeyValuePair<string, string>>();
+            var provider = DateTimeZoneProviders.Tzdb;
+            foreach (var id in provider.Ids)
+            {
+                var zone = provider[id];
+                timeZones2.Add(new KeyValuePair<string, string>(zone.Id, zone.Id));
+                // Use the zone 
+            }
+            
+            /*var tzs = TimeZoneInfo.GetSystemTimeZones();
+            var timeZones = new List<KeyValuePair<string, string>>();
+            foreach (var item in tzs)
+            {
+                timeZones.Add(new KeyValuePair<string, string>(item.DisplayName, item.Id));
+            }*/
+
+            return timeZones2;
         }
 
         public static TimeZoneInfo ConvertTimeZone(string userTimeZone, ILogger logger)
