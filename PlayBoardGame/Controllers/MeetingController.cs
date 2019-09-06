@@ -57,9 +57,9 @@ namespace PlayBoardGame.Controllers
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),*/
-                StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone)
+                StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
-                EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, timeZone)
+                EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 Notes = meeting.Notes,
                 Games = _gameRepository.Games.OrderBy(g => g.Title),
@@ -92,8 +92,8 @@ namespace PlayBoardGame.Controllers
                 if (DateTime.TryParse(vm.StartDateTime, out var startDate) &&
                     DateTime.TryParse(vm.EndDateTime, out var endDate))
                 {
-                    startDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(startDate, timeZone);
-                    endDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(endDate, timeZone);
+                    startDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(startDate, timeZone, _logger);
+                    endDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(endDate, timeZone, _logger);
 
                     //startDateUTC = TimeZoneInfo.ConvertTimeToUtc(startDate, timeZone);
                     //endDateUTC = TimeZoneInfo.ConvertTimeToUtc(endDate, timeZone);
@@ -202,9 +202,9 @@ namespace PlayBoardGame.Controllers
                 //.ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 //EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone)
                 //.ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
-                StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(1), timeZone)
+                StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(1), timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
-                EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(2), timeZone)
+                EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(2), timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 IsEditable = true,
                 Address = new AddressViewModels()

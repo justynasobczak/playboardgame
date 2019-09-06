@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using NodaTime;
 using NodaTime.Extensions;
+using NodaTime.TimeZones;
 
 namespace PlayBoardGame.Infrastructure
 {
@@ -78,22 +79,38 @@ namespace PlayBoardGame.Infrastructure
             return startDateUTC < endDateUTC;
         }
 
-        public static DateTime ConvertToTimeZoneFromUtc(DateTime utcDateTime, string timeZone)
+        public static DateTime ConvertToTimeZoneFromUtc(DateTime utcDateTime, string timeZone, ILogger logger)
         {
-            var dateTimeZone = DateTimeZoneProviders.Tzdb[timeZone];
+            var zone = FindTimeZone(timeZone, logger);
             return Instant.FromDateTimeUtc(utcDateTime)
-                .InZone(dateTimeZone)
+                .InZone(zone)
                 .ToDateTimeUnspecified();
         }
 
-        public static DateTime ConvertFromTimeZoneToUtc(DateTime localDateTime, string timeZone)
+        public static DateTime ConvertFromTimeZoneToUtc(DateTime localDateTime, string timeZone, ILogger logger)
         {
-            var zone = DateTimeZoneProviders.Tzdb[timeZone];
+            var zone = FindTimeZone(timeZone, logger);
             var ldt = localDateTime.ToLocalDateTime();
             var zdt = ldt.InZoneLeniently(zone);
             var instant = zdt.ToInstant();
             var utc = instant.InUtc();
             return utc.ToDateTimeUnspecified();
+        }
+
+        private static DateTimeZone FindTimeZone(string userTimeZone, ILogger logger)
+        {
+            DateTimeZone zone;
+            try
+            {
+                zone = DateTimeZoneProviders.Tzdb[userTimeZone];
+            }
+            catch (DateTimeZoneNotFoundException)
+            {
+                zone = DateTimeZoneProviders.Tzdb.GetAllZones().FirstOrDefault();
+                logger.LogError("Cannot find time zone", userTimeZone);
+            }
+
+            return zone;
         }
     }
 }

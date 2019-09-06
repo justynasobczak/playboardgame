@@ -38,8 +38,8 @@ namespace PlayBoardGame.Controllers
             {
                 //meeting.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone);
                 //meeting.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone);
-                meeting.StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone);
-                meeting.EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, timeZone);
+                meeting.StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone, _logger);
+                meeting.EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, timeZone, _logger);
             }
 
             return list.AsEnumerable();

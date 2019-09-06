@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NodaTime;
+using NodaTime.Extensions;
 
 namespace PlayBoardGame.Models
 {
@@ -21,6 +24,7 @@ namespace PlayBoardGame.Models
             var email = configuration["Data:AdminUser:Email"];
             var password = configuration["Data:AdminUser:Password"];
             var role = configuration["Data:AdminUser:Role"];
+            var timeZone = DateTimeZoneProviders.Tzdb.GetAllZones().FirstOrDefault().Id;
 
             if (await userManager.FindByNameAsync(username) == null)
             {
@@ -32,7 +36,8 @@ namespace PlayBoardGame.Models
                 var user = new AppUser
                 {
                     UserName = username,
-                    Email = email
+                    Email = email,
+                    TimeZone = timeZone
                 };
 
                 var result = await userManager.CreateAsync(user, password);

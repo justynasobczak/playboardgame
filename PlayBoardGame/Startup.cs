@@ -22,9 +22,9 @@ namespace PlayBoardGame
             _environment = env;
         }
 
-        public IConfiguration _configuration { get; }
-        public IHostingEnvironment _environment { get; }
-        public string _connectionString { get; set; }
+        private IConfiguration _configuration { get; }
+        private IHostingEnvironment _environment { get; }
+        private string _connectionString { get; set; }
 
 
         public void ConfigureServices(IServiceCollection services)
@@ -33,15 +33,9 @@ namespace PlayBoardGame
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 );
-            if (_environment.IsDevelopment())
-            {
-                _connectionString = _configuration["PlayBoardGame:ConnectionString"];
-            }
-
-            if (_environment.IsProduction())
-            {
-                _connectionString = _configuration.GetConnectionString("GameetProd");
-            }
+            _connectionString = _environment.IsDevelopment()
+                ? _configuration["PlayBoardGame:ConnectionString"]
+                : _configuration.GetConnectionString("GameetProd");
 
             services.AddDbContext<ApplicationDBContext>(options =>
                 options.UseSqlServer(_connectionString));
@@ -71,16 +65,12 @@ namespace PlayBoardGame
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            //_connectionString = env.IsDevelopment() ? _configuration["PlayBoardGame:ConnectionString"] : _configuration["PlayBoardGameProd:ConnectionString"];
-            /*if (env.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
-            }*/
-            app.UseDeveloperExceptionPage();
-            app.UseStatusCodePages();
-
-            app.UseMiniProfiler();
+                app.UseMiniProfiler();
+            }
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseMvc(routes =>

@@ -43,7 +43,7 @@ namespace PlayBoardGame.Controllers
             foreach (var message in messages)
             {
                 //message.Created = TimeZoneInfo.ConvertTimeFromUtc(message.Created, timeZone);
-                message.Created = ToolsExtensions.ConvertToTimeZoneFromUtc(message.Created, timeZone);
+                message.Created = ToolsExtensions.ConvertToTimeZoneFromUtc(message.Created, timeZone, _logger);
             }
 
             return View(new MessagesListViewModel {Messages = messages, MeetingId = id});
