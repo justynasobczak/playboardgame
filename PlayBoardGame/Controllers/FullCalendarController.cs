@@ -31,12 +31,15 @@ namespace PlayBoardGame.Controllers
             var currentUserId = GetCurrentUserId().Result;
             var currentUser = _userManager.FindByIdAsync(currentUserId).Result;
             var currentUserTimeZone = currentUser.TimeZone;
-            var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
+            //var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
+            var timeZone = currentUser.TimeZone;
             var list = _meetingRepository.GetMeetingsForUser(currentUserId).ToList();
             foreach (var meeting in list)
             {
-                meeting.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone);
-                meeting.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone);
+                //meeting.StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone);
+                //meeting.EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone);
+                meeting.StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone);
+                meeting.EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, timeZone);
             }
 
             return list.AsEnumerable();

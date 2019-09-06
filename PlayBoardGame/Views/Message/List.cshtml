@@ -24,18 +24,18 @@ else
         </div>
         <div class="row mb-3">
             <div class="col-10 messageFooter">
-                Added by @message.Author on @message.Created
+                Added by @message.Author on @message.Created.ToString()
             </div>
             @if (message.Author.UserName == User?.Identity?.Name)
             {
                 <div class="col-0">
-                    <button class="btn btn-link" onclick="ShowMessage(@message.MessageId)">
+                    <button class="btn btn-link" onclick="ShowMessage(@message.MessageId.ToString())">
                         <i class="fas fa-pencil-alt icons"></i>
                     </button>
                 </div>
                 <div class="col">
                     <form asp-action="Delete" method="post">
-                        <input type="hidden" name="id" value="@message.MessageId"/>
+                        <input type="hidden" name="id" value="@message.MessageId.ToString()"/>
                         <button type="submit" class="btn btn-link">
                             <i class="far fa-trash-alt icons"></i>
                         </button>
