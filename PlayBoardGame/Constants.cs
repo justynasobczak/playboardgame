@@ -24,9 +24,29 @@ namespace PlayBoardGame
         public const string UnknownId = "Unknown Id";
         public const string UnknownError = "Unknown error occurred";
 
+        //Email contents
+        public const string SubjectRegistrationEmail = "Your new Gameet account is ready";
+        public const string TitleRegistrationEmail = "Welcome to Gameet!";
+
+        public const string ContentRegistrationEmail = "Thank you for creating an account with The Gameet. " +
+                                                       "With your new account, you can organize the meeting with the board games" +
+                                                       " and communicte with the players.";
+        public const string ButtonVisitSide = "Visit our side";
+        
+        public const string SubjectResetPasswordEmail = "Reset your Gameet account password";
+        public const string TitleResetPasswordEmail = "Reset password";
+
+        public const string ContentResetPasswordEmail = "To reset your password click the link below: ";
+        public const string ButtonResetPassword = "Reset password";
+        
+        public const string SubjectInviteUserEmail = "Invitation from Gameet account";
+        public const string TitleInviteUserEmail = "Invitation";
+
+        public const string ContentInviteUserEmail = "You are invited to the meeting with board games";
+
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
-        
+
         public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>
         {
             {"AF", "Afghanistan"},

@@ -1,12 +1,14 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 using Microsoft.Extensions.Logging;
-using PlayBoardGame.Migrations;
+using PlayBoardGame.Email.SendGrid;
+using PlayBoardGame.Email.Template;
+using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -17,11 +19,19 @@ namespace PlayBoardGame.Controllers
     {
         private readonly IInvitedUserRepository _invitedUserRepository;
         private readonly IMeetingRepository _meetingRepository;
+        private readonly IEmailTemplateSender _templateSender;
+        private readonly ILogger<InvitedUserController> _logger;
+        private readonly UserManager<AppUser> _userManager;
 
-        public InvitedUserController(IInvitedUserRepository invitedUserRepository, IMeetingRepository meetingRepository)
+        public InvitedUserController(IInvitedUserRepository invitedUserRepository, IMeetingRepository meetingRepository,
+            IEmailTemplateSender templateSender, ILogger<InvitedUserController> logger,
+            UserManager<AppUser> userManager)
         {
             _invitedUserRepository = invitedUserRepository;
             _meetingRepository = meetingRepository;
+            _templateSender = templateSender;
+            _logger = logger;
+            _userManager = userManager;
         }
 
         public IActionResult List(int id)
@@ -70,11 +80,18 @@ namespace PlayBoardGame.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Add(InvitedUserViewModel.InvitedUserListViewModel vm)
+        public async Task<IActionResult> Add(InvitedUserViewModel.InvitedUserListViewModel vm)
         {
             var userId = vm.SelectedToInviteUserId;
             var meetingId = vm.MeetingId;
             var meeting = _meetingRepository.GetMeeting(meetingId);
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var games = meeting.MeetingGame.Select(mg => mg.Game.Title);
+            var meetingStartDate = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, user.TimeZone, _logger)
+                .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture);
+            var meetingEndDate = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, user.TimeZone, _logger)
+                .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture);
+            
             var overlappingMeetings = new List<string>();
             overlappingMeetings = _meetingRepository
                 .GetOverlappingMeetingsForUser(meeting.StartDateTime, meeting.EndDateTime, userId)
@@ -93,6 +110,26 @@ namespace PlayBoardGame.Controllers
 
             _invitedUserRepository.AddUserToMeeting(userId, meetingId, InvitationStatus.Pending);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            
+            var appLink = Url.Action(nameof(List), "InvitedUser", new {id = meetingId}, HttpContext.Request.Scheme);
+            var content =
+                $"{Constants.ContentInviteUserEmail}: Organizer: {meeting.Organizer.FullName}; Start date: {meetingStartDate}; End date: {meetingEndDate};" +
+                $" Games: {string.Join(", ", games)}";
+                          var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                {
+                    IsHTML = true,
+                    ToEmail = user.Email,
+                    Subject = Constants.SubjectInviteUserEmail
+                }, Constants.TitleInviteUserEmail, content,
+                Constants.ButtonVisitSide,
+                appLink);
+
+            if (response.Successful) return RedirectToAction(nameof(List), new {id = meetingId});
+            TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+            foreach (var error in response.Errors)
+            {
+                _logger.LogError(error);
+            }
 
             return RedirectToAction(nameof(List), new {id = meetingId});
         }

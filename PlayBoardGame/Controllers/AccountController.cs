@@ -61,21 +61,21 @@ namespace PlayBoardGame.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, false);
+                    var appLink = Url.Action(nameof(Login), "Account", null, HttpContext.Request.Scheme);
                     var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
-                    {
-                        IsHTML = true,
-                        //ToEmail = user.Email,
-                        ToEmail = "gameetportal@gmail.com", // bozy: huh?
-                        Subject = "Welcome to Let's play board game"
-                    }, "Welcome to Let's play board game", "This is content", "This is button", "www.test.pl");
-
-                    if (!response.Successful)
-                    {
-                        TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
-                        foreach (var error in response.Errors)
                         {
-                            _logger.LogError(error);
-                        }
+                            IsHTML = true,
+                            ToEmail = user.Email,
+                            Subject = Constants.SubjectRegistrationEmail
+                        }, Constants.TitleRegistrationEmail, Constants.ContentRegistrationEmail,
+                        Constants.ButtonVisitSide,
+                        appLink);
+
+                    if (response.Successful) return RedirectToAction(nameof(StartController.Index), "Start");
+                    TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+                    foreach (var error in response.Errors)
+                    {
+                        _logger.LogError(error);
                     }
 
                     return RedirectToAction(nameof(StartController.Index), "Start");
@@ -160,12 +160,12 @@ namespace PlayBoardGame.Controllers
                 var resetLink = Url.Action(nameof(ResetPassword), "Account", new {emailToken = token},
                     protocol: HttpContext.Request.Scheme);
                 var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
-                {
-                    IsHTML = true,
-                    //ToEmail = user.Email,
-                    ToEmail = "justyn.szczepan@gmail.com",
-                    Subject = "Reset password"
-                }, "Reset password", "This is content", "This is button", resetLink);
+                    {
+                        IsHTML = true,
+                        ToEmail = user.Email,
+                        Subject = Constants.SubjectResetPasswordEmail
+                    }, Constants.TitleResetPasswordEmail, Constants.ContentResetPasswordEmail,
+                    Constants.ButtonResetPassword, resetLink);
                 if (response.Successful)
                 {
                     TempData["SuccessMessage"] = Constants.SendResetLinkSuccessMessage;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SendGrid;
@@ -12,12 +13,13 @@ namespace PlayBoardGame.Email.SendGrid
 {
     public class SendGridEmailSender : IEmailSender
     {
-
         private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _environment;
 
-        public SendGridEmailSender(IConfiguration configuration)
+        public SendGridEmailSender(IConfiguration configuration, IHostingEnvironment environment)
         {
             _configuration = configuration;
+            _environment = environment;
         }
 
         public async Task<SendEmailResponse> SendEmailAsync(SendEmailDetails details)
@@ -26,13 +28,14 @@ namespace PlayBoardGame.Email.SendGrid
 
             var client = new SendGridClient(apiKey);
 
-            var from = new EmailAddress(_configuration["Data:SendGridFrom:FromEmail"], _configuration["Data:SendGridFrom:FromName"]);
+            var from = new EmailAddress(_configuration["Data:SendGridFrom:FromEmail"],
+                _configuration["Data:SendGridFrom:FromName"]);
 
-            var to = new EmailAddress(details.ToEmail, details.ToName);
-
+            var to = _environment.IsDevelopment()
+                ? new EmailAddress(_configuration["Data:SendGridTo:ToEmailForTests"],
+                    _configuration["Data:SendGridTo:ToNameForTests"])
+                : new EmailAddress(details.ToEmail, details.ToName);
             var subject = details.Subject;
-
-            var content = details.Content;
 
             var msg = MailHelper.CreateSingleEmail(from, to, subject, details.IsHTML ? null : details.Content,
                 details.IsHTML ? details.Content : null);
@@ -56,8 +59,9 @@ namespace PlayBoardGame.Email.SendGrid
 
                 if (errorResponse.Errors == null || errorResponse.Errors.Count == 0)
                 {
-                    errorResponse.Errors = new List<string>(new[] { Constants.GeneralSendEmailErrorMessage });
+                    errorResponse.Errors = new List<string>(new[] {Constants.GeneralSendEmailErrorMessage});
                 }
+
                 return errorResponse;
             }
             catch (Exception ex)
@@ -67,12 +71,12 @@ namespace PlayBoardGame.Email.SendGrid
                     var error = ex;
                     Debugger.Break();
                 }
+
                 return new SendEmailResponse
                 {
-                    Errors = new List<string>(new[] { Constants.UnknownError })
+                    Errors = new List<string>(new[] {Constants.UnknownError})
                 };
             }
         }
     }
 }
-

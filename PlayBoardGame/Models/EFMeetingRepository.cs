@@ -23,6 +23,8 @@ namespace PlayBoardGame.Models
         {
             return _applicationDBContext.Meetings
                 .Include(m => m.Organizer)
+                .Include(m => m.MeetingGame)
+                .ThenInclude(mg => mg.Game)
                 .FirstOrDefault(m => m.MeetingId == meetingId);
         }
 
