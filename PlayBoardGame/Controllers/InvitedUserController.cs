@@ -87,11 +87,12 @@ namespace PlayBoardGame.Controllers
             var meeting = _meetingRepository.GetMeeting(meetingId);
             var user = _userManager.FindByIdAsync(userId).Result;
             var games = meeting.MeetingGame.Select(mg => mg.Game.Title);
-            var meetingStartDate = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, user.TimeZone, _logger)
+            var meetingStartDate = ToolsExtensions
+                .ConvertToTimeZoneFromUtc(meeting.StartDateTime, user.TimeZone, _logger)
                 .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture);
             var meetingEndDate = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, user.TimeZone, _logger)
                 .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture);
-            
+
             var overlappingMeetings = new List<string>();
             overlappingMeetings = _meetingRepository
                 .GetOverlappingMeetingsForUser(meeting.StartDateTime, meeting.EndDateTime, userId)
@@ -110,26 +111,39 @@ namespace PlayBoardGame.Controllers
 
             _invitedUserRepository.AddUserToMeeting(userId, meetingId, InvitationStatus.Pending);
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-            
+
             var appLink = Url.Action(nameof(List), "InvitedUser", new {id = meetingId}, HttpContext.Request.Scheme);
             var content =
                 $"{Constants.ContentInviteUserEmail}: Organizer: {meeting.Organizer.FullName}; Start date: {meetingStartDate}; End date: {meetingEndDate};" +
                 $" Games: {string.Join(", ", games)}";
-                          var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+            _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                 {
                     IsHTML = true,
                     ToEmail = user.Email,
                     Subject = Constants.SubjectInviteUserEmail
                 }, Constants.TitleInviteUserEmail, content,
                 Constants.ButtonVisitSide,
-                appLink);
+                appLink)
+                .ContinueWith(t =>
+                {
+                    if (!t.Result.Successful)
+                    {
+                        foreach (var error in t.Result.Errors)
+                        {
+                            _logger.LogError(error);
+                        }
+                        
+                    }
+                }, TaskScheduler.Default);
 
+/*
             if (response.Successful) return RedirectToAction(nameof(List), new {id = meetingId});
             TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
             foreach (var error in response.Errors)
             {
                 _logger.LogError(error);
             }
+*/
 
             return RedirectToAction(nameof(List), new {id = meetingId});
         }
