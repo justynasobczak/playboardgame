@@ -29,13 +29,36 @@ namespace PlayBoardGame
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var serverDocker = _configuration["DBServer"];
+            var portDocker = _configuration["DBPort"];
+            var userDocker = _configuration["DBUser"];
+            var passwordDocker = _configuration["DBPassword"];
+            var databaseDocker = _configuration["DBDatabase"];
+
             services.AddMvc()
                 .AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 );
-            _connectionString = _environment.IsDevelopment()
+
+            if (_environment.IsDevelopment())
+            {
+                _connectionString = _configuration["PlayBoardGame:ConnectionString"];
+            }
+
+            if (_environment.IsProduction())
+            {
+                _connectionString = _configuration.GetConnectionString("GameetProd");
+            }
+
+            if (_environment.EnvironmentName == "Docker")
+            {
+                _connectionString = $"Server={serverDocker},{portDocker};Initial Catalog={databaseDocker};User ID={userDocker};Password={passwordDocker}";
+            }
+
+
+            /*_connectionString = _environment.IsDevelopment()
                 ? _configuration["PlayBoardGame:ConnectionString"]
-                : _configuration.GetConnectionString("GameetProd");
+                : _configuration.GetConnectionString("GameetProd");*/
 
             services.AddDbContext<ApplicationDBContext>(options =>
                 options.UseSqlServer(_connectionString));
@@ -71,6 +94,7 @@ namespace PlayBoardGame
                 app.UseStatusCodePages();
                 app.UseMiniProfiler();
             }
+
             app.UseAuthentication();
             app.UseStaticFiles();
             app.UseMvc(routes =>

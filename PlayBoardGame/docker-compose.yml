@@ -1,0 +1,19 @@
+version: "3"
+services:
+  ms-sql-server:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+  playboardgame:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Docker"
+      DBServer: "ms-sql-server"
+      DBPort: "1433"
+      DBUser: "SA"
+      DBPassword: ${SA_PASSWORD}
+      DBDatabase: "PlayBoardGame"
