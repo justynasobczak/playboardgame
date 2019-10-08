@@ -9,7 +9,7 @@ services:
   playboardgame:
     build: .
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
       ASPNETCORE_ENVIRONMENT: "Docker"
       DBServer: "ms-sql-server"
