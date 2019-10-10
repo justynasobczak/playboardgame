@@ -8,12 +8,7 @@
     isCreateMode = false
 })
 
-<table class="table table-striped">
-    <tr>
-        <th class="text-left">Name</th>
-        <th class="text-left">Status</th>
-        <th class="text-left">Actions</th>
-    </tr>
+<table class="table table-hover">
 
     @if (!Model.InvitedUsersList.Any())
     {
@@ -27,34 +22,53 @@
         {
             <tr>
                 <td>@item.DisplayedUserName</td>
-                <td>@item.Status</td>
+                @switch (item.Status)
+                {
+                    case InvitationStatus.Accepted:
+                        <td class="acceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    case InvitationStatus.Cancelled:
+                        <td class="notAcceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    case InvitationStatus.Pending:
+                        <td class="pendingStatus">@item.Status.ToString()</td>
+                        break;
+                    case InvitationStatus.Rejected:
+                        <td class="notAcceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    default:
+                        <td class="text-primary">@item.Status.ToString()</td>
+                        break;
+                }
                 <td>
                     <form method="post">
                         <input type="hidden" name="userId" value="@item.Id"/>
                         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
                         @if (Model.IsEditable)
                         {
-                            <button asp-action="Delete" type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button asp-action="Delete" type="submit" class="buttonForIcons">
+                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteInvitationTooltip"></i>
+                            </button>
                         }
                         @if (item.UserName == User.Identity.Name)
                         {
                             if (item.Status == InvitationStatus.Pending || item.Status == InvitationStatus.Rejected
                                 || item.Status == InvitationStatus.Cancelled)
                             {
-                                <button asp-action="ChangeStatus" type="submit" class="btn btn-info btn-sm" asp-route-status="Accepted">
-                                    Accept
+                                <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Accepted">
+                                    <i class="fas fa-user-check icons" data-toggle="tooltip" title="@Constants.AcceptInvitationTooltip"></i>
                                 </button>
                             }
                             if (item.Status == InvitationStatus.Pending)
                             {
-                                <button asp-action="ChangeStatus" type="submit" class="btn btn-danger btn-sm" asp-route-status="Rejected">
-                                    Reject
+                                <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Rejected">
+                                    <i class="fas fa-window-close icons" data-toggle="tooltip" title="@Constants.RejectInvitationTooltip"></i>
                                 </button>
                             }
                             if (item.Status == InvitationStatus.Accepted)
                             {
-                                <button asp-action="ChangeStatus" type="submit" class="btn btn-danger btn-sm" asp-route-status="Cancelled">
-                                    Cancel
+                                <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Cancelled">
+                                    <i class="fas fa-ban icons" data-toggle="tooltip" title="@Constants.CancelInvitationTooltip"></i>
                                 </button>
                             }
                         }
@@ -81,3 +95,9 @@
 
     </form>
 }
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

@@ -1,4 +1,3 @@
-@using PlayBoardGame.Controllers
 @model MeetingViewModels.CreateEditMeetingViewModel
 
 @{
@@ -75,8 +74,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Address.Street">Street</label>
-                        <button type="button" onclick="CopyAddress()" class="btn"
-                                data-toggle="copyAddressTooltip" title="Copy from profile">
+                        <button type="button" onclick="CopyAddress()" class="buttonForIcons"
+                                data-toggle="copyAddressTooltip" title="@Constants.CopyAddressTooltip">
                             <i class="far fa-copy icons"></i>
                         </button>
                         <span asp-validation-for="Address.Street" class="text-danger"></span>

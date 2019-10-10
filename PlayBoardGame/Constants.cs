@@ -19,6 +19,13 @@ namespace PlayBoardGame
         public const string EndDateBeforeStartMessage = "Please enter a date later than start date.";
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
         public const string WrongDateTimeFormat = "Please enter a date in format: yyyy/MM/dd HH:mm";
+        
+        //Tooltips
+        public const string DeleteInvitationTooltip = "Delete an invitation";
+        public const string AcceptInvitationTooltip = "Accept an invitation";
+        public const string RejectInvitationTooltip = "Decline";
+        public const string CancelInvitationTooltip = "Cancel a meeting";
+        public const string CopyAddressTooltip = "Copy an address from profile";
 
         //Logs
         public const string UnknownId = "Unknown Id";
