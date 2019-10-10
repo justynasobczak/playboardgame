@@ -26,6 +26,8 @@ namespace PlayBoardGame
         public const string RejectInvitationTooltip = "Decline";
         public const string CancelInvitationTooltip = "Cancel a meeting";
         public const string CopyAddressTooltip = "Copy an address from profile";
+        public const string EditMessageTooltip = "Edit a message";
+        public const string DeleteMessageTooltip = "Delete a message";
 
         //Logs
         public const string UnknownId = "Unknown Id";
