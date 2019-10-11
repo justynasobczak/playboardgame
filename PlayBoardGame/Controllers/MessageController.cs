@@ -44,6 +44,7 @@ namespace PlayBoardGame.Controllers
             {
                 //message.Created = TimeZoneInfo.ConvertTimeFromUtc(message.Created, timeZone);
                 message.Created = ToolsExtensions.ConvertToTimeZoneFromUtc(message.Created, timeZone, _logger);
+                message.Author.Email = message.Author.Email.Trim().ToLower();
             }
 
             return View(new MessagesListViewModel {Messages = messages, MeetingId = id});

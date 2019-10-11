@@ -22,11 +22,16 @@
         @foreach (var message in Model.Messages)
         {
             <tr>
-                <td class="text-left">
-                    <div>@message.Text</div>
-                    <div class="messageFooter">Added by @message.Author on @message.Created.ToString()</div>
+                <td class="text-left tdAvatar">
+                    <div>
+                        <img gravatar-email="@message.Author.Email" alt="Avatar"/>
+                    </div>
                 </td>
-                <td>
+                <td class="text-left">
+                    <div class="messageFooter"><span class="font-weight-bold">@message.Author</span>, <span class="text-black-50">@message.Created.ToString()</span></div>
+                    <div>@message.Text</div>
+                </td>
+                <td class="text-right">
                     @if (message.Author.UserName == User?.Identity?.Name)
                     {
                         <button class="buttonForIcons" onclick="ShowMessage(@message.MessageId.ToString())">
