@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authentication;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -36,6 +37,10 @@ namespace PlayBoardGame.Models.ViewModels
         [Required]
         [UIHint("password")]
         public string Password { get; set; }
+        
+        public string ReturnUrl { get; set; }
+        
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 
     public class SendResetPasswordLinkViewModel

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -95,21 +97,89 @@ namespace PlayBoardGame.Controllers
             return View(nameof(Register), vm);
         }
 
-        public IActionResult Login()
+        public async Task<IActionResult> Login(string returnUrl)
         {
+            var model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
             if (!User?.Identity?.IsAuthenticated ?? false)
             {
-                return View();
+                return View(model);
             }
 
             return RedirectToAction(nameof(ShelfController.List), "Shelf");
         }
 
         [HttpPost]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            returnUrl = returnUrl ?? Url.Content("~/");
+            var model = new LoginViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+            };
+            if (remoteError != null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error from external provider {remoteError}");
+                return View("Login", model);
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                ModelState.AddModelError(string.Empty, $"Error loading external login information");
+                return View("Login", model);
+            }
+
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
+                info.ProviderKey, false, true);
+            if (result.Succeeded)
+            {
+                return LocalRedirect(returnUrl);
+            }
+            else
+            {
+                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+                if (email != null)
+                {
+                    var user = await _userManager.FindByEmailAsync(email);
+                    if (user == null)
+                    {
+                        user = new AppUser
+                        {
+                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                            Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        };
+                        await _userManager.CreateAsync(user);
+                    }
+
+                    await _userManager.AddLoginAsync(user, info);
+                    await _signInManager.SignInAsync(user, false);
+
+                    return LocalRedirect(returnUrl);
+                }
+
+                return RedirectToAction(nameof(ErrorController.Error), "Error");
+            }
+        }
+
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginAsync(LoginViewModel vm)
         {
+            vm.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (!ModelState.IsValid) return View(nameof(Login), vm);
+            var returnUrl = vm.ReturnUrl ?? Url.Action(nameof(ShelfController.List), "Shelf");
             var user = await _userManager.FindByEmailAsync(vm.Email);
             if (user != null)
             {
@@ -118,7 +188,7 @@ namespace PlayBoardGame.Controllers
                     user, vm.Password, false, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction(nameof(ShelfController.List), "Shelf");
+                    return LocalRedirect(returnUrl);
                 }
 
                 // bozy: what if something went bad

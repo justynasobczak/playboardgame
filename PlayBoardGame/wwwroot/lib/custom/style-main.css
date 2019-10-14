@@ -119,8 +119,17 @@ h4 {
 .mainButtonBeforeLogin,
 .mainButtonBeforeLogin:hover {
     margin-top: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background-color: #138496;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.secondProviderButtonBeforeLogin,
+.secondProviderButtonBeforeLogin:hover {
+    margin-bottom: 20px;
+    background-color: #D94836;
     color: white;
     font-weight: 700;
     font-size: 16px;
@@ -129,12 +138,14 @@ h4 {
 .secondButtonBeforeLogin,
 .secondButtonBeforeLogin:hover {
     background-color: white;
+    color: #138496;
     border: #138496 solid thin;
 }
 
 .thirdButtonBeforeLogin,
 .thirdButtonBeforeLogin:hover {
     background-color: white;
+    color: #646464;
     border: #646464 solid thin;
 }
 

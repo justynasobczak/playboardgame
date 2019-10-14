@@ -20,22 +20,38 @@
                     <p>@TempData["SuccessMessage"]</p>
                 </div>
             }
-            <form asp-action="LoginAsync" method="post">   
+            <form asp-action="LoginAsync" method="post">
                 <div class="form-group">
+                    <input type="hidden" name="returnUrl" value="@Model.ReturnUrl"/>
                     <label asp-for="Email"></label>
                     <span asp-validation-for="Email" class="text-danger"></span>
-                    <input asp-for="Email" class="form-control" />
+                    <input asp-for="Email" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <label asp-for="Password"></label>
                     <span asp-validation-for="Password" class="text-danger"></span>
-                    <input asp-for="Password" class="form-control" />
+                    <input asp-for="Password" class="form-control"/>
                 </div>
                 <button class="btn mainButtonBeforeLogin btn-block" type="submit">LOG IN</button>
             </form>
-            <div><h4>Don't have an account?</h4></div>
+            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                <div>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        <button class="btn secondProviderButtonBeforeLogin btn-block" type="submit" name="provider" value="@provider.Name">
+                            Log in with <i class="fab fa-@provider.Name.ToLower()"></i>
+                        </button>
+                    }
+                </div>
+
+            </form>
+            <div>
+                <h4>Don't have an account?</h4>
+            </div>
             <a asp-action="Register" class="btn secondButtonBeforeLogin btn-block">REGISTER</a>
-            <div class="mt-2"><h4>Forgotten Password?</h4></div>
+            <div class="mt-2">
+                <h4>Forgotten Password?</h4>
+            </div>
             <a asp-action="SendResetPasswordLink" class="btn thirdButtonBeforeLogin btn-block">RESET PASSWORD</a>
         </div>
         <div class="col-md-2 col-sm-12"></div>

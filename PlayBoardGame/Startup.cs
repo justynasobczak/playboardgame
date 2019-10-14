@@ -52,7 +52,8 @@ namespace PlayBoardGame
 
             if (_environment.EnvironmentName == "Docker")
             {
-                _connectionString = $"Server={serverDocker},{portDocker};Initial Catalog={databaseDocker};User ID={userDocker};Password={passwordDocker}";
+                _connectionString =
+                    $"Server={serverDocker},{portDocker};Initial Catalog={databaseDocker};User ID={userDocker};Password={passwordDocker}";
             }
 
 
@@ -72,6 +73,11 @@ namespace PlayBoardGame
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMiniProfiler()
                 .AddEntityFramework();
+            services.AddAuthentication().AddGoogle(options =>
+            {
+                options.ClientId = _configuration["GoogleClientId"];
+                options.ClientSecret = _configuration["GoogleClientSecret"];
+            });
             services.AddIdentity<AppUser, IdentityRole>(opts =>
                 {
                     opts.User.RequireUniqueEmail = true;
