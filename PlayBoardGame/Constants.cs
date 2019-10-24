@@ -19,6 +19,7 @@ namespace PlayBoardGame
         public const string EndDateBeforeStartMessage = "Please enter a date later than start date.";
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
         public const string WrongDateTimeFormat = "Please enter a date in format: yyyy/MM/dd HH:mm";
+        public const string AuthProviderError = "Error from external authenticate provider, please contact support.";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";
@@ -32,6 +33,9 @@ namespace PlayBoardGame
         //Logs
         public const string UnknownId = "Unknown Id";
         public const string UnknownError = "Unknown error occurred";
+        public const string AuthProviderKnownError = "Error from external provider";
+        public const string AuthProviderUnknownError = "Error loading external login information";
+        public const string AuthProviderUnknownEmailError = "Error from external provider: unknown email";
 
         //Email contents
         public const string SubjectRegistrationEmail = "Your new Gameet account is ready";

@@ -36,11 +36,17 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register(string returnUrl)
         {
+            var model = new RegisterViewModel
+            {
+                ReturnUrl = returnUrl,
+                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList(),
+                TimeZoneList = ToolsExtensions.GetTimeZones()
+            };
             if (!User?.Identity?.IsAuthenticated ?? false)
             {
-                return View(new RegisterViewModel {TimeZoneList = ToolsExtensions.GetTimeZones()});
+                return View(model);
             }
 
             return RedirectToAction(nameof(ShelfController.List), "Shelf");
@@ -94,6 +100,7 @@ namespace PlayBoardGame.Controllers
             }
 
             vm.TimeZoneList = ToolsExtensions.GetTimeZones();
+            vm.ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             return View(nameof(Register), vm);
         }
 
@@ -113,32 +120,56 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpPost]
-        public IActionResult ExternalLogin(string provider, string returnUrl)
+        public IActionResult ExternalLogin(string provider, string returnUrl, string timeZone,
+            AuthPageType pageType = AuthPageType.Login)
         {
-            var redirectUrl = Url.Action("ExternalLoginCallback", "Account", new {ReturnUrl = returnUrl});
+            var redirectUrl = Url.Action("ExternalLoginCallback", "Account",
+                new {ReturnUrl = returnUrl, TimeZone = timeZone, PageType = pageType});
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        public async Task<IActionResult> ExternalLoginCallback(string timeZone, AuthPageType pageType = AuthPageType.Login,
+            string returnUrl = null, string remoteError = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
-            var model = new LoginViewModel
+            var view = new ViewResult();
+            var field = string.Empty;
+            switch (pageType)
             {
-                ReturnUrl = returnUrl,
-                ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
-            };
+                case AuthPageType.Login:
+                    returnUrl = returnUrl ?? Url.Content("~/");
+                    view = View("Login", new LoginViewModel
+                    {
+                        ReturnUrl = returnUrl,
+                        ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+                    });
+                    field = nameof(LoginViewModel.Email);
+                    break;
+                case AuthPageType.Register:
+                    returnUrl = Url.Action(nameof(StartController.Index), "Start");
+                    field = nameof(RegisterViewModel.Email);
+                    view = View("Register", new RegisterViewModel()
+                    {
+                        ReturnUrl = returnUrl,
+                        ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList(),
+                        TimeZoneList = ToolsExtensions.GetTimeZones()
+                    });
+                    break;
+            }
+
             if (remoteError != null)
             {
-                ModelState.AddModelError(string.Empty, $"Error from external provider {remoteError}");
-                return View("Login", model);
+                ModelState.AddModelError(field, Constants.AuthProviderError);
+                _logger.LogError($"{Constants.AuthProviderKnownError}: {remoteError}");
+                return view;
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                ModelState.AddModelError(string.Empty, $"Error loading external login information");
-                return View("Login", model);
+                ModelState.AddModelError(field, Constants.AuthProviderError);
+                _logger.LogError(Constants.AuthProviderUnknownError);
+                return view;
             }
 
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider,
@@ -147,30 +178,51 @@ namespace PlayBoardGame.Controllers
             {
                 return LocalRedirect(returnUrl);
             }
-            else
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            if (email == null)
             {
-                var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                if (email != null)
-                {
-                    var user = await _userManager.FindByEmailAsync(email);
-                    if (user == null)
-                    {
-                        user = new AppUser
-                        {
-                            UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
-                            Email = info.Principal.FindFirstValue(ClaimTypes.Email)
-                        };
-                        await _userManager.CreateAsync(user);
-                    }
-
-                    await _userManager.AddLoginAsync(user, info);
-                    await _signInManager.SignInAsync(user, false);
-
-                    return LocalRedirect(returnUrl);
-                }
-
-                return RedirectToAction(nameof(ErrorController.Error), "Error");
+                ModelState.AddModelError(field, Constants.AuthProviderError);
+                _logger.LogError(Constants.AuthProviderUnknownEmailError);
+                return view;
             }
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                user = new AppUser
+                {
+                    UserName = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                    TimeZone = timeZone ?? ToolsExtensions.GetTimeZones().FirstOrDefault().Key
+                };
+                var resultCreate = await _userManager.CreateAsync(user);
+                if (resultCreate.Succeeded)
+                {
+                    var appLink = Url.Action(nameof(Login), "Account", null, HttpContext.Request.Scheme);
+                    var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                        {
+                            IsHTML = true,
+                            ToEmail = user.Email,
+                            Subject = Constants.SubjectRegistrationEmail
+                        }, Constants.TitleRegistrationEmail, Constants.ContentRegistrationEmail,
+                        Constants.ButtonVisitSide,
+                        appLink);
+
+                    if (!response.Successful)
+                    {
+                        TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+                        foreach (var error in response.Errors)
+                        {
+                            _logger.LogError(error);
+                        }
+                    }
+                }
+            }
+
+            await _userManager.AddLoginAsync(user, info);
+            await _signInManager.SignInAsync(user, false);
+
+            return LocalRedirect(returnUrl);
         }
 
         [HttpPost]

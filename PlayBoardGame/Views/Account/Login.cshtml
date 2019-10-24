@@ -34,7 +34,7 @@
                 </div>
                 <button class="btn mainButtonBeforeLogin btn-block" type="submit">LOG IN</button>
             </form>
-            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-pageType="@AuthPageType.Login.ToString()">
                 <div>
                     @foreach (var provider in Model.ExternalLogins)
                     {
@@ -43,6 +43,7 @@
                         </button>
                     }
                 </div>
+                <input id="TimeZoneInput" type="hidden" asp-for="TimeZone"/>
 
             </form>
             <div>
@@ -57,3 +58,7 @@
         <div class="col-md-2 col-sm-12"></div>
     </div>
 </div>
+<script>
+   var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+   document.getElementById("TimeZoneInput").value = timeZone;
+</script>
