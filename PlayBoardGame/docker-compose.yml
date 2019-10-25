@@ -17,3 +17,6 @@ services:
       DBUser: "SA"
       DBPassword: ${SA_PASSWORD}
       DBDatabase: "PlayBoardGame"
+      GoogleClientId: ${GOOGLE_CLIENT_ID}
+      GoogleClientSecret: ${GOOGLE_CLIENT_SECRET}
+      SendGridKey: ${SENDGRID_KEY}

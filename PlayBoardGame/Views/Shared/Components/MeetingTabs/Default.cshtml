@@ -16,7 +16,7 @@
         </li>
         <li class="nav-item">
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Description ? "active" : "tab-links"))" 
-               asp-controller="MeetingDescription" asp-action="Edit" asp-route-id="@Model.MeetingId"> Description </a>
+               asp-controller="MeetingDescription" asp-action="Edit" asp-route-id="@Model.MeetingId"> Description, results </a>
         </li>
     </ul>
 </div>

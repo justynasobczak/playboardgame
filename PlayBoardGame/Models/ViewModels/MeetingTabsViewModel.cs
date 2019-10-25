@@ -1,3 +1,4 @@
+
 namespace PlayBoardGame.Models.ViewModels
 {
     public class MeetingTabsViewModel

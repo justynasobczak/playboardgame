@@ -20,6 +20,8 @@ namespace PlayBoardGame
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
         public const string WrongDateTimeFormat = "Please enter a date in format: yyyy/MM/dd HH:mm";
         public const string AuthProviderError = "Error from external authenticate provider, please contact support.";
+        public const string LoginByExternalProviderMessage = "You registered by using external provider like Google etc., " +
+                                                             "please change your password on the page of your provider.";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";

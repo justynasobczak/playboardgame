@@ -101,6 +101,12 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction(nameof(ErrorController.Error), "Error");
             }
 
+            if (!_userManager.HasPasswordAsync(user).Result)
+            {
+                ModelState.AddModelError(nameof(ChangePasswordViewModel.NewPassword), Constants.LoginByExternalProviderMessage);
+                return View(nameof(ChangePassword), vm);
+            }
+
             var isCorrectOld = await _userManager.CheckPasswordAsync(user, vm.OldPassword);
             if (isCorrectOld)
             {
