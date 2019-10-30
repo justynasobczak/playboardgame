@@ -7,10 +7,13 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Express"
   playboardgame:
-    build: .
-    ports:
-      - "80:80"
+    build:
+      context: ./PlayBoardGame
+      dockerfile: Dockerfile
+    expose:
+      - "5000"
     environment:
+      ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_ENVIRONMENT: "Docker"
       DBServer: "ms-sql-server"
       DBPort: "1433"
@@ -20,3 +23,11 @@ services:
       GoogleClientId: ${GOOGLE_CLIENT_ID}
       GoogleClientSecret: ${GOOGLE_CLIENT_SECRET}
       SendGridKey: ${SENDGRID_KEY}
+  proxy:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    links:
+      - playboardgame
