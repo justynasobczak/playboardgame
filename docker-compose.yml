@@ -28,9 +28,9 @@ services:
       context: ./nginx
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "80:80" 
       - "443:443"
     volumes:
-      - /data/certs:/etc/nginx/certs
+      - /etc/letsencrypt/:/etc/letsencrypt/
     links:
       - playboardgame
