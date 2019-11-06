@@ -7,7 +7,7 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Express"
     volumes:
-      - ./data:/var/lib/mysql
+      - ./data/db:var/opt/mssql
   playboardgame:
     build:
       context: ./PlayBoardGame
