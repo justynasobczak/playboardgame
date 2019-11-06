@@ -7,7 +7,7 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Express"
     volumes:
-      - mssql-server-data:/var/opt/mssql/data
+      - ./data:/var/lib/mysql
   playboardgame:
     build:
       context: ./PlayBoardGame
@@ -36,5 +36,3 @@ services:
       - /etc/letsencrypt/:/etc/letsencrypt/
     links:
       - playboardgame
-volumes:
-  mssql-server-data:
