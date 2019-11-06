@@ -36,5 +36,5 @@ services:
       - /etc/letsencrypt/:/etc/letsencrypt/
     links:
       - playboardgame
-  volumes:
-    mssql-server-data:
+volumes:
+  mssql-server-data:
