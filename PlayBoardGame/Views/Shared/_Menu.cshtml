@@ -1,7 +1,9 @@
 <nav class="navbar mainMenu navbar-light navbar-expand-lg">
     <div class="container">
         <div class="navbar-brand">
+            <a asp-controller="Start" asp-action="Index">
             <img src="~/lib/custom/img/logo-small.png" alt="logo"/>
+            </a>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
                 aria-controls="mainmenu" aria-expanded="false" aria-label="switch for navigation">
@@ -17,9 +19,6 @@
                 </li>
                 <li class="nav-item">
                     <a asp-controller="Meeting" asp-action="List" class="nav-link"> Calendar </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-controller="HangingTree" asp-action="HangingTree" class="nav-link"> Hanging tree </a>
                 </li>
                 @if (User?.Identity?.Name == "Admin")
                 {
