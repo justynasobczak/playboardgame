@@ -11,5 +11,7 @@ namespace PlayBoardGame.Models
         public IEnumerable<GameAppUser> GameAppUser { get; set; }
         
         public IEnumerable<MeetingGame> MeetingGame { get; set; }
+        
+        public string PhotoPath { get; set; }
     }
 }

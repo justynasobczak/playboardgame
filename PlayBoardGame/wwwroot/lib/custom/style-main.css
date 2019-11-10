@@ -189,3 +189,8 @@ h4 {
 .tdAvatar {
     width: 60px;
 }
+
+.imageGame {
+    height: 100px;
+    width: auto;
+}

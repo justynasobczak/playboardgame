@@ -5,12 +5,13 @@
 <table class="table table-sm table-bordered">
     <tr>
         <th class="text-left">Title</th>
+        <th class="text-left">Photo</th>
         <th class="text-left">Action</th>
     </tr>
 
     @if (!Model.Games.Any())
     {
-        <tr><td colspan="2" class="text-center">No games</td></tr>
+        <tr><td colspan="3" class="text-center">No games</td></tr>
     }
     else
     {
@@ -18,6 +19,10 @@
         {
             <tr>
                 <td>@game.Title</td>
+                <td>
+                    @{ var photoPath = $"~/gamePhotos/{game.PhotoPath}";}
+                    <img src="@photoPath" alt="no image" asp-append-version="true" class="imageGame"/>
+                </td>
                 <td>
                     <form asp-action="Delete" method="post">
                         <a asp-action="Edit" class="btn btn-sm btn-success" asp-route-id="@game.GameId">Edit</a>

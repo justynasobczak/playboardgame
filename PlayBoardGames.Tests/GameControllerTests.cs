@@ -6,6 +6,7 @@ using PlayBoardGame.Controllers;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 using Xunit;
+using Microsoft.AspNetCore.Hosting;
 
 namespace PlayBoardGames.Tests
 {
@@ -28,8 +29,9 @@ namespace PlayBoardGames.Tests
             mockRepo.Setup(g => g.GetGame(game2.GameId)).Returns(game2);
             mockRepo.Setup(g => g.GetGame(game3.GameId)).Returns(game3);
             var mockLogger = new Mock<ILogger<GameController>>();
+            var mockEnvironemnt = new Mock<IHostingEnvironment>();
             
-            var controller = new GameController(mockRepo.Object, mockLogger.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironemnt.Object);
 
             //Act
             var g1 = GetViewModel<CreateEditGameViewModel>(controller.Edit(game1.GameId));
@@ -63,8 +65,9 @@ namespace PlayBoardGames.Tests
             mockRepo.Setup(g => g.GetGame(game3.GameId)).Returns(game3);
             
             var mockLogger = new Mock<ILogger<GameController>>();
+            var mockEnvironemnt = new Mock<IHostingEnvironment>();
 
-            var controller = new GameController(mockRepo.Object, mockLogger.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironemnt.Object);
 
             //Act
             var result = GetViewModel<CreateEditGameViewModel>(controller.Edit(4));
@@ -84,8 +87,9 @@ namespace PlayBoardGames.Tests
             new Game { GameId = 3, Title = "P3"}
             }.AsEnumerable);
             var mockLogger = new Mock<ILogger<GameController>>();
+            var mockEnvironemnt = new Mock<IHostingEnvironment>();
             
-            var controller = new GameController(mockRepo.Object, mockLogger.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironemnt.Object);
 
             //Act
             controller.Delete(game.GameId);

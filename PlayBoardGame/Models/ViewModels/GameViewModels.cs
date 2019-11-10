@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace PlayBoardGame.Models.ViewModels
 {
@@ -13,5 +14,7 @@ namespace PlayBoardGame.Models.ViewModels
         public int GameId { get; set; }
 
         [Required] public string Title { get; set; }
+        
+        public IFormFile Photo { get; set; }
     }
 }

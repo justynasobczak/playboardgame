@@ -28,6 +28,7 @@ namespace PlayBoardGame.Models
                 if (dbEntry != null)
                 {
                     dbEntry.Title = game.Title;
+                    dbEntry.PhotoPath = game.PhotoPath;
                 }
             }
             _applicationDBContext.SaveChanges();

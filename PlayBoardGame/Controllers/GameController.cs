@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.IO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 using System.Linq;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace PlayBoardGame.Controllers
@@ -12,11 +15,14 @@ namespace PlayBoardGame.Controllers
     {
         private readonly IGameRepository _gameRepository;
         private readonly ILogger<GameController> _logger;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
-        public GameController(IGameRepository gameRepository, ILogger<GameController> logger)
+        public GameController(IGameRepository gameRepository, ILogger<GameController> logger, 
+            IHostingEnvironment hostingEnvironment)
         {
             _gameRepository = gameRepository;
             _logger = logger;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         //TODO paging
@@ -45,7 +51,15 @@ namespace PlayBoardGame.Controllers
         public IActionResult Edit(CreateEditGameViewModel game)
         {
             if (!ModelState.IsValid) return View(game);
-            _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameId});
+            string uniqueFileName = null;
+            if (game.Photo != null)
+            {
+                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "gamePhotos");
+                uniqueFileName = $"{Guid.NewGuid().ToString()}_{game.Photo.FileName}";
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                game.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+            }
+            _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameId, PhotoPath =  uniqueFileName});
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List));
         }
