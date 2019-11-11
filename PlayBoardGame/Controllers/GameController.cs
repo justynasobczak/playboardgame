@@ -18,7 +18,7 @@ namespace PlayBoardGame.Controllers
         private readonly ILogger<GameController> _logger;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public GameController(IGameRepository gameRepository, ILogger<GameController> logger, 
+        public GameController(IGameRepository gameRepository, ILogger<GameController> logger,
             IHostingEnvironment hostingEnvironment)
         {
             _gameRepository = gameRepository;
@@ -51,19 +51,58 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CreateEditGameViewModel game)
         {
-            if (!ModelState.IsValid) return View(game);
-            string uniqueFileName = null;
+            string[] permittedExtensions = {".jpg", ".png"};
+            string extension = null;
             if (game.Photo != null)
             {
-                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "gamePhotos");
-                uniqueFileName = $"{Guid.NewGuid().ToString()}_{game.Photo.FileName}";
+                extension = Path.GetExtension(game.Photo.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(extension) || !permittedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError(nameof(CreateEditGameViewModel.Photo),
+                        $"{Constants.WrongFileExtension}, allowed file types: {string.Join(" ,", permittedExtensions)}.");
+                }
+
+                if (game.Photo.Length > Constants.FileSizeLimit)
+                {
+                    ModelState.AddModelError(nameof(CreateEditGameViewModel.Photo),
+                        $"{Constants.WrongFileSize}, max: {Constants.FileSizeLimit.ToString()}.");
+                }
+            }
+
+            if (!ModelState.IsValid) return View(game);
+            var editedGame = _gameRepository.GetGame(game.GameId) ?? new Game();
+            var uniqueFileName = editedGame.PhotoPath;
+            var fileName = editedGame.PhotoName;
+            if (game.Photo != null)
+            {
+                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "gamephotos");
+                if (editedGame.PhotoPath != null)
+                {
+                    var fileToRemove = $"/{uploadsFolder}/{editedGame.PhotoPath}";
+                    if (System.IO.File.Exists(fileToRemove))
+                    {
+                        System.IO.File.Delete(fileToRemove);
+                    }
+                    else
+                    {
+                        _logger.LogError($"{Constants.CannotRemoveFile}: {fileName}");
+                    }
+                }
+
+                uniqueFileName = $"{Guid.NewGuid().ToString()}{extension}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                //game.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
-                using (var fileStream = new FileStream(filePath, FileMode.Create)) {
+                fileName = game.Photo.FileName;
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
                     await game.Photo.CopyToAsync(fileStream);
                 }
             }
-            _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameId, PhotoPath =  uniqueFileName});
+
+            _gameRepository.SaveGame(new Game
+            {
+                Title = game.Title, GameId = game.GameId,
+                PhotoPath = uniqueFileName, PhotoName = fileName
+            });
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List));
         }

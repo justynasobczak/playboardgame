@@ -13,5 +13,7 @@ namespace PlayBoardGame.Models
         public IEnumerable<MeetingGame> MeetingGame { get; set; }
         
         public string PhotoPath { get; set; }
+        
+        public string PhotoName { get; set; }
     }
 }

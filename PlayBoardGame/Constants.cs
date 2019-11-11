@@ -22,6 +22,8 @@ namespace PlayBoardGame
         public const string AuthProviderError = "Error from external authenticate provider, please contact support.";
         public const string LoginByExternalProviderMessage = "You registered by using external provider like Google etc., " +
                                                              "please change your password on the page of your provider.";
+        public const string WrongFileExtension = "Wrong file extension";
+        public const string WrongFileSize = "The file is too big, please upload smaller one";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";
@@ -38,6 +40,7 @@ namespace PlayBoardGame
         public const string AuthProviderKnownError = "Error from external provider";
         public const string AuthProviderUnknownError = "Error loading external login information";
         public const string AuthProviderUnknownEmailError = "Error from external provider: unknown email";
+        public const string CannotRemoveFile = "Cannot remove uploaded file";
 
         //Email contents
         public const string SubjectRegistrationEmail = "Your new Gameet account is ready";
@@ -61,6 +64,8 @@ namespace PlayBoardGame
 
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
+        
+        public const long FileSizeLimit = 2097152;
 
         public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>
         {
