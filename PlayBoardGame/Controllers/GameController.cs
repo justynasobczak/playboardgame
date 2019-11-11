@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -48,7 +49,7 @@ namespace PlayBoardGame.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CreateEditGameViewModel game)
+        public async Task<IActionResult> Edit(CreateEditGameViewModel game)
         {
             if (!ModelState.IsValid) return View(game);
             string uniqueFileName = null;
@@ -57,7 +58,10 @@ namespace PlayBoardGame.Controllers
                 var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "gamePhotos");
                 uniqueFileName = $"{Guid.NewGuid().ToString()}_{game.Photo.FileName}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                game.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                //game.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                using (var fileStream = new FileStream(filePath, FileMode.Create)) {
+                    await game.Photo.CopyToAsync(fileStream);
+                }
             }
             _gameRepository.SaveGame(new Game {Title = game.Title, GameId = game.GameId, PhotoPath =  uniqueFileName});
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;

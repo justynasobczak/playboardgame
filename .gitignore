@@ -7,4 +7,3 @@
 *.user
 **/Logs/*
 .env
-**/wwwroot/gamePhotos/*
