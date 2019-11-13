@@ -13,7 +13,7 @@ namespace PlayBoardGame.Models
         }
         // bozy Remember about paging to prevent fetching large number of records and causing memory usage bloating.
         //TODO paging
-        public IEnumerable<Game> Games => _applicationDBContext.Games;
+        public IQueryable<Game> Games => _applicationDBContext.Games;
 
         public Game GetGame(int gameId) => _applicationDBContext.Games.FirstOrDefault(g => g.GameId == gameId);
 

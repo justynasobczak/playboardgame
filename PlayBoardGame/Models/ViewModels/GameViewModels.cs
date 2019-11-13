@@ -16,5 +16,7 @@ namespace PlayBoardGame.Models.ViewModels
         [Required] public string Title { get; set; }
         
         public IFormFile Photo { get; set; }
+        
+        public string PhotoPath { get; set; }
     }
 }

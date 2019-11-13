@@ -27,7 +27,22 @@ namespace PlayBoardGame.Controllers
         }
 
         //TODO paging
-        public ViewResult List() => View(new GamesListViewModel {Games = _gameRepository.Games.ToList()});
+        public ViewResult List(string sortOrder)
+        {
+            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            var games = _gameRepository.Games;
+            switch (sortOrder)
+            {
+                case "title_desc":
+                    games = games.OrderByDescending(g => g.Title);
+                    break;
+                default:
+                    games = games.OrderBy(g => g.Title);
+                    break;
+            }
+
+            return View(new GamesListViewModel {Games = games.ToList()});
+        }
 
         public IActionResult Edit(int id)
         {
@@ -38,7 +53,8 @@ namespace PlayBoardGame.Controllers
                 var vm = new CreateEditGameViewModel
                 {
                     Title = game.Title,
-                    GameId = game.GameId
+                    GameId = game.GameId,
+                    PhotoPath = game.PhotoPath
                 };
                 return View(vm);
             }
@@ -75,18 +91,10 @@ namespace PlayBoardGame.Controllers
             var fileName = editedGame.PhotoName;
             if (game.Photo != null)
             {
-                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "gamephotos");
+                var uploadsFolder = SetUploadsFolder();
                 if (editedGame.PhotoPath != null)
                 {
-                    var fileToRemove = $"/{uploadsFolder}/{editedGame.PhotoPath}";
-                    if (System.IO.File.Exists(fileToRemove))
-                    {
-                        System.IO.File.Delete(fileToRemove);
-                    }
-                    else
-                    {
-                        _logger.LogError($"{Constants.CannotRemoveFile}: {fileName}");
-                    }
+                    DeleteGamePhoto(editedGame, uploadsFolder);
                 }
 
                 uniqueFileName = $"{Guid.NewGuid().ToString()}{extension}";
@@ -114,12 +122,36 @@ namespace PlayBoardGame.Controllers
         public IActionResult Delete(int id)
         {
             var deletedGame = _gameRepository.DeleteGame(id);
+            if (deletedGame.PhotoPath != null)
+            {
+                var uploadsFolder = SetUploadsFolder();
+                DeleteGamePhoto(deletedGame, uploadsFolder);
+            }
+
             if (deletedGame != null)
             {
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
             return RedirectToAction(nameof(List));
+        }
+
+        private string SetUploadsFolder()
+        {
+            return Path.Combine(_hostingEnvironment.WebRootPath, "gamephotos");
+        }
+
+        private void DeleteGamePhoto(Game game, string uploadsFolder)
+        {
+            var fileToRemove = $"/{uploadsFolder}/{game.PhotoPath}";
+            if (System.IO.File.Exists(fileToRemove))
+            {
+                System.IO.File.Delete(fileToRemove);
+            }
+            else
+            {
+                _logger.LogError($"{Constants.CannotRemoveFile}: {game.PhotoName}");
+            }
         }
     }
 }
