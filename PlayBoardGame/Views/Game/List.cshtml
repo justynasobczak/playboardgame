@@ -2,6 +2,14 @@
 @{
     ViewBag.Title = "Games";
 }
+
+<form asp-action="List" class="form-inline plainText mb-3" method="get">
+    <label class="mr-sm-2 mb-0">Find by title:</label>
+    <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" name="SearchString" value="@ViewData["currentFilter"]"/>
+    <input value="Search" type="submit" class="btn btn-info mt-2 mt-sm-0"/>
+    <a asp-action="List" class="ml-1">Back to Full List</a>
+</form>
+
 <table class="table table-hover">
     <tr>
         <th class="text-left plainText">

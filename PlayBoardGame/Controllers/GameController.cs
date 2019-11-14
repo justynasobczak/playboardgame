@@ -27,10 +27,16 @@ namespace PlayBoardGame.Controllers
         }
 
         //TODO paging
-        public ViewResult List(string sortOrder)
+        public ViewResult List(string sortOrder, string searchString)
         {
-            ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["TitleSortParm"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["CurrentFilter"] = searchString;
             var games = _gameRepository.Games;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                games = games.Where(g => g.Title.Contains(searchString));
+            }
+
             switch (sortOrder)
             {
                 case "title_desc":
