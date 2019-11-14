@@ -63,14 +63,6 @@ h4 {
     margin-top: 15px;
 }
 
-.plainText a:link,
-.plainText a:visited,
-.plainText button,
-.footer a {
-    color: #138496;
-    text-decoration: none;
-}
-
 .plainText a:hover {
     color: #2176AE;
     text-decoration: underline;
@@ -204,7 +196,8 @@ ul.pagination li > a {
 
 .standardLink a,
 .standardLink a:hover,
-.standardLink a:visited {
+.standardLink a:visited,
+.plainText button {
     color: #138496;
     text-decoration: none;
 }
