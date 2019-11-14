@@ -67,6 +67,8 @@ namespace PlayBoardGame
         
         public const long FileSizeLimit = 2097152;
 
+        public const int PageSize = 3;
+
         public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>
         {
             {"AF", "Afghanistan"},

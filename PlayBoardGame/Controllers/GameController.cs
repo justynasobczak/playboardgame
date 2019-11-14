@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using PlayBoardGame.Infrastructure;
 
 namespace PlayBoardGame.Controllers
 {
@@ -27,10 +28,23 @@ namespace PlayBoardGame.Controllers
         }
 
         //TODO paging
-        public ViewResult List(string sortOrder, string searchString)
+        public async Task<IActionResult> List(string sortOrder, string currentFilter, string searchString,
+            int? pageNumber)
         {
+            ViewData["CurrentSort"] = sortOrder;
             ViewData["TitleSortParm"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
             ViewData["CurrentFilter"] = searchString;
+
             var games = _gameRepository.Games;
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -46,8 +60,9 @@ namespace PlayBoardGame.Controllers
                     games = games.OrderBy(g => g.Title);
                     break;
             }
-
-            return View(new GamesListViewModel {Games = games.ToList()});
+            
+            return View(new GamesListViewModel
+                {Games = await PaginatedList<Game>.CreateAsync(games, pageNumber ?? 1, Constants.PageSize)});
         }
 
         public IActionResult Edit(int id)

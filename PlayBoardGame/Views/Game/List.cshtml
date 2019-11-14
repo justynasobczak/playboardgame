@@ -3,17 +3,21 @@
     ViewBag.Title = "Games";
 }
 
-<form asp-action="List" class="form-inline plainText mb-3" method="get">
+<form asp-action="List" class="form-inline mb-4" method="get">
     <label class="mr-sm-2 mb-0">Find by title:</label>
-    <input type="text" class="form-control mr-sm-2 mb-2 mb-sm-0" name="SearchString" value="@ViewData["currentFilter"]"/>
-    <input value="Search" type="submit" class="btn btn-info mt-2 mt-sm-0"/>
-    <a asp-action="List" class="ml-1">Back to Full List</a>
+    <input type="text" class="form-control mb-2 mb-sm-0" name="SearchString" value="@ViewData["currentFilter"]"/>
+    @*<input value="Search" type="submit" class="btn btn-info mt-2 mt-sm-0"/>*@
+    <button class="buttonForIcons mr-4">
+        <i class="fas fa-search icons"></i>
+    </button>
+    <div class="standardLink"><a asp-action="List">Back to Full List</a></div>
+    <a asp-action="Create" class="btn btn-info ml-auto">Add Game</a>
 </form>
 
 <table class="table table-hover">
     <tr>
         <th class="text-left plainText">
-            <a asp-action="List" asp-route-sortOrder="@ViewData["TitleSortParm"]">Title</a>
+            <a asp-action="List" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Title</a>
         </th>
         <th class="text-left">Photo</th>
         <th class="text-left">Action</th>
@@ -53,6 +57,30 @@
         }
     }
 </table>
-<div class="text-left">
-    <a asp-action="Create" class="btn btn-info">Add Game</a>
+
+@{
+    var prevDisabled = !Model.Games.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Games.HasNextPage ? "disabled" : "";
+}
+<div>
+    <ul class="pagination">
+        <li class="page-item @prevDisabled">
+            <a asp-action="List"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.Games.PageIndex - 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link">
+                Previous
+            </a>
+        </li>
+        <li class="page-item @nextDisabled">
+            <a asp-action="List"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.Games.PageIndex + 1)"
+               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+               class="page-link">
+                Next
+            </a>
+        </li>
+    </ul>
 </div>

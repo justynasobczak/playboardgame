@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using PlayBoardGame.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
@@ -6,7 +6,7 @@ namespace PlayBoardGame.Models.ViewModels
 {
     public class GamesListViewModel
     {
-        public List<Game> Games { get; set; }
+        public PaginatedList<Game> Games { get; set; }
     }
 
     public class CreateEditGameViewModel
