@@ -58,6 +58,23 @@ namespace PlayBoardGame.Controllers
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List));
         }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(ShelfModificationViewModel model)
+        {
+            var currentUserId = GetCurrentUserId().Result;
+            if (!ModelState.IsValid) return Edit();
+
+            foreach (var gameId in model.IdsToDelete)
+            {
+                var gameAppUser = new GameAppUser {UserId = currentUserId, GameId = gameId};
+                _shelfRepository.RemoveFromShelf(gameAppUser);
+            }
+
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            return RedirectToAction(nameof(List));
+        }
 
         private async Task<string> GetCurrentUserId()
         {

@@ -201,3 +201,7 @@ ul.pagination li > a {
     color: #138496;
     text-decoration: none;
 }
+
+.imageShelf {
+    width: 70%;
+}
