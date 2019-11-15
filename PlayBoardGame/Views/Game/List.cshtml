@@ -10,7 +10,9 @@
     <button class="buttonForIcons mr-4">
         <i class="fas fa-search icons"></i>
     </button>
-    <div class="standardLink"><a asp-action="List">Back to Full List</a></div>
+    <div class="standardLink">
+        <a asp-action="List">Back to Full List</a>
+    </div>
     <a asp-action="Create" class="btn btn-info ml-auto">Add Game</a>
 </form>
 
@@ -57,30 +59,9 @@
         }
     }
 </table>
-
-@{
-    var prevDisabled = !Model.Games.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.Games.HasNextPage ? "disabled" : "";
-}
-<div>
-    <ul class="pagination">
-        <li class="page-item @prevDisabled">
-            <a asp-action="List"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.Games.PageIndex - 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="page-link">
-                Previous
-            </a>
-        </li>
-        <li class="page-item @nextDisabled">
-            <a asp-action="List"
-               asp-route-sortOrder="@ViewData["CurrentSort"]"
-               asp-route-pageNumber="@(Model.Games.PageIndex + 1)"
-               asp-route-currentFilter="@ViewData["CurrentFilter"]"
-               class="page-link">
-                Next
-            </a>
-        </li>
-    </ul>
-</div>
+@await Component.InvokeAsync("PaginationTabs", new
+{
+    HasPreviousPage = Model.Games.HasPreviousPage,
+    HasNextPage = Model.Games.HasNextPage,
+    PageIndex = Model.Games.PageIndex
+})
