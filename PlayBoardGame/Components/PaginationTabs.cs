@@ -5,10 +5,10 @@ namespace PlayBoardGame.Components
 {
     public class PaginationTabs : ViewComponent
     {
-        public IViewComponentResult Invoke(bool hasPreviousPage, bool hasNextPage, int pageIndex)
+        public IViewComponentResult Invoke(bool hasPreviousPage, bool hasNextPage, int pageIndex, string actionMethod)
         {
             var vm = new PaginationTabsViewModel
-                {HasPreviousPage = hasPreviousPage, HasNextPage = hasNextPage, PageIndex = pageIndex};
+                {HasPreviousPage = hasPreviousPage, HasNextPage = hasNextPage, PageIndex = pageIndex, ActionMethod = actionMethod};
             return View(vm);
         }
     }

@@ -1,45 +1,67 @@
 ﻿@model ShelfEditViewModel
 @{
-    ViewBag.Title = "Edit my shelf";
+    ViewBag.Title = "Put the game on the shelf";
 }
-
-<div asp-validation-summary="All" class="text-danger"></div>
-<form asp-action="Edit" method="post">
-    <h6 class="bg-info p-2 text-white">Add to my shelf</h6>
-    <table class="table table-bordered table-sm">
-        @if (!Model.AvailableGames.Any())
-        {
-            <tr><td colspan="2">You have all games</td></tr>
-        }
-        else
-        {
-            foreach (var game in Model.AvailableGames)
-            {
-                <tr>
-                    <td>@game.Title</td>
-                    <td><input type="checkbox" name="IdsToAdd" value="@game.GameId" /></td>
-                </tr>
-            }
-        }
-    </table>
-
-    <h6 class="bg-info p-2 text-white">Remove from my shelf</h6>
-    <table class="table table-bordered table-sm">
-        @if (!Model.Shelf.Any())
-        {
-            <tr><td colspan="2">No games on your shelf</td></tr>
-        }
-        else
-        {
-            foreach (var game in Model.Shelf)
-            {
-                <tr>
-                    <td>@game.Title</td>
-                    <td><input type="checkbox" name="IdsToDelete" value="@game.GameId" /></td>
-                </tr>
-            }
-        }
-    </table>
-    <button type="submit" class="btn btn-info">Save</button>
-    <a asp-action="List" class="btn btn-secondary">Cancel</a>
+<form asp-action="Edit" class="form-inline mb-4" method="get">
+    @await Html.PartialAsync("_Search")
+    <div class="standardLink">
+        <a asp-action="Edit">Back to Full List</a>
+    </div>
+    <a asp-action="List" class="btn btn-secondary text-right ml-auto">Back to shelf</a>
 </form>
+
+<div class="row">
+    @foreach (var game in Model.AvailableGames)
+    {
+        <div class="col-md-3 col-sm-4">
+            <div class="thumbnail">
+                @if (game.PhotoPath != null)
+                {
+                    var photoPath = $"~/gamephotos/{game.PhotoPath}";
+                    <img src="@photoPath" alt="no image" asp-append-version="true" class="imageShelf"/>
+                    <div class="caption">
+                        <p>
+                            @game.Title
+                            <span>
+                                <form asp-action="Edit" method="post">
+                                    <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                                    <button type="submit" class="buttonForIcons">
+                                        <i class="fas fa-plus icons" data-toggle="tooltip" title="@Constants.AddGameToShelfTooltip"></i>
+                                    </button>
+                                </form>
+                            </span>
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageShelf"/>
+                    <div class="caption">
+                        <form asp-action="Edit" method="post">
+                            <p>
+                                @game.Title
+                                <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                                <button type="submit" class="buttonForIcons">
+                                    <i class="fas fa-plus icons" data-toggle="tooltip" title="@Constants.AddGameToShelfTooltip"></i>
+                                </button>
+                            </p>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+@await Component.InvokeAsync("PaginationTabs", new
+{
+    HasPreviousPage = Model.AvailableGames.HasPreviousPage,
+    HasNextPage = Model.AvailableGames.HasNextPage,
+    PageIndex = Model.AvailableGames.PageIndex,
+    ActionMethod = nameof(ShelfController.Edit)
+})
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

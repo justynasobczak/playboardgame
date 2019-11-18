@@ -17,7 +17,7 @@ namespace PlayBoardGame.Models
             return _applicationDBContext.Games.Where(g => g.GameAppUser.Any(gu => gu.AppUser.Id == userId));
         }
 
-        public IEnumerable<Game> GetAvailableGamesForUser(string userId)
+        public IQueryable<Game> GetAvailableGamesForUser(string userId)
         {
             return _applicationDBContext.Games.Where(g => g.GameAppUser.All(gu => gu.AppUser.Id != userId));
         }

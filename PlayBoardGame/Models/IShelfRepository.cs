@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -6,7 +7,7 @@ namespace PlayBoardGame.Models
     {
         IEnumerable<Game> GetShelfForUser(string userId);
 
-        IEnumerable<Game> GetAvailableGamesForUser(string userId);
+        IQueryable<Game> GetAvailableGamesForUser(string userId);
 
         void AddToShelf(GameAppUser gameAppUser);
 

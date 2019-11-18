@@ -2,43 +2,55 @@
 @{
     ViewBag.Title = "My shelf";
 }
-<form asp-action="Delete" method="post">
-    <div class="mb-3">
-        <button type="submit" class="btn btn-danger">Delete</button>
-        <a asp-action="Edit" class="btn btn-info">Edit My shelf</a>
-    </div>
-    <div class="row">
-        @foreach (var game in Model.Shelf)
-        {
-            <div class="col-md-4">
-                <div class="thumbnail">
-                    @if (game.PhotoPath != null)
-                    {
-                        var photoPath = $"~/gamephotos/{game.PhotoPath}";
-                        <img src="@photoPath" alt="no image" asp-append-version="true" class="imageShelf"/>
-                        <div class="caption">
-                            <p>
-                                @game.Title
-                                <span>
-                                    <input type="checkbox" name="IdsToDelete" value="@game.GameId"/>
-                                </span>
-                            </p>
-                        </div>
-                    }
-                    else
-                    {
-                        <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageShelf"/>
-                        <div class="caption">
-                            <p>
-                                @game.Title
-                                <span>
-                                    <input type="checkbox" name="IdsToDelete" value="@game.GameId"/>
-                                </span>
-                            </p>
-                        </div>
-                    }
-                </div>
+<div class="text-right">
+    <a asp-action="Edit" class="btn btn-info btn-sm mb-1">Add to shelf</a>
+</div>
+<div class="row">
+    @foreach (var game in Model.Shelf)
+    {
+        <div class="col-md-3 col-sm-4">
+            <div class="thumbnail">
+                @if (game.PhotoPath != null)
+                {
+                    var photoPath = $"~/gamephotos/{game.PhotoPath}";
+                    <img src="@photoPath" alt="no image" asp-append-version="true" class="imageShelf"/>
+                    <div class="caption">
+                        <p>
+                            @game.Title
+                            <span>
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                                    <button type="submit" class="buttonForIcons">
+                                        <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
+                                    </button>
+                                </form>
+                            </span>
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageShelf"/>
+                    <div class="caption">
+                        <p>
+                            @game.Title
+                            <span>
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                                    <button type="submit" class="buttonForIcons">
+                                        <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
+                                    </button>
+                                </form>
+                            </span>
+                        </p>
+                    </div>
+                }
             </div>
-        }
-    </div>
-</form>
+        </div>
+    }
+</div>
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

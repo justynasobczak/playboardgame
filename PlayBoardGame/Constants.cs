@@ -33,6 +33,8 @@ namespace PlayBoardGame
         public const string CopyAddressTooltip = "Copy an address from profile";
         public const string EditMessageTooltip = "Edit a message";
         public const string DeleteMessageTooltip = "Delete a message";
+        public const string DeleteGameFromShelfTooltip = "Remove the game from shelf";
+        public const string AddGameToShelfTooltip = "Put the game on the shelf";
 
         //Logs
         public const string UnknownId = "Unknown Id";
@@ -67,7 +69,7 @@ namespace PlayBoardGame
         
         public const long FileSizeLimit = 2097152;
 
-        public const int PageSize = 3;
+        public const int PageSize = 8;
 
         public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>
         {
