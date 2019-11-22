@@ -15,34 +15,30 @@
                     var photoPath = $"~/gamephotos/{game.PhotoPath}";
                     <img src="@photoPath" alt="no image" asp-append-version="true" class="imageShelf"/>
                     <div class="caption">
-                        <p>
-                            @game.Title
-                            <span>
-                                <form asp-action="Delete" method="post">
-                                    <input type="hidden" name="id" value="@game.GameId.ToString()"/>
-                                    <button type="submit" class="buttonForIcons">
-                                        <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
-                                    </button>
-                                </form>
-                            </span>
-                        </p>
+                        <form asp-action="Delete" method="post">
+                            <p>
+                                @game.Title
+                                <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                                <button type="submit" class="buttonForIcons">
+                                    <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
+                                </button>
+                            </p>
+                        </form>
                     </div>
                 }
                 else
                 {
                     <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageShelf"/>
                     <div class="caption">
-                        <p>
-                            @game.Title
-                            <span>
-                                <form asp-action="Delete" method="post">
-                                    <input type="hidden" name="id" value="@game.GameId.ToString()"/>
-                                    <button type="submit" class="buttonForIcons">
-                                        <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
-                                    </button>
-                                </form>
-                            </span>
-                        </p>
+                        <form asp-action="Delete" method="post">
+                            <p>
+                                @game.Title
+                                <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                                <button type="submit" class="buttonForIcons">
+                                    <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
+                                </button>
+                            </p>
+                        </form>
                     </div>
                 }
             </div>
