@@ -26,8 +26,7 @@ namespace PlayBoardGame.Controllers
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
         }
-
-        //TODO paging
+        
         public async Task<IActionResult> List(string sortOrder, string currentFilter, string searchString,
             int? pageNumber)
         {
@@ -142,8 +141,13 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
+            if (_gameRepository.IsGameInMeeting(id))
+            {
+                TempData["ErrorMessage"] = Constants.GameConnectedWithMeetingErrorMessage;
+                return RedirectToAction(nameof(List));
+            }
             var deletedGame = _gameRepository.DeleteGame(id);
-            if (deletedGame.PhotoPath != null)
+            if (deletedGame != null && deletedGame.PhotoPath != null)
             {
                 var uploadsFolder = SetUploadsFolder();
                 DeleteGamePhoto(deletedGame, uploadsFolder);

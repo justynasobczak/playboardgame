@@ -8,6 +8,8 @@ namespace PlayBoardGame.Models
         
         Game GetGame(int gameId);
 
+        bool IsGameInMeeting(int gameId);
+
         void SaveGame(Game game);
 
         Game DeleteGame(int GameID);

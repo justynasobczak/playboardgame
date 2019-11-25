@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -12,7 +11,7 @@ namespace PlayBoardGame.Models
             _applicationDBContext = applicationDBContext;
         }
 
-        public IEnumerable<Game> GetShelfForUser(string userId)
+        public IQueryable<Game> GetShelfForUser(string userId)
         {
             return _applicationDBContext.Games.Where(g => g.GameAppUser.Any(gu => gu.AppUser.Id == userId));
         }

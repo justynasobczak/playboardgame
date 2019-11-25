@@ -3,11 +3,7 @@
     ViewBag.Title = "Add game";
 }
 <form asp-action="Edit" class="form-inline mb-4" method="get">
-    @await Html.PartialAsync("_Search")
-    <div class="standardLink">
-        <i class="fas fa-backspace icons"></i>
-        <a asp-action="Edit">Back to Full List</a>
-    </div>
+    @await Component.InvokeAsync("SearchFields", new {ActionMethod = nameof(ShelfController.Edit)})
     <a asp-action="List" class="btn btn-secondary text-right ml-auto btn-sm">Back to shelf</a>
 </form>
 

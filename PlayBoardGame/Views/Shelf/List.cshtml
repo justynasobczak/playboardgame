@@ -2,9 +2,10 @@
 @{
     ViewBag.Title = "My shelf";
 }
-<div class="text-right">
-    <a asp-action="Edit" class="btn btn-info btn-sm mb-1">Add to shelf</a>
-</div>
+<form asp-action="List" class="form-inline mb-4" method="get">
+    @await Component.InvokeAsync("SearchFields", new {ActionMethod = nameof(ShelfController.List)})
+    <a asp-action="Edit" class="btn btn-info btn-sm text-right ml-auto">Add to shelf</a>
+</form>
 <div class="row">
     @foreach (var game in Model.Shelf)
     {
@@ -45,6 +46,13 @@
         </div>
     }
 </div>
+@await Component.InvokeAsync("PaginationTabs", new
+{
+    HasPreviousPage = Model.Shelf.HasPreviousPage,
+    HasNextPage = Model.Shelf.HasNextPage,
+    PageIndex = Model.Shelf.PageIndex,
+    ActionMethod = nameof(ShelfController.List)
+})
 <script>
 $(document).ready(function(){
   $('[data-toggle="tooltip"]').tooltip();

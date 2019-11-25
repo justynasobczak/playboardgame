@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace PlayBoardGame.Models
 {
     public interface IShelfRepository
     {
-        IEnumerable<Game> GetShelfForUser(string userId);
+        IQueryable<Game> GetShelfForUser(string userId);
 
         IQueryable<Game> GetAvailableGamesForUser(string userId);
 

@@ -21,10 +21,32 @@ namespace PlayBoardGame.Controllers
             _userManager = userManager;
         }
 
-        public ViewResult List()
+        public async Task<ViewResult> List(string currentFilter, string searchString,
+            int? pageNumber)
         {
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
             var currentUserId = GetCurrentUserId().Result;
-            return View(new ShelfListViewModel {Shelf = _shelfRepository.GetShelfForUser(currentUserId).ToList()});
+            var shelf = _shelfRepository.GetShelfForUser(currentUserId);
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                shelf = shelf.Where(g => g.Title.Contains(searchString));
+            }
+
+            var mv = new ShelfListViewModel
+            {
+                Shelf =
+                    await PaginatedList<Game>.CreateAsync(shelf, pageNumber ?? 1, Constants.PageSize)
+            };
+            return View(mv);
         }
 
         public async Task<ViewResult> Edit(string currentFilter, string searchString,
@@ -49,7 +71,6 @@ namespace PlayBoardGame.Controllers
 
             var mv = new ShelfEditViewModel
             {
-                Shelf = _shelfRepository.GetShelfForUser(currentUserId).ToList(),
                 AvailableGames =
                     await PaginatedList<Game>.CreateAsync(availableGames, pageNumber ?? 1, Constants.PageSize)
             };
@@ -64,9 +85,9 @@ namespace PlayBoardGame.Controllers
 
             var gameAppUser = new GameAppUser {UserId = currentUserId, GameId = id};
             _shelfRepository.AddToShelf(gameAppUser);
-            
+
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(Edit));
         }
 
         [HttpPost]

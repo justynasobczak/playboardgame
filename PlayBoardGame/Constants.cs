@@ -24,6 +24,7 @@ namespace PlayBoardGame
                                                              "please change your password on the page of your provider.";
         public const string WrongFileExtension = "Wrong file extension";
         public const string WrongFileSize = "The file is too big, please upload smaller one";
+        public const string GameConnectedWithMeetingErrorMessage = "Cannot remove the game which is connected with the meeting";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -24,14 +25,14 @@ namespace PlayBoardGames.Tests
             {   game1,
                 game2,
                 game3
-            }.AsEnumerable);
+            }.AsQueryable);
             mockRepo.Setup(g => g.GetGame(game1.GameId)).Returns(game1);
             mockRepo.Setup(g => g.GetGame(game2.GameId)).Returns(game2);
             mockRepo.Setup(g => g.GetGame(game3.GameId)).Returns(game3);
             var mockLogger = new Mock<ILogger<GameController>>();
-            var mockEnvironemnt = new Mock<IHostingEnvironment>();
+            var mockEnvironment = new Mock<IHostingEnvironment>();
             
-            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironemnt.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironment.Object);
 
             //Act
             var g1 = GetViewModel<CreateEditGameViewModel>(controller.Edit(game1.GameId));
@@ -59,15 +60,15 @@ namespace PlayBoardGames.Tests
             {   game1,
                 game2,
                 game3
-            }.AsEnumerable);
+            }.AsQueryable);
             mockRepo.Setup(g => g.GetGame(game1.GameId)).Returns(game1);
             mockRepo.Setup(g => g.GetGame(game2.GameId)).Returns(game2);
             mockRepo.Setup(g => g.GetGame(game3.GameId)).Returns(game3);
             
             var mockLogger = new Mock<ILogger<GameController>>();
-            var mockEnvironemnt = new Mock<IHostingEnvironment>();
+            var mockEnvironment = new Mock<IHostingEnvironment>();
 
-            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironemnt.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironment.Object);
 
             //Act
             var result = GetViewModel<CreateEditGameViewModel>(controller.Edit(4));
@@ -79,17 +80,17 @@ namespace PlayBoardGames.Tests
         public void Can_Delete_Valid_Game()
         {
             //Arrange
-            var game = new Game { GameId = 2, Title = "Test" };
+            var game = new Game { GameId = 2, Title = "Test"};
             var mockRepo = new Mock<IGameRepository>();
             mockRepo.Setup(m => m.Games).Returns(new [] {
             new Game {GameId = 1, Title = "P1" },
             game,
             new Game { GameId = 3, Title = "P3"}
-            }.AsEnumerable);
+            }.AsQueryable);
             var mockLogger = new Mock<ILogger<GameController>>();
-            var mockEnvironemnt = new Mock<IHostingEnvironment>();
+            var mockEnvironment = new Mock<IHostingEnvironment>();
             
-            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironemnt.Object);
+            var controller = new GameController(mockRepo.Object, mockLogger.Object, mockEnvironment.Object);
 
             //Act
             controller.Delete(game.GameId);
