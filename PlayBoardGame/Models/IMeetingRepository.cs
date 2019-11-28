@@ -22,6 +22,8 @@ namespace PlayBoardGame.Models
 
         IEnumerable<Game> GetGamesFromMeeting(int meetingId);
 
+        IQueryable<Game> GetGamesForOrganizer(int meetingId, string organizerId);
+
         IEnumerable<Meeting> GetOverlappingMeetingsForUser(DateTime startDate, DateTime endDate, string userId);
 
         IEnumerable<Meeting> GetOverlappingMeetingsForMeeting(DateTime startDate, DateTime endDate, int meetingId);

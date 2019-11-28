@@ -19,15 +19,13 @@ namespace PlayBoardGame.Controllers
         private readonly IMeetingRepository _meetingRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<MeetingController> _logger;
-        private readonly IGameRepository _gameRepository;
 
         public MeetingController(IMeetingRepository meetingRepository, UserManager<AppUser> userManager,
-            ILogger<MeetingController> logger, IGameRepository gameRepository)
+            ILogger<MeetingController> logger)
         {
             _meetingRepository = meetingRepository;
             _userManager = userManager;
             _logger = logger;
-            _gameRepository = gameRepository;
         }
 
         public IActionResult List()
@@ -38,7 +36,6 @@ namespace PlayBoardGame.Controllers
         public IActionResult Edit(int id)
         {
             var currentUserId = GetCurrentUserId().Result;
-            //var timeZone = GetTimeZoneOfUser(currentUserId);
             var meeting = _meetingRepository.GetMeeting(id);
             if (meeting == null)
             {
@@ -53,16 +50,12 @@ namespace PlayBoardGame.Controllers
                 Organizer = meeting.Organizer.FullName,
                 Title = meeting.Title,
                 MeetingId = meeting.MeetingId,
-                /*StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.StartDateTime, timeZone)
-                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
-                EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(meeting.EndDateTime, timeZone)
-                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),*/
                 StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.EndDateTime, timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 Notes = meeting.Notes,
-                Games = _gameRepository.Games.OrderBy(g => g.Title),
+                Games = _meetingRepository.GetGamesForOrganizer(id, meeting.OrganizerId).OrderBy(g => g.Title),
                 SelectedGames = GetGameIdsFromMeeting(id),
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name,
                 Address = new AddressViewModels
@@ -87,16 +80,12 @@ namespace PlayBoardGame.Controllers
                 .FindByIdAsync(currentUserId).Result.TimeZone;
             if (ModelState.IsValid)
             {
-                //var timeZone = GetTimeZoneOfUser(currentUserId);
-
                 if (DateTime.TryParse(vm.StartDateTime, out var startDate) &&
                     DateTime.TryParse(vm.EndDateTime, out var endDate))
                 {
                     startDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(startDate, timeZone, _logger);
                     endDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(endDate, timeZone, _logger);
 
-                    //startDateUTC = TimeZoneInfo.ConvertTimeToUtc(startDate, timeZone);
-                    //endDateUTC = TimeZoneInfo.ConvertTimeToUtc(endDate, timeZone);
                     var overlappingMeetings = new List<string>();
 
                     overlappingMeetings = vm.MeetingId == 0
@@ -184,24 +173,19 @@ namespace PlayBoardGame.Controllers
                 return RedirectToAction(nameof(Edit), new {id = meeting.MeetingId});
             }
 
-            vm.Games = _gameRepository.Games;
+            vm.Games = _meetingRepository.GetGamesForOrganizer(vm.MeetingId, currentUserId).OrderBy(g => g.Title);
             return View(vm);
         }
 
         public IActionResult Create()
         {
             var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
-            //var timeZone = GetTimeZoneOfUser(currentUser.Id);
             var timeZone = currentUser.TimeZone;
 
             return View(nameof(Edit), new MeetingViewModels.CreateEditMeetingViewModel
             {
                 Organizer = currentUser.FullName,
-                Games = _gameRepository.Games,
-                //StartDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), timeZone)
-                //.ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
-                //EndDateTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(2), timeZone)
-                //.ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
+                Games = _meetingRepository.GetGamesForOrganizer(0, currentUser.Id),
                 StartDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(1), timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(2), timeZone, _logger)
@@ -216,13 +200,6 @@ namespace PlayBoardGame.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             return user.Id;
         }
-
-        /*private TimeZoneInfo GetTimeZoneOfUser(string id)
-        {
-            var user = _userManager.FindByIdAsync(id).Result;
-            var userTimeZone = user.TimeZone;
-            return ToolsExtensions.ConvertTimeZone(userTimeZone, _logger);
-        }*/
 
         private List<int> GetGameIdsFromMeeting(int meetingId)
         {

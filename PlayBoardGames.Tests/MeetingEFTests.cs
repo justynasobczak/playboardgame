@@ -188,16 +188,17 @@ namespace PlayBoardGames.Tests
                 }
             }
         }
-        
+
         [Fact]
         public void Can_Save_Description_For_Meeting()
         {
             //Arrange
             using (var factory = new SQLiteDbContextFactory())
             {
-                var description = "some test description some test description some test description some test description some test description some test description " +
-                                  "some test description some test description some test description some test description some test description some test description " +
-                                  "some test description some test description some test description some test description some test description some test description ";
+                var description =
+                    "some test description some test description some test description some test description some test description some test description " +
+                    "some test description some test description some test description some test description some test description some test description " +
+                    "some test description some test description some test description some test description some test description some test description ";
 
                 var meeting = new Meeting
                 {
@@ -515,7 +516,7 @@ namespace PlayBoardGames.Tests
                     Meeting = meeting6,
                     AppUser = user4
                 };
-                
+
                 var invitedUsers11 = new MeetingInvitedUser
                 {
                     Meeting = meeting10,
@@ -799,16 +800,17 @@ namespace PlayBoardGames.Tests
                 }
             }
         }
-        
+
         [Fact]
         public void Can_Get_Description_From_Meeting()
         {
             //Arrange
             using (var factory = new SQLiteDbContextFactory())
             {
-                var description = "some test description some test description some test description some test description some test description some test description " +
-                                  "some test description some test description some test description some test description some test description some test description " +
-                                  "some test description some test description some test description some test description some test description some test description ";
+                var description =
+                    "some test description some test description some test description some test description some test description some test description " +
+                    "some test description some test description some test description some test description some test description some test description " +
+                    "some test description some test description some test description some test description some test description some test description ";
 
                 var meeting = new Meeting
                 {
@@ -841,5 +843,149 @@ namespace PlayBoardGames.Tests
             }
         }
 
+        [Fact]
+        public void Can_Get_Games_For_Organizer()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+                var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
+                var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
+
+                var game1 = new Game {GameId = 1, Title = "game1"};
+                var game2 = new Game {GameId = 2, Title = "game2"};
+                var game3 = new Game {GameId = 3, Title = "game3"};
+                var game4 = new Game {GameId = 4, Title = "game4"};
+                var game5 = new Game {GameId = 5, Title = "game5"};
+                var game6 = new Game {GameId = 6, Title = "game6"};
+
+                var shelfItem1 = new GameAppUser {UserId = "id1", GameId = 1};
+                var shelfItem2 = new GameAppUser {UserId = "id1", GameId = 2};
+                var shelfItem3 = new GameAppUser {UserId = "id1", GameId = 3};
+                var shelfItem4 = new GameAppUser {UserId = "id1", GameId = 4};
+                var shelfItem5 = new GameAppUser {UserId = "id2", GameId = 1};
+                var shelfItem6 = new GameAppUser {UserId = "id2", GameId = 4};
+
+                var meeting1 = new Meeting {MeetingId = 1, Title = "Meeting1", Organizer = user1};
+                var meeting2 = new Meeting {MeetingId = 2, Title = "Meeting2", Organizer = user1};
+                var meeting3 = new Meeting {MeetingId = 3, Title = "Meeting3", Organizer = user1};
+                var meeting4 = new Meeting {MeetingId = 4, Title = "Meeting4", Organizer = user1};
+                var meeting5 = new Meeting {MeetingId = 5, Title = "Meeting5", Organizer = user1};
+                var meeting6 = new Meeting {MeetingId = 6, Title = "Meeting6", Organizer = user2};
+
+                var gameInMeeting1 = new MeetingGame {Game = game1, Meeting = meeting1};
+                var gameInMeeting2 = new MeetingGame {Game = game5, Meeting = meeting2};
+                var gameInMeeting3 = new MeetingGame {Game = game5, Meeting = meeting3};
+                var gameInMeeting4 = new MeetingGame {Game = game3, Meeting = meeting3};
+                var gameInMeeting5 = new MeetingGame {Game = game5, Meeting = meeting4};
+                var gameInMeeting6 = new MeetingGame {Game = game6, Meeting = meeting4};
+                var gameInMeeting7 = new MeetingGame {Game = game3, Meeting = meeting4};
+                var gameInMeeting8 = new MeetingGame {Game = game4, Meeting = meeting4};
+                var gameInMeeting9 = new MeetingGame {Game = game1, Meeting = meeting6};
+                var gameInMeeting10 = new MeetingGame {Game = game6, Meeting = meeting6};
+
+                var result1 = new List<Game>();
+                var result2 = new List<Game>();
+                var result3 = new List<Game>();
+                var result4 = new List<Game>();
+                var result5 = new List<Game>();
+                var result6 = new List<Game>();
+                var result7 = new List<Game>();
+                var result8 = new List<Game>();
+                var result9 = new List<Game>();
+
+                using (var context = factory.CreateContext())
+                {
+                    context.Users.AddRange(user1, user2, user3);
+                    context.Games.AddRange(game1, game2, game3, game4, game5, game6);
+                    context.SaveChanges();
+                    context.GameAppUser.AddRange(shelfItem1, shelfItem2, shelfItem3, shelfItem4, shelfItem5,
+                        shelfItem6);
+                    context.Meetings.AddRange(meeting1, meeting2, meeting3, meeting4, meeting5, meeting6);
+                    context.SaveChanges();
+                    context.MeetingGame.AddRange(gameInMeeting1, gameInMeeting2, gameInMeeting3, gameInMeeting4,
+                        gameInMeeting5, gameInMeeting6, gameInMeeting7, gameInMeeting8, gameInMeeting9,
+                        gameInMeeting10);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    //Add
+                    result1 = meetingRepository.GetGamesForOrganizer(0, user1.Id).OrderBy(g => g.Title).ToList();
+                    result2 = meetingRepository.GetGamesForOrganizer(0, user2.Id).OrderBy(g => g.Title).ToList();
+                    result3 = meetingRepository.GetGamesForOrganizer(0, user3.Id).OrderBy(g => g.Title).ToList(); 
+                    //Edit
+                    result4 = meetingRepository.GetGamesForOrganizer(1, user1.Id).OrderBy(g => g.Title).ToList();
+                    result5 = meetingRepository.GetGamesForOrganizer(2, user1.Id).OrderBy(g => g.Title).ToList();
+                    result6 = meetingRepository.GetGamesForOrganizer(3, user1.Id).OrderBy(g => g.Title).ToList();
+                    result7 = meetingRepository.GetGamesForOrganizer(4, user1.Id).OrderBy(g => g.Title).ToList();
+                    result8 = meetingRepository.GetGamesForOrganizer(5, user1.Id).OrderBy(g => g.Title).ToList();
+                    result9 = meetingRepository.GetGamesForOrganizer(6, user2.Id).OrderBy(g => g.Title).ToList();
+                }
+
+                //Assert
+                using (var context = factory.CreateContext())
+                {
+                    Assert.Equal(3, context.Users.Count());
+                    Assert.Equal(6, context.Games.Count());
+                    Assert.Equal(6, context.GameAppUser.Count());
+                    Assert.Equal(6, context.Meetings.Count());
+                    Assert.Equal(10, context.MeetingGame.Count());
+                    //Add for user1
+                    Assert.Equal(4, result1.Count);
+                    Assert.Equal(1, result1[0].GameId);
+                    Assert.Equal(2, result1[1].GameId);
+                    Assert.Equal(3, result1[2].GameId);
+                    Assert.Equal(4, result1[3].GameId);
+                    //Add for user2
+                    Assert.Equal(2, result2.Count);
+                    Assert.Equal(1, result2[0].GameId);
+                    Assert.Equal(4, result2[1].GameId);
+                    //Add for user3
+                    Assert.Empty(result3);
+
+                    //Edit
+                    Assert.Equal(4, result4.Count);
+                    Assert.Equal(1, result4[0].GameId);
+                    Assert.Equal(2, result4[1].GameId);
+                    Assert.Equal(3, result4[2].GameId);
+                    Assert.Equal(4, result4[3].GameId);
+
+                    Assert.Equal(5, result5.Count);
+                    Assert.Equal(1, result5[0].GameId);
+                    Assert.Equal(2, result5[1].GameId);
+                    Assert.Equal(3, result5[2].GameId);
+                    Assert.Equal(4, result5[3].GameId);
+                    Assert.Equal(5, result5[4].GameId);
+
+                    Assert.Equal(5, result6.Count);
+                    Assert.Equal(1, result6[0].GameId);
+                    Assert.Equal(2, result6[1].GameId);
+                    Assert.Equal(3, result6[2].GameId);
+                    Assert.Equal(4, result6[3].GameId);
+                    Assert.Equal(5, result6[4].GameId);
+
+                    Assert.Equal(6, result7.Count);
+                    Assert.Equal(1, result7[0].GameId);
+                    Assert.Equal(2, result7[1].GameId);
+                    Assert.Equal(3, result7[2].GameId);
+                    Assert.Equal(4, result7[3].GameId);
+                    Assert.Equal(5, result7[4].GameId);
+                    Assert.Equal(6, result7[5].GameId);
+
+                    Assert.Equal(4, result8.Count);
+                    Assert.Equal(1, result8[0].GameId);
+                    Assert.Equal(2, result8[1].GameId);
+                    Assert.Equal(3, result8[2].GameId);
+                    Assert.Equal(4, result8[3].GameId);
+
+                    Assert.Equal(3, result9.Count);
+                    Assert.Equal(1, result9[0].GameId);
+                    Assert.Equal(4, result9[1].GameId);
+                    Assert.Equal(6, result9[2].GameId);
+                }
+            }
+        }
     }
 }

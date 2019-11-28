@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace PlayBoardGame.Models
 {
@@ -17,6 +18,18 @@ namespace PlayBoardGame.Models
         public IEnumerable<Game> GetGamesFromMeeting(int meetingId)
         {
             return _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId));
+        }
+
+        public IQueryable<Game> GetGamesForOrganizer(int meetingId, string organizerId)
+        {
+            if (meetingId == 0)
+            {
+                return _applicationDBContext.Games.Where(g => g.GameAppUser.Any(gu => gu.AppUser.Id == organizerId))
+                    .Select(g => new Game {Title = g.Title, GameId = g.GameId});
+            }
+            return _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId)
+                                                          || g.GameAppUser.Any(gu => gu.UserId == organizerId))
+                .Select(g => new Game {Title = g.Title, GameId = g.GameId});
         }
 
         public Meeting GetMeeting(int meetingId)
