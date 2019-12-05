@@ -25,6 +25,7 @@ namespace PlayBoardGame
         public const string WrongFileExtension = "Wrong file extension";
         public const string WrongFileSize = "The file is too big, please upload smaller one";
         public const string GameConnectedWithMeetingErrorMessage = "Cannot remove the game which is connected with the meeting";
+        public const string PopulateGamesMessage = "The number of added games";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";
@@ -71,6 +72,10 @@ namespace PlayBoardGame
         public const long FileSizeLimit = 2097152;
 
         public const int PageSize = 8;
+        
+        public const int PicturesNumber = 20;
+        
+        public static readonly string[] PicturePermittedExtensions = {".jpg", ".png"};
 
         public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>
         {

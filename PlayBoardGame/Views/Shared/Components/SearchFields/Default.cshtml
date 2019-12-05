@@ -1,11 +1,12 @@
 @model SearchFieldsViewModel
-
-<label class="mr-sm-2 mb-0">Search:</label>
-<input type="text" class="form-control mb-2 mb-sm-0" name="SearchString" value="@ViewData["currentFilter"]"/>
-<button class="buttonForIcons mr-4">
-    <i class="fas fa-search icons"></i>
-</button>
-<div class="standardLink">
-    <i class="fas fa-backspace icons"></i>
-    <a asp-action="@Model.ActionMethod">Back to Full List</a>
+<div class="form-group">
+    <div class="input-group">
+        <input type="text" class="form-control" name="SearchString" value="@ViewData["currentFilter"]" placeholder="Search.."/>
+        <button class="buttonForSearch">
+            <i class="fas fa-search icons"></i>
+        </button>
+    </div>
 </div>
+@*<div class="standardLink ml-3">
+    <a asp-action="@Model.ActionMethod">Back to Full List</a>
+</div>*@

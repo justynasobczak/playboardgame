@@ -6,46 +6,46 @@
     @await Component.InvokeAsync("SearchFields", new {ActionMethod = nameof(ShelfController.List)})
     <a asp-action="Edit" class="btn btn-info btn-sm text-right ml-auto">Add to shelf</a>
 </form>
-<div class="row">
-    @foreach (var game in Model.Shelf)
+
+<table class="table table-hover">
+
+    @if (!Model.Shelf.Any())
     {
-        <div class="col-md-3 col-sm-4">
-            <div class="thumbnail">
-                @if (game.PhotoPath != null)
-                {
-                    var photoPath = $"~/gamephotos/{game.PhotoPath}";
-                    <img src="@photoPath" alt="no image" asp-append-version="true" class="imageShelf"/>
-                    <div class="caption">
-                        <form asp-action="Delete" method="post">
-                            <p>
-                                @game.Title
-                                <input type="hidden" name="id" value="@game.GameId.ToString()"/>
-                                <button type="submit" class="buttonForIcons">
-                                    <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
-                                </button>
-                            </p>
-                        </form>
-                    </div>
-                }
-                else
-                {
-                    <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageShelf"/>
-                    <div class="caption">
-                        <form asp-action="Delete" method="post">
-                            <p>
-                                @game.Title
-                                <input type="hidden" name="id" value="@game.GameId.ToString()"/>
-                                <button type="submit" class="buttonForIcons">
-                                    <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
-                                </button>
-                            </p>
-                        </form>
-                    </div>
-                }
-            </div>
-        </div>
+        <tr>
+            <td colspan="3" class="text-center">No games</td>
+        </tr>
     }
-</div>
+    else
+    {
+        foreach (var game in Model.Shelf)
+        {
+            <tr>
+                <td style="width: 10%">
+                    @if (game.PhotoPath != null)
+                    {
+                        var photoPath = $"~/gamephotos/{game.PhotoPath}";
+                        <img src="@photoPath" alt="no image" asp-append-version="true" class="imageGame"/>
+                    }
+                    else
+                    {
+                        <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageGame"/>
+                    }
+                </td>
+                <td>
+                    <form asp-action="Delete" method="post">
+                        <p>
+                            @game.Title
+                            <input type="hidden" name="id" value="@game.GameId.ToString()"/>
+                            <button type="submit" class="buttonForIcons">
+                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
+                            </button>
+                        </p>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>
 @await Component.InvokeAsync("PaginationTabs", new
 {
     HasPreviousPage = Model.Shelf.HasPreviousPage,

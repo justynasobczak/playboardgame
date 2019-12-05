@@ -26,7 +26,7 @@ namespace PlayBoardGame.Controllers
             _logger = logger;
             _hostingEnvironment = hostingEnvironment;
         }
-        
+
         public async Task<IActionResult> List(string sortOrder, string currentFilter, string searchString,
             int? pageNumber)
         {
@@ -59,7 +59,7 @@ namespace PlayBoardGame.Controllers
                     games = games.OrderBy(g => g.Title);
                     break;
             }
-            
+
             return View(new GamesListViewModel
                 {Games = await PaginatedList<Game>.CreateAsync(games, pageNumber ?? 1, Constants.PageSize)});
         }
@@ -87,15 +87,14 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CreateEditGameViewModel game)
         {
-            string[] permittedExtensions = {".jpg", ".png"};
             string extension = null;
             if (game.Photo != null)
             {
                 extension = Path.GetExtension(game.Photo.FileName).ToLowerInvariant();
-                if (string.IsNullOrEmpty(extension) || !permittedExtensions.Contains(extension))
+                if (string.IsNullOrEmpty(extension) || !Constants.PicturePermittedExtensions.Contains(extension))
                 {
                     ModelState.AddModelError(nameof(CreateEditGameViewModel.Photo),
-                        $"{Constants.WrongFileExtension}, allowed file types: {string.Join(" ,", permittedExtensions)}.");
+                        $"{Constants.WrongFileExtension}, allowed file types: {string.Join(" ,", Constants.PicturePermittedExtensions)}.");
                 }
 
                 if (game.Photo.Length > Constants.FileSizeLimit)
@@ -146,6 +145,7 @@ namespace PlayBoardGame.Controllers
                 TempData["ErrorMessage"] = Constants.GameConnectedWithMeetingErrorMessage;
                 return RedirectToAction(nameof(List));
             }
+
             var deletedGame = _gameRepository.DeleteGame(id);
             if (deletedGame != null && deletedGame.PhotoPath != null)
             {
@@ -158,6 +158,45 @@ namespace PlayBoardGame.Controllers
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
+            return RedirectToAction(nameof(List));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult PopulateGames()
+        {
+            var path = Path.Combine(_hostingEnvironment.WebRootPath, "gamemigration");
+            var list = Directory.GetFiles(path);
+            var uploadsFolder = SetUploadsFolder();
+            var uploadedFiles = 0;
+            foreach (var file in list)
+            {
+                string extension = null;
+                var fullFileName = file.Replace($"{path}/", "");
+                extension = fullFileName.Substring(fullFileName.Length - 4, 4);
+                if (Constants.PicturePermittedExtensions.Contains(extension))
+                {
+                    var fileName = fullFileName.Replace(extension, "");
+                    var uniqueFileName = $"{Guid.NewGuid().ToString()}{extension}";
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    try
+                    {
+                        System.IO.File.Move(file, filePath);
+                        _gameRepository.SaveGame(new Game
+                        {
+                            Title = fileName,
+                            PhotoPath = uniqueFileName, PhotoName = fullFileName
+                        });
+                        uploadedFiles++;
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e.Message);
+                    }
+                }
+            }
+
+            TempData["SuccessMessage"] = $"{Constants.PopulateGamesMessage}: {uploadedFiles}";
             return RedirectToAction(nameof(List));
         }
 

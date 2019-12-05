@@ -35,10 +35,10 @@ namespace PlayBoardGame.Controllers
 
             ViewData["CurrentFilter"] = searchString;
             var currentUserId = GetCurrentUserId().Result;
-            var shelf = _shelfRepository.GetShelfForUser(currentUserId);
+            var shelf = _shelfRepository.GetShelfForUser(currentUserId).OrderBy(g => g.Title);
             if (!string.IsNullOrEmpty(searchString))
             {
-                shelf = shelf.Where(g => g.Title.Contains(searchString));
+                shelf = shelf.Where(g => g.Title.Contains(searchString)).OrderBy(g => g.Title);
             }
 
             var mv = new ShelfListViewModel
@@ -63,16 +63,16 @@ namespace PlayBoardGame.Controllers
 
             ViewData["CurrentFilter"] = searchString;
             var currentUserId = GetCurrentUserId().Result;
-            var availableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId);
+            var availableGames = _shelfRepository.GetAvailableGamesForUser(currentUserId).OrderBy(g => g.Title);
             if (!string.IsNullOrEmpty(searchString))
             {
-                availableGames = availableGames.Where(g => g.Title.Contains(searchString));
+                availableGames = availableGames.Where(g => g.Title.Contains(searchString)).OrderBy(g => g.Title);
             }
 
             var mv = new ShelfEditViewModel
             {
                 AvailableGames =
-                    await PaginatedList<Game>.CreateAsync(availableGames, pageNumber ?? 1, Constants.PageSize)
+                    await PaginatedList<Game>.CreateAsync(availableGames, pageNumber ?? 1, Constants.PicturesNumber)
             };
             return View(mv);
         }

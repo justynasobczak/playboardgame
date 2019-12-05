@@ -15,7 +15,7 @@
                 @if (game.PhotoPath != null)
                 {
                     var photoPath = $"~/gamephotos/{game.PhotoPath}";
-                    <img src="@photoPath" alt="no image" asp-append-version="true" class="imageShelf"/>
+                    <img src="@photoPath" alt="no image" asp-append-version="true" class="imageGame"/>
                     <div class="caption">
                         <form asp-action="Edit" method="post">
                             <p>
@@ -30,7 +30,7 @@
                 }
                 else
                 {
-                    <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageShelf"/>
+                    <img src="/lib/custom/img/noImageAlien.jpg" alt="no image" asp-append-version="true" class="imageGame"/>
                     <div class="caption">
                         <form asp-action="Edit" method="post">
                             <p>

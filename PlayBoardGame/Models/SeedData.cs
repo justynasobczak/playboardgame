@@ -16,7 +16,7 @@ namespace PlayBoardGame.Models
             var context = app.ApplicationServices
                 .GetRequiredService<ApplicationDBContext>();
             context.Database.Migrate();
-           
+
             var userManager = app.ApplicationServices.GetRequiredService<UserManager<AppUser>>();
             var roleManager = app.ApplicationServices.GetRequiredService<RoleManager<IdentityRole>>();
 
