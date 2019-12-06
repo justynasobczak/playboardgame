@@ -166,14 +166,13 @@ namespace PlayBoardGame.Controllers
         public IActionResult PopulateGames()
         {
             var path = Path.Combine(_hostingEnvironment.WebRootPath, "gamemigration");
-            var list = Directory.GetFiles(path);
+            var listOfFiles = Directory.GetFiles(path);
             var uploadsFolder = SetUploadsFolder();
             var uploadedFiles = 0;
-            foreach (var file in list)
+            foreach (var file in listOfFiles)
             {
-                string extension = null;
                 var fullFileName = file.Replace($"{path}/", "");
-                extension = fullFileName.Substring(fullFileName.Length - 4, 4);
+                var extension = fullFileName.Substring(fullFileName.Length - 4, 4);
                 if (Constants.PicturePermittedExtensions.Contains(extension))
                 {
                     var fileName = fullFileName.Replace(extension, "");
