@@ -15,7 +15,7 @@ services:
     expose:
       - "5000"
     volumes:
-      - gamePictures:./wwwroot/gamephotos
+      - gamePictures:/app/wwwroot/gamephotos
     environment:
       ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_ENVIRONMENT: "Docker"
