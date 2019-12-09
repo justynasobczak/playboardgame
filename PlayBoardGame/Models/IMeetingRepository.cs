@@ -12,6 +12,8 @@ namespace PlayBoardGame.Models
 
         IEnumerable<Meeting> GetMeetingsForUser(string userId);
 
+        IQueryable<Meeting> GetMeetingsForUserForNextDays(string userId, int days);
+
         void SaveMeeting(Meeting meeting);
 
         void AddGameToMeeting(MeetingGame gameInMeeting);

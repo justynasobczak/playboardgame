@@ -1,3 +1,4 @@
+@model StartViewModels
 @{
     ViewBag.Title = "Let's play board games";
 }
@@ -18,3 +19,31 @@
 </div>
 <div class="plainText standardLink">Check your meetings in the <a asp-controller="Meeting" asp-action="List">calendar</a>.</div>
 <div class="plainText standardLink">Do you know <a asp-controller="HangingTree" asp-action="HangingTree">hanged man</a> game?</div>
+<div class="mt-5 mb-3">
+    <h4>Upcoming meetings (next 7 days)</h4>
+</div>
+<table class="table table-hover">
+
+    @if (!Model.UpcomingMeetings.Any())
+    {
+        <tr>
+            <td colspan="3" class="text-center">No upcoming meetings</td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th class="text-left">When</th>
+            <th class="text-left">Who</th>
+            <th class="text-left">Games</th>
+        </tr>
+        foreach (var item in Model.UpcomingMeetings)
+        {
+            <tr>
+                <td>@item.StartDate</td>
+                <td>@item.People</td>
+                <td>@item.Games</td>
+            </tr>
+        }
+    }
+</table>

@@ -27,6 +27,7 @@ namespace PlayBoardGame.Models
                 return _applicationDBContext.Games.Where(g => g.GameAppUser.Any(gu => gu.AppUser.Id == organizerId))
                     .Select(g => new Game {Title = g.Title, GameId = g.GameId});
             }
+
             return _applicationDBContext.Games.Where(g => g.MeetingGame.Any(mg => mg.MeetingId == meetingId)
                                                           || g.GameAppUser.Any(gu => gu.UserId == organizerId))
                 .Select(g => new Game {Title = g.Title, GameId = g.GameId});
@@ -52,6 +53,19 @@ namespace PlayBoardGame.Models
             return _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId ||
                                                              m.MeetingInvitedUser.Any(mu => mu.UserId == userId))
                 .Distinct();
+        }
+
+        public IQueryable<Meeting> GetMeetingsForUserForNextDays(string userId, int days)
+        {
+            return _applicationDBContext.Meetings.Where(m => m.Organizer.Id == userId ||
+                                                             m.MeetingInvitedUser.Any(mu => mu.UserId == userId))
+                .Where(m => m.StartDateTime > DateTime.UtcNow && m.StartDateTime < DateTime.UtcNow.AddDays(days))
+                .Distinct()
+                .Include(m => m.Organizer)
+                .Include(m => m.MeetingGame)
+                .ThenInclude(mg => mg.Game)
+                .Include(m => m.MeetingInvitedUser)
+                .ThenInclude(iu => iu.AppUser);
         }
 
         public void SaveMeeting(Meeting meeting)
