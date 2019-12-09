@@ -6,3 +6,4 @@
 .directory
 *.user
 .env
+**/Logs/*
