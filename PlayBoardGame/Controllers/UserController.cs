@@ -34,6 +34,7 @@ namespace PlayBoardGame.Controllers
             {
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 TimeZoneList = ToolsExtensions.GetTimeZones(),
                 TimeZone = user.TimeZone,

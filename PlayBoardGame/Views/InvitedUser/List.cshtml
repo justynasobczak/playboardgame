@@ -21,6 +21,11 @@
         foreach (var item in Model.InvitedUsersList)
         {
             <tr>
+                <td class="tdAvatar">
+                    <div>
+                        <img gravatar-email="@item.UserEmail" alt="Avatar"/>
+                    </div>
+                </td>
                 <td>@item.DisplayedUserName</td>
                 @switch (item.Status)
                 {

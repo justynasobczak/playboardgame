@@ -23,6 +23,8 @@ namespace PlayBoardGame.Models.ViewModels
             public string UserName { get; set; }
 
             public string DisplayedUserName { get; set; }
+            
+            public string UserEmail { get; set; }
 
             public InvitationStatus Status { get; set; }
 

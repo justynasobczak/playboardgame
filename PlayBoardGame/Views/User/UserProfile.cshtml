@@ -11,7 +11,13 @@
 
 <form asp-action="UserProfileAsync" method="post">
     <div class="form-row">
-        <div class="col-md-6">
+        <div class="col-md-1">
+            <div class="form-group text-left">
+                <label>Gravatar</label>
+                <img gravatar-email="@Model.Email" alt="Avatar"/>
+            </div>
+        </div>
+        <div class="col-md-5">
             <div class="form-group">
                 <label asp-for="FirstName">First name</label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
@@ -39,7 +45,7 @@
                 <label asp-for="TimeZone">Time zone</label>
                 <span asp-validation-for="TimeZone" class="text-danger"></span>
                 <select asp-for="TimeZone" asp-items="@(new SelectList(Model.TimeZoneList.
-                                                            OrderBy(i => i.Value), "Value", "Value"))"
+                                                          OrderBy(i => i.Value), "Value", "Value"))"
                         class="form-control custom-select">
                 </select>
             </div>

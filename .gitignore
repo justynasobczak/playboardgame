@@ -5,5 +5,4 @@
 .idea
 .directory
 *.user
-**/Logs/*
 .env

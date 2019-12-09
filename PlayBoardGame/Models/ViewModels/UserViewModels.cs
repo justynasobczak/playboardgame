@@ -19,6 +19,8 @@ namespace PlayBoardGame.Models.ViewModels
         
         public string TimeZone { get; set; }
         
+        public string Email { get; set; }
+        
         public List<KeyValuePair<string, string>> TimeZoneList { get; set; }
         
     }

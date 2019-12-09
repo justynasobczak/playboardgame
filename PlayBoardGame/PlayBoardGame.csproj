@@ -35,10 +35,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Logs" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="nlog.config.xml" />
     </ItemGroup>
 

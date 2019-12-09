@@ -47,7 +47,8 @@ namespace PlayBoardGame.Controllers
                     // bozy Use string interpolation
                     // DisplayedUserName = $"{user.UserName} {user.FirstName} {user.LastName}";
                     //Changed in AppUser
-                    DisplayedUserName = item.AppUser.FullName, UserName = item.AppUser.UserName, Status = item.Status,
+                    DisplayedUserName = item.AppUser.FullName, UserName = item.AppUser.UserName,
+                    UserEmail = item.AppUser.Email, Status = item.Status,
                     Id = item.AppUser.Id
                 })
                 .ToList();
@@ -117,13 +118,13 @@ namespace PlayBoardGame.Controllers
                 $"{Constants.ContentInviteUserEmail}: Organizer: {meeting.Organizer.FullName}; Start date: {meetingStartDate}; End date: {meetingEndDate};" +
                 $" Games: {string.Join(", ", games)}";
             _templateSender.SendGeneralEmailAsync(new SendEmailDetails
-                {
-                    IsHTML = true,
-                    ToEmail = user.Email,
-                    Subject = Constants.SubjectInviteUserEmail
-                }, Constants.TitleInviteUserEmail, content,
-                Constants.ButtonVisitSide,
-                appLink)
+                    {
+                        IsHTML = true,
+                        ToEmail = user.Email,
+                        Subject = Constants.SubjectInviteUserEmail
+                    }, Constants.TitleInviteUserEmail, content,
+                    Constants.ButtonVisitSide,
+                    appLink)
                 .ContinueWith(t =>
                 {
                     if (!t.Result.Successful)
@@ -132,7 +133,6 @@ namespace PlayBoardGame.Controllers
                         {
                             _logger.LogError(error);
                         }
-                        
                     }
                 }, TaskScheduler.Default);
 
