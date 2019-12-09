@@ -16,6 +16,7 @@ services:
       - "5000"
     volumes:
       - gamePictures:/app/wwwroot/gamephotos
+      - logs:/Logs
     environment:
       ASPNETCORE_URLS: http://+:5000
       ASPNETCORE_ENVIRONMENT: "Docker"
@@ -41,3 +42,4 @@ services:
 volumes:
   ms-sql:
   gamePictures:
+  logs:
