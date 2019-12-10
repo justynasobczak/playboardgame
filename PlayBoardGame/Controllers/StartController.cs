@@ -32,20 +32,20 @@ namespace PlayBoardGame.Controllers
             var currentUserId = GetCurrentUserId().Result;
             var timeZone = _userManager
                 .FindByIdAsync(currentUserId).Result.TimeZone;
-            var upcomingMeetings = _meetingRepository.GetMeetingsForUserForNextDays(currentUserId, 7);
-            var list = new List<UpcomingMeetings>();
-            foreach (var meeting in upcomingMeetings)
-            {
-                var games = string.Join(", ", meeting.MeetingGame.Select(mg => mg.Game.Title));
-                var people = string.Join(", ", meeting.MeetingInvitedUser.Select(iu => iu.AppUser.FullName))
-                    .Insert(0, $"{meeting.Organizer.FullName}, ");
-                var startDateUtc = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone, _logger);
-                list.Add(new UpcomingMeetings()
+            var upcomingMeetings = _meetingRepository.GetMeetingsForUserForNextDays(currentUserId, 7)
+                .OrderBy(m => m.StartDateTime);
+            var list = (from meeting in upcomingMeetings
+                let games = string.Join(", ", meeting.MeetingGame.Select(mg => mg.Game.Title))
+                let people = string.Join(", ", meeting.MeetingInvitedUser.Select(iu => iu.AppUser.FullName))
+                    .Insert(0, $"{meeting.Organizer.FullName}, ")
+                let startDateUtc = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone, _logger)
+                select new UpcomingMeetings()
                 {
                     StartDate = startDateUtc.ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
-                    Games = games, People = people
-                });
-            }
+                    Games = games, People = people,
+                    Url = Url.Action("Edit", "Meeting", new {id = meeting.MeetingId.ToString()},
+                        HttpContext.Request.Scheme)
+                }).ToList();
 
             var mv = new StartViewModels {UpcomingMeetings = list};
             return View(mv);

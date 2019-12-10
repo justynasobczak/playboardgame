@@ -33,6 +33,7 @@
             <th class="text-left">Date</th>
             <th class="text-left">Games</th>
             <th class="text-left">People</th>
+            <th class="text-left">Action</th>
         </tr>
         foreach (var item in Model.UpcomingMeetings)
         {
@@ -40,6 +41,11 @@
                 <td>@item.StartDate</td>
                 <td>@item.Games</td>
                 <td>@item.People</td>
+                <td>
+                    <a href=@item.Url>
+                        <i class="fas fa-info icons"></i>
+                    </a>
+                </td>
             </tr>
         }
     }

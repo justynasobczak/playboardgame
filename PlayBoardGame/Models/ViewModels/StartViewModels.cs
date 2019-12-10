@@ -12,5 +12,6 @@ namespace PlayBoardGame.Models.ViewModels
         public string StartDate { get; set; }
         public string People { get; set; }
         public string Games { get; set; }
+        public string Url { get; set; }
     }
 }
