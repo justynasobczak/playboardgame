@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -29,17 +30,21 @@ namespace PlayBoardGame.Controllers
         public ViewResult Index()
         {
             var currentUserId = GetCurrentUserId().Result;
-            var upcomingMeetings = _meetingRepository.GetMeetingsForUserForNextDays(currentUserId, 7);
-            var list = new List<UpcomingMeetings>();
             var timeZone = _userManager
                 .FindByIdAsync(currentUserId).Result.TimeZone;
+            var upcomingMeetings = _meetingRepository.GetMeetingsForUserForNextDays(currentUserId, 7);
+            var list = new List<UpcomingMeetings>();
             foreach (var meeting in upcomingMeetings)
             {
                 var games = string.Join(", ", meeting.MeetingGame.Select(mg => mg.Game.Title));
-                var people = string.Join(", ", meeting.MeetingInvitedUser.Select(iu => iu.AppUser.FullName));
-                var startDateUtc = ToolsExtensions.ConvertFromTimeZoneToUtc(meeting.StartDateTime, timeZone, _logger);
+                var people = string.Join(", ", meeting.MeetingInvitedUser.Select(iu => iu.AppUser.FullName))
+                    .Insert(0, $"{meeting.Organizer.FullName}, ");
+                var startDateUtc = ToolsExtensions.ConvertToTimeZoneFromUtc(meeting.StartDateTime, timeZone, _logger);
                 list.Add(new UpcomingMeetings()
-                    {StartDate = startDateUtc.ToString(), Games = games, People = people});
+                {
+                    StartDate = startDateUtc.ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
+                    Games = games, People = people
+                });
             }
 
             var mv = new StartViewModels {UpcomingMeetings = list};

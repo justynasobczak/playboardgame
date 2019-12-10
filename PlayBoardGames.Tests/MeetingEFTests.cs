@@ -914,7 +914,7 @@ namespace PlayBoardGames.Tests
                     //Add
                     result1 = meetingRepository.GetGamesForOrganizer(0, user1.Id).OrderBy(g => g.Title).ToList();
                     result2 = meetingRepository.GetGamesForOrganizer(0, user2.Id).OrderBy(g => g.Title).ToList();
-                    result3 = meetingRepository.GetGamesForOrganizer(0, user3.Id).OrderBy(g => g.Title).ToList(); 
+                    result3 = meetingRepository.GetGamesForOrganizer(0, user3.Id).OrderBy(g => g.Title).ToList();
                     //Edit
                     result4 = meetingRepository.GetGamesForOrganizer(1, user1.Id).OrderBy(g => g.Title).ToList();
                     result5 = meetingRepository.GetGamesForOrganizer(2, user1.Id).OrderBy(g => g.Title).ToList();
@@ -984,6 +984,83 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(1, result9[0].GameId);
                     Assert.Equal(4, result9[1].GameId);
                     Assert.Equal(6, result9[2].GameId);
+                }
+            }
+        }
+
+        [Fact]
+        public void Can_See_Meetings_By_User_For_N_Days()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                using (var context = factory.CreateContext())
+                {
+                    var user1 = new AppUser
+                        {Id = "1", UserName = "user1", Email = "user1@example.com"};
+                    var user2 = new AppUser
+                        {Id = "2", UserName = "user2", Email = "user2@example.com"};
+                    var user3 = new AppUser
+                        {Id = "3", UserName = "user3", Email = "user3@example.com"};
+                    context.Users.Add(user1);
+                    context.Users.Add(user2);
+                    context.Users.Add(user3);
+                    context.SaveChanges();
+
+                    var meeting1 = new Meeting
+                        {Title = "Meeting1", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(-4)};
+                    var meeting2 = new Meeting
+                        {Title = "Meeting2", Organizer = user1, StartDateTime = DateTime.UtcNow.AddMinutes(-2)};
+                    var meeting3 = new Meeting
+                        {Title = "Meeting3", Organizer = user2, StartDateTime = DateTime.UtcNow.AddMinutes(1)};
+                    var meeting4 = new Meeting
+                        {Title = "Meeting4", Organizer = user3, StartDateTime = DateTime.UtcNow.AddDays(4)};
+                    var meeting5 = new Meeting
+                        {Title = "Meeting5", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(6).AddHours(23).AddMinutes(59)};
+                    var meeting6 = new Meeting
+                        {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(8)};
+                    context.Meetings.Add(meeting1);
+                    context.Meetings.Add(meeting2);
+                    context.Meetings.Add(meeting3);
+                    context.Meetings.Add(meeting4);
+                    context.Meetings.Add(meeting5);
+                    context.Meetings.Add(meeting6);
+                    context.SaveChanges();
+
+                    var invitedUsers1 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user3};
+                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    var invitedUsers3 = new MeetingInvitedUser {Meeting = meeting2, AppUser = user2};
+                    var invitedUsers4 = new MeetingInvitedUser {Meeting = meeting4, AppUser = user2};
+                    context.MeetingInvitedUser.Add(invitedUsers1);
+                    context.MeetingInvitedUser.Add(invitedUsers2);
+                    context.MeetingInvitedUser.Add(invitedUsers3);
+                    context.MeetingInvitedUser.Add(invitedUsers4);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    var result1 = meetingRepository.GetMeetingsForUserForNextDays(user1.Id, 7).ToList();
+                    var list1 = new List<Meeting> {meeting5};
+
+                    var result2 = meetingRepository.GetMeetingsForUserForNextDays(user2.Id, 7).ToList();
+                    var list2 = new List<Meeting> {meeting3, meeting4};
+
+                    var result3 = meetingRepository.GetMeetingsForUserForNextDays(user3.Id, 7).ToList();
+                    var list3 = new List<Meeting> {meeting4};
+
+                    //Assert
+                    Assert.Equal(6, context.Meetings.Count());
+                    Assert.Equal(3, context.Users.Count());
+                    Assert.Equal(4, context.MeetingInvitedUser.Count());
+
+                    Assert.Single(result1);
+                    Assert.Equal(result1.OrderBy(m => m.Title), list1.OrderBy(m => m.Title));
+
+                    Assert.Equal(2, result2.Count);
+                    Assert.Equal(result2.OrderBy(m => m.Title), list2.OrderBy(m => m.Title));
+
+                    Assert.Single(result3);
+                    Assert.Equal(result3, list3);
                 }
             }
         }

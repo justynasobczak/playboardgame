@@ -35,14 +35,11 @@ namespace PlayBoardGame.Controllers
 
             var currentUserId = GetCurrentUserId().Result;
             var currentUser = _userManager.FindByIdAsync(currentUserId).Result;
-            //var currentUserTimeZone = currentUser.TimeZone;
-            //var timeZone = ToolsExtensions.ConvertTimeZone(currentUserTimeZone, _logger);
             var timeZone = currentUser.TimeZone;
 
             var messages = _messageRepository.GetMessagesForMeeting(id).ToList();
             foreach (var message in messages)
             {
-                //message.Created = TimeZoneInfo.ConvertTimeFromUtc(message.Created, timeZone);
                 message.Created = ToolsExtensions.ConvertToTimeZoneFromUtc(message.Created, timeZone, _logger);
                 message.Author.Email = message.Author.Email.Trim().ToLower();
             }

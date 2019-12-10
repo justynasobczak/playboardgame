@@ -2,9 +2,6 @@
 @{
     ViewBag.Title = "Let's play board games";
 }
-<div>
-    <h4>Do you want to arrange the meeting with board games?</h4>
-</div>
 <div class="plainText standardLink">
     <a asp-controller="Shelf" asp-action="List">Organize your shelf</a>, put your games on your virtual shelf, it will be
     easier to select the games for the meeting.
@@ -33,16 +30,16 @@
     else
     {
         <tr>
-            <th class="text-left">When</th>
-            <th class="text-left">Who</th>
+            <th class="text-left">Date</th>
             <th class="text-left">Games</th>
+            <th class="text-left">People</th>
         </tr>
         foreach (var item in Model.UpcomingMeetings)
         {
             <tr>
                 <td>@item.StartDate</td>
-                <td>@item.People</td>
                 <td>@item.Games</td>
+                <td>@item.People</td>
             </tr>
         }
     }
