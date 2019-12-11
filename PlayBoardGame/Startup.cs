@@ -68,6 +68,7 @@ namespace PlayBoardGame
             services.AddTransient<IMeetingRepository, EFMeetingRepository>();
             services.AddTransient<IInvitedUserRepository, EFInvitedUserRepository>();
             services.AddTransient<IMessageRepository, EFMessageRepository>();
+            services.AddTransient<INotificationRepository, EFNotificationRepository>();
             services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<IEmailTemplateSender, EmailTemplateSender>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
