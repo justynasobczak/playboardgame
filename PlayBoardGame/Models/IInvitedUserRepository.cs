@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PlayBoardGame.Models
 {
@@ -13,5 +14,7 @@ namespace PlayBoardGame.Models
         MeetingInvitedUser RemoveUserFromMeeting(string userId, int meetingId);
 
         void ChangeStatus(string userId, int meetingId, InvitationStatus status);
+
+        IQueryable<string> GetInvitedUsersEmails(int meetingId);
     }
 }

@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using PlayBoardGame.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using PlayBoardGame.Email.SendGrid;
+using PlayBoardGame.Email.Template;
 using PlayBoardGame.Infrastructure;
 
 namespace PlayBoardGame.Controllers
@@ -19,13 +21,18 @@ namespace PlayBoardGame.Controllers
         private readonly IMeetingRepository _meetingRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<MeetingController> _logger;
+        private readonly IEmailTemplateSender _templateSender;
+        private readonly IInvitedUserRepository _invitedUserRepository;
 
         public MeetingController(IMeetingRepository meetingRepository, UserManager<AppUser> userManager,
-            ILogger<MeetingController> logger)
+            ILogger<MeetingController> logger, IEmailTemplateSender templateSender,
+            IInvitedUserRepository invitedUserRepository)
         {
             _meetingRepository = meetingRepository;
             _userManager = userManager;
             _logger = logger;
+            _templateSender = templateSender;
+            _invitedUserRepository = invitedUserRepository;
         }
 
         public IActionResult List()
@@ -73,8 +80,8 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(MeetingViewModels.CreateEditMeetingViewModel vm)
         {
-            var startDateUTC = new DateTime();
-            var endDateUTC = new DateTime();
+            var startDateUtc = new DateTime();
+            var endDateUtc = new DateTime();
             var currentUserId = GetCurrentUserId().Result;
             var timeZone = _userManager
                 .FindByIdAsync(currentUserId).Result.TimeZone;
@@ -83,24 +90,24 @@ namespace PlayBoardGame.Controllers
                 if (DateTime.TryParse(vm.StartDateTime, out var startDate) &&
                     DateTime.TryParse(vm.EndDateTime, out var endDate))
                 {
-                    startDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(startDate, timeZone, _logger);
-                    endDateUTC = ToolsExtensions.ConvertFromTimeZoneToUtc(endDate, timeZone, _logger);
+                    startDateUtc = ToolsExtensions.ConvertFromTimeZoneToUtc(startDate, timeZone, _logger);
+                    endDateUtc = ToolsExtensions.ConvertFromTimeZoneToUtc(endDate, timeZone, _logger);
 
                     var overlappingMeetings = new List<string>();
 
                     overlappingMeetings = vm.MeetingId == 0
-                        ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUTC, endDateUTC, currentUserId)
+                        ? _meetingRepository.GetOverlappingMeetingsForUser(startDateUtc, endDateUtc, currentUserId)
                             .Select(m => m.Title).ToList()
-                        : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUTC, endDateUTC, vm.MeetingId)
+                        : _meetingRepository.GetOverlappingMeetingsForMeeting(startDateUtc, endDateUtc, vm.MeetingId)
                             .Select(m => m.Title).ToList();
 
-                    if (!ToolsExtensions.IsDateInFuture(startDateUTC))
+                    if (!ToolsExtensions.IsDateInFuture(startDateUtc))
                     {
                         ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.StartDateTime),
                             Constants.FutureDateInPastMessage);
                     }
 
-                    if (!ToolsExtensions.IsStartDateBeforeEndDate(startDateUTC, endDateUTC))
+                    if (!ToolsExtensions.IsStartDateBeforeEndDate(startDateUtc, endDateUtc))
                     {
                         ModelState.AddModelError(nameof(MeetingViewModels.CreateEditMeetingViewModel.EndDateTime),
                             Constants.EndDateBeforeStartMessage);
@@ -137,8 +144,8 @@ namespace PlayBoardGame.Controllers
                 {
                     MeetingId = vm.MeetingId,
                     Title = vm.Title,
-                    StartDateTime = startDateUTC,
-                    EndDateTime = endDateUTC,
+                    StartDateTime = startDateUtc,
+                    EndDateTime = endDateUtc,
                     Organizer = organizer,
                     Street = vm.Address.Street,
                     PostalCode = vm.Address.PostalCode,
@@ -146,6 +153,13 @@ namespace PlayBoardGame.Controllers
                     Country = vm.Address.Country,
                     Notes = vm.Notes
                 };
+                var baseMeeting = _meetingRepository.GetMeeting(meeting.MeetingId);
+                string changes = null;
+                if (baseMeeting != null)
+                {
+                    changes = CompareMeetingData(baseMeeting, meeting, timeZone);
+                }
+
                 _meetingRepository.SaveMeeting(meeting);
                 var savedGames = GetGameIdsFromMeeting(meeting.MeetingId);
                 var selectedGames = vm.SelectedGames ?? new List<int>();
@@ -154,9 +168,9 @@ namespace PlayBoardGame.Controllers
 
                 if (gamesToAdd.Count > 0)
                 {
-                    foreach (var game in gamesToAdd)
+                    foreach (var gameToAdd in gamesToAdd.Select(game => new MeetingGame
+                        {GameId = game, MeetingId = meeting.MeetingId}))
                     {
-                        var gameToAdd = new MeetingGame {GameId = game, MeetingId = meeting.MeetingId};
                         _meetingRepository.AddGameToMeeting(gameToAdd);
                     }
                 }
@@ -170,6 +184,30 @@ namespace PlayBoardGame.Controllers
                 }
 
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+                if (changes == null) return RedirectToAction(nameof(Edit), new {id = meeting.MeetingId});
+                var appLink = Url.Action(nameof(Edit), "Meeting", new {id = baseMeeting.MeetingId},
+                    HttpContext.Request.Scheme);
+                foreach (var email in _invitedUserRepository.GetInvitedUsersEmails(baseMeeting.MeetingId))
+                {
+                    _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                            {
+                                IsHTML = true,
+                                ToEmail = email,
+                                Subject = Constants.SubjectChangeMeetingDataEmail
+                            }, Constants.TitleChangeMeetingDataEmail,
+                            $"{Constants.ContentChangeMeetingDataEmail}: {changes}",
+                            Constants.ButtonCheckMeeting,
+                            appLink)
+                        .ContinueWith(t =>
+                        {
+                            if (t.Result.Successful) return;
+                            foreach (var error in t.Result.Errors)
+                            {
+                                _logger.LogError(error);
+                            }
+                        }, TaskScheduler.Default);
+                }
+
                 return RedirectToAction(nameof(Edit), new {id = meeting.MeetingId});
             }
 
@@ -203,18 +241,39 @@ namespace PlayBoardGame.Controllers
 
         private List<int> GetGameIdsFromMeeting(int meetingId)
         {
-            // bozy use extension methods or linq or both
-//            return _meetingRepository
-//                .GetGamesFromMeeting(meetingId)
-//                .Select(it => it.GameId)
-//                .ToArray();
-// OR
-//            return (from it in _meetingRepository.GetGamesFromMeeting(meetingId) select it.GameId).ToArray();
-
             return _meetingRepository
                 .GetGamesFromMeeting(meetingId)
                 .Select(g => g.GameId)
                 .ToList();
+        }
+
+        private string CompareMeetingData(Meeting oldMeeting, Meeting newMeeting, string timeZone)
+        {
+            string changes = null;
+            var oldStartDateUtc = DateTime.SpecifyKind(oldMeeting.StartDateTime, DateTimeKind.Utc);
+            var newStartDateUtc = DateTime.SpecifyKind(newMeeting.StartDateTime, DateTimeKind.Utc);
+            if (oldMeeting.StartDateTime != newMeeting.StartDateTime)
+            {
+                changes += string.Join(", ",
+                    $"{Constants.OldValueMeetingMessage} Start date: {ToolsExtensions.ConvertToTimeZoneFromUtc(oldStartDateUtc, timeZone, _logger).ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture)}, " +
+                    $"{Constants.CurrentValueMeetingMessage} Start date: {ToolsExtensions.ConvertToTimeZoneFromUtc(newStartDateUtc, timeZone, _logger).ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture)}, ");
+            }
+
+            if (!ToolsExtensions.IfStringsEqual(oldMeeting.Street, newMeeting.Street))
+            {
+                changes += string.Join(", ",
+                    $"{Constants.OldValueMeetingMessage} Street (address): {oldMeeting.Street}, " +
+                    $"{Constants.CurrentValueMeetingMessage} Street (address): {newMeeting.Street}, ");
+            }
+
+            if (!ToolsExtensions.IfStringsEqual(oldMeeting.City, newMeeting.City))
+            {
+                changes += string.Join(", ",
+                    $"{Constants.OldValueMeetingMessage} City (address): {oldMeeting.City}, " +
+                    $"{Constants.CurrentValueMeetingMessage} City (address): {newMeeting.City}");
+            }
+
+            return changes;
         }
     }
 }

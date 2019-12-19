@@ -112,5 +112,14 @@ namespace PlayBoardGame.Infrastructure
 
             return zone;
         }
+
+        public static bool IfStringsEqual(string a, string b)
+        {
+            if (a == null && b == null) return true;
+
+            if ((a == null & b != null) | (b == null & a != null)) return false;
+
+            return a.Trim().Equals(b.Trim(), StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

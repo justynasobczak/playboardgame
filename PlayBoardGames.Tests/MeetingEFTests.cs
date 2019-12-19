@@ -1016,7 +1016,10 @@ namespace PlayBoardGames.Tests
                     var meeting4 = new Meeting
                         {Title = "Meeting4", Organizer = user3, StartDateTime = DateTime.UtcNow.AddDays(4)};
                     var meeting5 = new Meeting
-                        {Title = "Meeting5", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(6).AddHours(23).AddMinutes(59)};
+                    {
+                        Title = "Meeting5", Organizer = user1,
+                        StartDateTime = DateTime.UtcNow.AddDays(6).AddHours(23).AddMinutes(59)
+                    };
                     var meeting6 = new Meeting
                         {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(8)};
                     context.Meetings.Add(meeting1);
@@ -1052,6 +1055,79 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(6, context.Meetings.Count());
                     Assert.Equal(3, context.Users.Count());
                     Assert.Equal(4, context.MeetingInvitedUser.Count());
+
+                    Assert.Single(result1);
+                    Assert.Equal(result1.OrderBy(m => m.Title), list1.OrderBy(m => m.Title));
+
+                    Assert.Equal(2, result2.Count);
+                    Assert.Equal(result2.OrderBy(m => m.Title), list2.OrderBy(m => m.Title));
+
+                    Assert.Single(result3);
+                    Assert.Equal(result3, list3);
+                }
+            }
+        }
+
+        [Fact]
+        public void Can_Get_Tomorrows_Meetings()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                using (var context = factory.CreateContext())
+                {
+                    var user1 = new AppUser
+                        {Id = "1", UserName = "user1", Email = "user1@example.com"};
+                    var user2 = new AppUser
+                        {Id = "2", UserName = "user2", Email = "user2@example.com"};
+                    context.Users.Add(user1);
+                    context.Users.Add(user2);
+                    context.SaveChanges();
+
+                    var meeting1 = new Meeting
+                        {Title = "Meeting1", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(-4)};
+                    var meeting2 = new Meeting
+                        {Title = "Meeting2", Organizer = user1, StartDateTime = DateTime.UtcNow.AddMinutes(-2)};
+                    var meeting3 = new Meeting
+                        {Title = "Meeting3", Organizer = user2, StartDateTime = DateTime.UtcNow.AddMinutes(1)};
+                    var meeting4 = new Meeting
+                        {Title = "Meeting4", Organizer = user2, StartDateTime = DateTime.UtcNow.AddDays(4)};
+                    var meeting5 = new Meeting
+                    {
+                        Title = "Meeting5", Organizer = user1,
+                        StartDateTime = DateTime.UtcNow.AddDays(6).AddHours(23).AddMinutes(59)
+                    };
+                    var meeting6 = new Meeting
+                        {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(8)};
+                    context.Meetings.Add(meeting1);
+                    context.Meetings.Add(meeting2);
+                    context.Meetings.Add(meeting3);
+                    context.Meetings.Add(meeting4);
+                    context.Meetings.Add(meeting5);
+                    context.Meetings.Add(meeting6);
+                    context.SaveChanges();
+
+                    var invitedUsers1 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    context.MeetingInvitedUser.Add(invitedUsers1);
+                    context.MeetingInvitedUser.Add(invitedUsers2);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    var result1 = meetingRepository.GetMeetingsForUserForNextDays(user1.Id, 7).ToList();
+                    var list1 = new List<Meeting> {meeting5};
+
+                    var result2 = meetingRepository.GetMeetingsForUserForNextDays(user2.Id, 7).ToList();
+                    var list2 = new List<Meeting> {meeting3, meeting4};
+
+                    var result3 = meetingRepository.GetMeetingsForUserForNextDays(user2.Id, 7).ToList();
+                    var list3 = new List<Meeting> {meeting4};
+
+                    //Assert
+                    Assert.Equal(6, context.Meetings.Count());
+                    Assert.Equal(2, context.Users.Count());
+                    Assert.Equal(2, context.MeetingInvitedUser.Count());
 
                     Assert.Single(result1);
                     Assert.Equal(result1.OrderBy(m => m.Title), list1.OrderBy(m => m.Title));

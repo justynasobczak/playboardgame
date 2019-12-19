@@ -68,6 +68,17 @@ namespace PlayBoardGame.Models
                 .ThenInclude(iu => iu.AppUser);
         }
 
+        public IQueryable<Meeting> GetTomorrowsMeetings()
+        {
+            return _applicationDBContext.Meetings
+                .Where(m => m.StartDateTime > DateTime.UtcNow && m.StartDateTime < DateTime.UtcNow.AddDays(1))
+                .Include(m => m.Organizer)
+                .Include(m => m.MeetingGame)
+                .ThenInclude(mg => mg.Game)
+                .Include(m => m.MeetingInvitedUser)
+                .ThenInclude(iu => iu.AppUser);
+        }
+
         public void SaveMeeting(Meeting meeting)
         {
             if (meeting.MeetingId == 0)

@@ -8,3 +8,4 @@
 .env
 **/Logs/*
 **/wwwroot/gamemigration/*
+*.blob

@@ -60,5 +60,11 @@ namespace PlayBoardGame.Models
             _applicationDbContext.MeetingInvitedUser.Update(dbEntry);
             _applicationDbContext.SaveChanges();
         }
+
+        public IQueryable<string> GetInvitedUsersEmails(int meetingId)
+        {
+            return _applicationDbContext.Users.Where(u => u.MeetingInvitedUser.Any(iu => iu.MeetingId == meetingId))
+                .Select(u => u.Email);
+        }
     }
 }

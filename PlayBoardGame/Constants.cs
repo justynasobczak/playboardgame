@@ -26,6 +26,8 @@ namespace PlayBoardGame
         public const string WrongFileSize = "The file is too big, please upload smaller one";
         public const string GameConnectedWithMeetingErrorMessage = "Cannot remove the game which is connected with the meeting";
         public const string PopulateGamesMessage = "The number of added games";
+        public const string OldValueMeetingMessage = "Previous value of";
+        public const string CurrentValueMeetingMessage = "Current value of";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";
@@ -54,6 +56,7 @@ namespace PlayBoardGame
                                                        "With your new account, you can organize the meeting with the board games" +
                                                        " and communicte with the players.";
         public const string ButtonVisitSide = "Visit our side";
+        public const string ButtonCheckMeeting = "Check the meeting";
         
         public const string SubjectResetPasswordEmail = "Reset your Gameet account password";
         public const string TitleResetPasswordEmail = "Reset password";
@@ -63,8 +66,11 @@ namespace PlayBoardGame
         
         public const string SubjectInviteUserEmail = "Invitation from Gameet account";
         public const string TitleInviteUserEmail = "Invitation";
-
         public const string ContentInviteUserEmail = "You are invited to the meeting with board games";
+        
+        public const string SubjectChangeMeetingDataEmail = "Gameet meeting data have changed";
+        public const string TitleChangeMeetingDataEmail = "Changes of main meeting data";
+        public const string ContentChangeMeetingDataEmail = "Please look at the new data of the meeting";
 
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
