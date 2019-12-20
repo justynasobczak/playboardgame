@@ -39,6 +39,7 @@ namespace PlayBoardGame
         public const string DeleteMessageTooltip = "Delete a message";
         public const string DeleteGameFromShelfTooltip = "Remove the game from shelf";
         public const string AddGameToShelfTooltip = "Put the game on the shelf";
+        public const string MeetingNotificationTooltip = "Invited people will be informed about each change of this field";
 
         //Logs
         public const string UnknownId = "Unknown Id";

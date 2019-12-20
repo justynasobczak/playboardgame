@@ -30,6 +30,16 @@ namespace PlayBoardGame.Models
                 .WithMany(u => u.OrganizedMeetings)
                 .HasForeignKey(m => m.OrganizerId);
 
+            builder.Entity<TomorrowsMeetingsNotification>()
+                .HasOne(n => n.Participant)
+                .WithMany(u => u.TomorrowsMeetingsNotifications)
+                .HasForeignKey(n => n.ParticipantId);
+            
+            builder.Entity<TomorrowsMeetingsNotification>()
+                .HasOne(n => n.Meeting)
+                .WithMany(m => m.TomorrowsMeetingsNotifications)
+                .HasForeignKey(n => n.MeetingId);
+
             builder.Entity<MeetingInvitedUser>()
                 .HasKey(mu => new {mu.MeetingId, mu.UserId});
             builder.Entity<MeetingInvitedUser>()
@@ -87,6 +97,6 @@ namespace PlayBoardGame.Models
         public DbSet<MeetingInvitedUser> MeetingInvitedUser { get; set; }
         public DbSet<MeetingGame> MeetingGame { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<TomorrowsMeetingsNotification> TomorrowsMeetingsNotifications { get; set; }
     }
 }

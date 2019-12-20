@@ -36,7 +36,8 @@
             <div class="form-row">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label asp-for="StartDateTime">Start date and time</label><i class="far fa-envelope icons ml-1"></i>
+                        <label asp-for="StartDateTime">Start date and time</label>
+                        <i class="far fa-envelope iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingNotificationTooltip"></i>
                         <span asp-validation-for="StartDateTime" class="text-danger"></span>
                         <input id="startDatetimepicker" type="text" asp-for="StartDateTime" class="form-control"/>
                     </div>
@@ -74,8 +75,9 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Address.Street">Street</label>
+                        <i class="far fa-envelope iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingNotificationTooltip"></i>
                         <button type="button" onclick="CopyAddress()" class="buttonForIcons"
-                                data-toggle="copyAddressTooltip" title="@Constants.CopyAddressTooltip">
+                                data-toggle="tooltip" title="@Constants.CopyAddressTooltip">
                             <i class="far fa-copy icons"></i>
                         </button>
                         <span asp-validation-for="Address.Street" class="text-danger"></span>
@@ -85,6 +87,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="Address.City">City</label>
+                        <i class="far fa-envelope iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingNotificationTooltip"></i>
                         <span asp-validation-for="Address.City" class="text-danger"></span>
                         <input asp-for="Address.City" class="form-control" id="City"/>
                     </div>
@@ -142,10 +145,10 @@
 
 <script>
     $(document).ready(function() {
-        $('[data-toggle="copyAddressTooltip"]').tooltip();
-        $('#startDatetimepicker').datetimepicker();
-        $('#endDatetimepicker').datetimepicker();
-    });
+            $('[data-toggle="tooltip"]').tooltip();
+            $('#startDatetimepicker').datetimepicker();
+            $('#endDatetimepicker').datetimepicker();
+        });
     let CopyAddress = function() {
         $.ajax({
             url: "/api/HomeAddress",

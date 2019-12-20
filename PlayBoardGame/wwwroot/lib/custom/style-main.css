@@ -95,6 +95,12 @@ h4 {
     font-size: 18px;
 }
 
+.iconsForNotification {
+    color: #646464;
+    font-size: 15px;
+    margin-left: 10px;
+}
+
 .buttonForIcons {
     height: 0;
     width: 0;

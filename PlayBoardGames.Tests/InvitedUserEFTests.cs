@@ -309,5 +309,70 @@ namespace PlayBoardGames.Tests
                 }
             }
         }
+        
+        [Fact]
+        public void Can_Get_Invited_Users_Emails()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                using (var context = factory.CreateContext())
+                {
+                    var user1 = new AppUser
+                        {Id = "1", UserName = "user1", Email = "user1@example.com"};
+                    var user2 = new AppUser
+                        {Id = "2", UserName = "user2", Email = "user2@example.com"};
+                    var user3 = new AppUser
+                        {Id = "3", UserName = "user3", Email = "user3@example.com"};
+                    context.Users.Add(user1);
+                    context.Users.Add(user2);
+                    context.Users.Add(user3);
+                    context.SaveChanges();
+
+                    var meeting1 = new Meeting
+                        {Title = "Meeting1", Organizer = user1};
+                    var meeting2 = new Meeting
+                        {Title = "Meeting2", Organizer = user2};
+                    var meeting3 = new Meeting
+                        {Title = "Meeting3", Organizer = user3};
+                    
+                    context.Meetings.Add(meeting1);
+                    context.Meetings.Add(meeting2);
+                    context.Meetings.Add(meeting3);
+                    context.SaveChanges();
+
+                    var invitedUsers1 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user3};
+                    var invitedUsers3 = new MeetingInvitedUser {Meeting = meeting2, AppUser = user1};
+                    context.MeetingInvitedUser.Add(invitedUsers1);
+                    context.MeetingInvitedUser.Add(invitedUsers2);
+                    context.MeetingInvitedUser.Add(invitedUsers3);
+                    context.SaveChanges();
+
+                    //Act
+                    var invitedUserRepository = new EFInvitedUserRepository(context);
+                    var result1 = invitedUserRepository.GetInvitedUsersEmails(meeting1.MeetingId).OrderBy(s=> s).ToList();
+                    var list1 = new List<string> {user2.Email, user3.Email};
+
+                    var result2 = invitedUserRepository.GetInvitedUsersEmails(meeting2.MeetingId).OrderBy(s => s).ToList();
+                    var list2 = new List<string> {user1.Email};
+
+                    var result3 = invitedUserRepository.GetInvitedUsersEmails(meeting3.MeetingId).ToList();
+
+                    //Assert
+                    Assert.Equal(3, context.Meetings.Count());
+                    Assert.Equal(3, context.Users.Count());
+                    Assert.Equal(3, context.MeetingInvitedUser.Count());
+
+                    Assert.Equal(2, result1.Count);
+                    Assert.Equal(result1, list1.OrderBy(s => s));
+
+                    Assert.Single(result2);
+                    Assert.Equal(result2, list2.OrderBy(s => s));
+
+                    Assert.Empty(result3);
+                }
+            }
+        }
     }
 }

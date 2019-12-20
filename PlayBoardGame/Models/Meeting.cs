@@ -30,6 +30,8 @@ namespace PlayBoardGame.Models
         
         public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
         
+        public IEnumerable<TomorrowsMeetingsNotification> TomorrowsMeetingsNotifications { get; set; }
+        
         public string Notes { get; set; }
         
         public IEnumerable<MeetingGame> MeetingGame { get; set; }

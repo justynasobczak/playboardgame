@@ -1068,7 +1068,7 @@ namespace PlayBoardGames.Tests
             }
         }
 
-        [Fact]
+        /*[Fact]
         public void Can_Get_Tomorrows_Meetings()
         {
             //Arrange
@@ -1139,6 +1139,6 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(result3, list3);
                 }
             }
-        }
+        }*/
     }
 }

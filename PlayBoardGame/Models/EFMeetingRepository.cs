@@ -68,6 +68,59 @@ namespace PlayBoardGame.Models
                 .ThenInclude(iu => iu.AppUser);
         }
 
+        public Dictionary<Meeting, AppUser> GetUsersToSendNotification()
+        {
+            var list = new Dictionary<Meeting, AppUser>();
+            var meetings = GetTomorrowsMeetings();
+            foreach (var meeting in meetings)
+            {
+                var users = _applicationDBContext.Users.Where(u =>
+                    (u.MeetingInvitedUser.Any(mu => mu.MeetingId == meeting.MeetingId) ||
+                     u.OrganizedMeetings.Any(om => om.MeetingId == meeting.MeetingId)));
+                foreach (var user in users)
+                {
+                    if (!_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
+                                                                                       n.Meeting.MeetingId ==
+                                                                                       meeting.MeetingId &&
+                                                                                       n.IfSent == true &&
+                                                                                       n.MeetingStartDateTime ==
+                                                                                       meeting.StartDateTime))
+                    {
+                        list.Add(meeting, user);
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public Dictionary<Meeting, AppUser> GetUsersToSendAgainNotification()
+        {
+            var list = new Dictionary<Meeting, AppUser>();
+            var meetings = GetTomorrowsMeetings();
+            foreach (var meeting in meetings)
+            {
+                var users = _applicationDBContext.Users.Where(u =>
+                    (u.MeetingInvitedUser.Any(mu => mu.MeetingId == meeting.MeetingId) ||
+                     u.OrganizedMeetings.Any(om => om.MeetingId == meeting.MeetingId)));
+                foreach (var user in users)
+                {
+                    if (_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
+                                                                                      n.Meeting.MeetingId ==
+                                                                                      meeting.MeetingId &&
+                                                                                      n.IfSent == false &&
+                                                                                      n.NumberOfTries > 3 &&
+                                                                                      n.MeetingStartDateTime ==
+                                                                                      meeting.StartDateTime))
+                    {
+                        list.Add(meeting, user);
+                    }
+                }
+            }
+
+            return list;
+        }
+
         public IQueryable<Meeting> GetTomorrowsMeetings()
         {
             return _applicationDBContext.Meetings

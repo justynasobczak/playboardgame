@@ -16,6 +16,10 @@ namespace PlayBoardGame.Models
         
         IQueryable<Meeting> GetTomorrowsMeetings();
 
+        Dictionary<Meeting, AppUser> GetUsersToSendNotification();
+
+        Dictionary<Meeting, AppUser> GetUsersToSendAgainNotification();
+
         void SaveMeeting(Meeting meeting);
 
         void AddGameToMeeting(MeetingGame gameInMeeting);

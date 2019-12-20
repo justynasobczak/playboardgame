@@ -25,6 +25,8 @@ namespace PlayBoardGame.Models
         public IEnumerable<GameAppUser> GameAppUser { get; set; }
 
         public IEnumerable<Meeting> OrganizedMeetings { get; set; }
+        
+        public IEnumerable<TomorrowsMeetingsNotification> TomorrowsMeetingsNotifications { get; set; }
 
         public IEnumerable<Message> WrittenMessages { get; set; }
 
