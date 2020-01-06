@@ -1140,5 +1140,144 @@ namespace PlayBoardGames.Tests
                 }
             }
         }*/
+
+        [Fact]
+        public void Can_Get_Users_To_Send_Notification()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                using (var context = factory.CreateContext())
+                {
+                    var user1 = new AppUser
+                        {Id = "1", UserName = "user1", Email = "user1@example.com"};
+                    var user2 = new AppUser
+                        {Id = "2", UserName = "user2", Email = "user2@example.com"};
+                    var user3 = new AppUser
+                        {Id = "3", UserName = "user3", Email = "user3@example.com"};
+                    context.Users.Add(user1);
+                    context.Users.Add(user2);
+                    context.Users.Add(user3);
+                    context.SaveChanges();
+
+                    var meeting1 = new Meeting
+                        {Title = "Meeting1", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    var meeting2 = new Meeting
+                        {Title = "Meeting2", Organizer = user2, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    var meeting3 = new Meeting
+                        {Title = "Meeting3", Organizer = user2, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    var meeting4 = new Meeting
+                        {Title = "Meeting4", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    var meeting5 = new Meeting
+                        {Title = "Meeting5", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    var meeting6 = new Meeting
+                        {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    var meeting7 = new Meeting
+                        {Title = "Meeting7", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
+                    
+                    context.Meetings.Add(meeting1);
+                    context.Meetings.Add(meeting2);
+                    context.Meetings.Add(meeting3);
+                    context.Meetings.Add(meeting4);
+                    context.Meetings.Add(meeting5);
+                    context.Meetings.Add(meeting6);
+                    context.Meetings.Add(meeting7);
+                    context.SaveChanges();
+
+                    var invitedUsers1 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user3};
+                    var invitedUsers3 = new MeetingInvitedUser {Meeting = meeting2, AppUser = user1};
+                    var invitedUsers4 = new MeetingInvitedUser {Meeting = meeting3, AppUser = user1};
+                    context.MeetingInvitedUser.Add(invitedUsers1);
+                    context.MeetingInvitedUser.Add(invitedUsers2);
+                    context.MeetingInvitedUser.Add(invitedUsers3);
+                    context.MeetingInvitedUser.Add(invitedUsers4);
+                    context.SaveChanges();
+                    
+                    var notification1 = new TomorrowsMeetingsNotification()
+                    {
+                        Meeting = meeting3, Participant = user2, IfSent = true, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting3.StartDateTime
+                    };
+                    var notification2 = new TomorrowsMeetingsNotification()
+                    {
+                        Meeting = meeting3, Participant = user1, IfSent = true, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting3.StartDateTime
+                    };
+                    var notification3 = new TomorrowsMeetingsNotification()
+                    {
+                        Meeting = meeting4, Participant = user1, IfSent = true, PostDate = DateTime.UtcNow, MeetingStartDateTime = DateTime.UtcNow.AddDays(4)
+                    };
+                    var notification4 = new TomorrowsMeetingsNotification()
+                    {
+                        Meeting = meeting5, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting5.StartDateTime, NumberOfTries = 1
+                    };
+                    var notification5 = new TomorrowsMeetingsNotification()
+                    {
+                        Meeting = meeting6, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting6.StartDateTime, NumberOfTries = 2
+                    };
+                    var notification6 = new TomorrowsMeetingsNotification()
+                    {
+                        Meeting = meeting7, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting7.StartDateTime, NumberOfTries = Constants.NumberOfTriesSendNotification
+                    };
+                    context.TomorrowsMeetingsNotifications.Add(notification1);
+                    context.TomorrowsMeetingsNotifications.Add(notification2);
+                    context.TomorrowsMeetingsNotifications.Add(notification3);
+                    context.TomorrowsMeetingsNotifications.Add(notification4);
+                    context.TomorrowsMeetingsNotifications.Add(notification5);
+                    context.TomorrowsMeetingsNotifications.Add(notification6);
+                    context.SaveChanges();
+
+                    //Act
+                    var meetingRepository = new EFMeetingRepository(context);
+                    var result1 = meetingRepository.GetUsersToSendNotification();
+
+                    //Assert
+                    Assert.Equal(7, context.Meetings.Count());
+                    Assert.Equal(3, context.Users.Count());
+                    Assert.Equal(4, context.MeetingInvitedUser.Count());
+                    Assert.Equal(6, context.TomorrowsMeetingsNotifications.Count());
+
+                    Assert.Equal(8, result1.Count);
+                    Assert.Collection(result1, item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting1.MeetingId);
+                            Assert.Equal(item.User.Id, user1.Id);
+                        }, item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting1.MeetingId);
+                            Assert.Equal(item.User.Id, user2.Id);
+                        },
+                        item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting1.MeetingId);
+                            Assert.Equal(item.User.Id, user3.Id);
+                        },
+                        item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting2.MeetingId);
+                            Assert.Equal(item.User.Id, user1.Id);
+                        },
+                        item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting2.MeetingId);
+                            Assert.Equal(item.User.Id, user2.Id);
+                        },
+                        item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting4.MeetingId);
+                            Assert.Equal(item.User.Id, user1.Id);
+                        },
+                        item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting5.MeetingId);
+                            Assert.Equal(item.User.Id, user1.Id);
+                        },
+                        item =>
+                        {
+                            Assert.Equal(item.Meeting.MeetingId, meeting6.MeetingId);
+                            Assert.Equal(item.User.Id, user1.Id);
+                        });
+                }
+            }
+        }
     }
 }

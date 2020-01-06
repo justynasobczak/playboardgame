@@ -68,53 +68,45 @@ namespace PlayBoardGame.Models
                 .ThenInclude(iu => iu.AppUser);
         }
 
-        public Dictionary<Meeting, AppUser> GetUsersToSendNotification()
+        public List<NotificationList> GetUsersToSendNotification()
         {
-            var list = new Dictionary<Meeting, AppUser>();
+            var list = new List<NotificationList>();
             var meetings = GetTomorrowsMeetings();
             foreach (var meeting in meetings)
             {
                 var users = _applicationDBContext.Users.Where(u =>
                     (u.MeetingInvitedUser.Any(mu => mu.MeetingId == meeting.MeetingId) ||
-                     u.OrganizedMeetings.Any(om => om.MeetingId == meeting.MeetingId)));
+                     u.OrganizedMeetings.Any(m => m.MeetingId == meeting.MeetingId)));
                 foreach (var user in users)
                 {
                     if (!_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
                                                                                        n.Meeting.MeetingId ==
                                                                                        meeting.MeetingId &&
-                                                                                       n.IfSent == true &&
+                                                                                       (n.IfSent.Equals(true) ||
+                                                                                        (n.IfSent.Equals(false) &&
+                                                                                         n.NumberOfTries >=
+                                                                                         Constants
+                                                                                             .NumberOfTriesSendNotification
+                                                                                        )
+                                                                                       ) &&
                                                                                        n.MeetingStartDateTime ==
                                                                                        meeting.StartDateTime))
                     {
-                        list.Add(meeting, user);
+                        list.Add(new NotificationList {Meeting = meeting, User = user});
                     }
-                }
-            }
 
-            return list;
-        }
-
-        public Dictionary<Meeting, AppUser> GetUsersToSendAgainNotification()
-        {
-            var list = new Dictionary<Meeting, AppUser>();
-            var meetings = GetTomorrowsMeetings();
-            foreach (var meeting in meetings)
-            {
-                var users = _applicationDBContext.Users.Where(u =>
-                    (u.MeetingInvitedUser.Any(mu => mu.MeetingId == meeting.MeetingId) ||
-                     u.OrganizedMeetings.Any(om => om.MeetingId == meeting.MeetingId)));
-                foreach (var user in users)
-                {
-                    if (_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
+                    /*if (_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
                                                                                       n.Meeting.MeetingId ==
                                                                                       meeting.MeetingId &&
-                                                                                      n.IfSent == false &&
-                                                                                      n.NumberOfTries > 3 &&
+                                                                                      n.IfSent.Equals(false) &&
+                                                                                      n.NumberOfTries <
+                                                                                      Constants
+                                                                                          .NumberOfTriesSendNotification &&
                                                                                       n.MeetingStartDateTime ==
                                                                                       meeting.StartDateTime))
                     {
-                        list.Add(meeting, user);
-                    }
+                        list.Add(new NotificationList {Meeting = meeting, User = user});
+                    }*/
                 }
             }
 

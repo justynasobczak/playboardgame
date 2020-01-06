@@ -24,14 +24,14 @@ namespace PlayBoardGame.Controllers
             foreach (var item in usersToSendNotification)
             {
                 //send email
-                _notificationRepository.SaveNotification(new TomorrowsMeetingsNotification()
+               /* _notificationRepository.SaveNotification(new TomorrowsMeetingsNotification()
                 {
                     Meeting = item.Key,
                     Participant = item.Value,
                     IfSent = true,
                     MeetingStartDateTime = item.Key.StartDateTime,
                     NumberOfTries = 1,
-                });
+                });*/
             }
         }
     }

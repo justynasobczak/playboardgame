@@ -81,6 +81,8 @@ namespace PlayBoardGame
         public const int PageSize = 8;
         
         public const int PicturesNumber = 20;
+
+        public const int NumberOfTriesSendNotification = 3;
         
         public static readonly string[] PicturePermittedExtensions = {".jpg", ".png"};
 
