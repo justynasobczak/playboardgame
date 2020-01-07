@@ -72,6 +72,10 @@ namespace PlayBoardGame
         public const string SubjectChangeMeetingDataEmail = "Gameet meeting data have changed";
         public const string TitleChangeMeetingDataEmail = "Changes of main meeting data";
         public const string ContentChangeMeetingDataEmail = "Please look at the new data of the meeting";
+        
+        public const string SubjectTomorrowsMeetingEmail = "Meeting is coming";
+        public const string TitleTomorrowsMeetingEmail = "Notification about tomorrow's meeting";
+        public const string ContentTomorrowsMeetingEmail = "Reminder about tomorrow's meeting: ";
 
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
