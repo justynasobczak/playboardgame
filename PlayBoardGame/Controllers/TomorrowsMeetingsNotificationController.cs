@@ -1,8 +1,10 @@
-using System.Threading.Tasks;
+using System.Globalization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
+using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 
 namespace PlayBoardGame.Controllers
@@ -14,15 +16,17 @@ namespace PlayBoardGame.Controllers
         private readonly IMeetingRepository _meetingRepository;
         private readonly IEmailTemplateSender _templateSender;
         private readonly ILogger<TomorrowsMeetingsNotificationController> _logger;
+        private readonly UserManager<AppUser> _userManager;
 
         public TomorrowsMeetingsNotificationController(ITomorrowsMeetingsNotificationRepository notificationRepository,
             IMeetingRepository meetingRepository, IEmailTemplateSender templateSender,
-            ILogger<TomorrowsMeetingsNotificationController> logger)
+            ILogger<TomorrowsMeetingsNotificationController> logger, UserManager<AppUser> userManager)
         {
             _notificationRepository = notificationRepository;
             _meetingRepository = meetingRepository;
             _templateSender = templateSender;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -33,34 +37,30 @@ namespace PlayBoardGame.Controllers
             {
                 var appLink = Url.Action("Edit", "Meeting", new {id = item.Meeting.MeetingId},
                     HttpContext.Request.Scheme);
-                //TODO: time zone
-                var content = $"$Start date: {item.Meeting.StartDateTime}, Organizer: {item.User.FullName}";
-                _templateSender.SendGeneralEmailAsync(new SendEmailDetails
-                        {
-                            IsHTML = true,
-                            ToEmail = item.User.Email,
-                            Subject = Constants.SubjectTomorrowsMeetingEmail
-                        }, Constants.TitleTomorrowsMeetingEmail,
-                        $"{Constants.ContentTomorrowsMeetingEmail}{content}",
-                        Constants.ButtonCheckMeeting,
-                        appLink)
-                    .ContinueWith(t =>
+                var timeZone = _userManager.FindByIdAsync(item.User.Id).Result.TimeZone;
+                var StartDateTime = ToolsExtensions
+                    .ConvertToTimeZoneFromUtc(item.Meeting.StartDateTime, timeZone, _logger)
+                    .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture);
+                var content = $"Start date: {StartDateTime}, Organizer: {item.User.FullName}.";
+                var result = _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
-                        var notification = _notificationRepository.GetNotification(item.Meeting.MeetingId,
-                                               item.User.Id, item.Meeting.StartDateTime) ??
-                                           new TomorrowsMeetingsNotification();
-                        notification.Meeting = item.Meeting;
-                        notification.Participant = item.User;
-                        notification.MeetingStartDateTime = item.Meeting.StartDateTime;
-                        notification.IfSent = t.Result.Successful;
+                        IsHTML = true,
+                        ToEmail = item.User.Email,
+                        Subject = Constants.SubjectTomorrowsMeetingEmail
+                    }, Constants.TitleTomorrowsMeetingEmail,
+                    $"{Constants.ContentTomorrowsMeetingEmail}{content}",
+                    Constants.ButtonCheckMeeting,
+                    appLink);
 
-                        _notificationRepository.SaveNotification(notification);
+                //Async?
+                var notification = _notificationRepository.GetNotification(item.Meeting.MeetingId,
+                                       item.User.Id, item.Meeting.StartDateTime) ??
+                                   new TomorrowsMeetingsNotification();
+                notification.Meeting = item.Meeting;
+                notification.Participant = item.User;
+                notification.IfSent = result.Result.Successful;
 
-                        foreach (var error in t.Result.Errors)
-                        {
-                            _logger.LogError(error);
-                        }
-                    }, TaskScheduler.Default);
+                _notificationRepository.SaveNotification(notification);
             }
         }
     }

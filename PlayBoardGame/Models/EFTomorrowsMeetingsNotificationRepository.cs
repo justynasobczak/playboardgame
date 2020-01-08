@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,10 +15,11 @@ namespace PlayBoardGame.Models
 
         public void SaveNotification(TomorrowsMeetingsNotification notification)
         {
+            notification.PostDate = DateTime.UtcNow;
             if (notification.TomorrowsMeetingsNotificationId == 0)
             {
+                notification.MeetingStartDateTime = notification.Meeting.StartDateTime;
                 notification.NumberOfTries = 1;
-                notification.PostDate = DateTime.UtcNow;
                 _applicationDBContext.TomorrowsMeetingsNotifications.Add(notification);
             }
             else
@@ -31,7 +31,6 @@ namespace PlayBoardGame.Models
                 {
                     dbEntry.IfSent = notification.IfSent;
                     dbEntry.NumberOfTries++;
-                    dbEntry.PostDate = DateTime.UtcNow;
                 }
             }
 
