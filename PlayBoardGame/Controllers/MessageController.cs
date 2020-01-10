@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PlayBoardGame.Email.SendGrid;
+using PlayBoardGame.Email.Template;
 using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
@@ -17,13 +19,18 @@ namespace PlayBoardGame.Controllers
         private readonly IMessageRepository _messageRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<MessageController> _logger;
+        private readonly IEmailTemplateSender _templateSender;
+        private readonly IInvitedUserRepository _invitedUserRepository;
 
         public MessageController(IMessageRepository messageRepository, UserManager<AppUser> userManager,
-            ILogger<MessageController> logger)
+            ILogger<MessageController> logger, IEmailTemplateSender templateSender,
+            IInvitedUserRepository invitedUserRepository)
         {
             _messageRepository = messageRepository;
             _userManager = userManager;
             _logger = logger;
+            _templateSender = templateSender;
+            _invitedUserRepository = invitedUserRepository;
         }
 
         public IActionResult List(int id)
@@ -64,6 +71,29 @@ namespace PlayBoardGame.Controllers
                 _messageRepository.SaveMessage(message);
             }
 
+            var appLink = Url.Action(nameof(List), "Message", new {id = vm.MeetingId}, HttpContext.Request.Scheme);
+            var content = $"{vm.Text}";
+            var users = _invitedUserRepository.GetUsersEmailsForNotification(vm.MeetingId, GetCurrentUserId().Result);
+            foreach (var email in users)
+            {
+                _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                        {
+                            IsHTML = true,
+                            ToEmail = email,
+                            Subject = Constants.SubjectNewMessageEmail
+                        }, Constants.TitleNewMessageEmail, $"{Constants.ContentNewMessageEmail}: {content}",
+                        Constants.ButtonVisitSide,
+                        appLink)
+                    .ContinueWith(t =>
+                    {
+                        if (t.Result.Successful) return;
+                        foreach (var error in t.Result.Errors)
+                        {
+                            _logger.LogError(error);
+                        }
+                    }, TaskScheduler.Default);
+            }
+
             return RedirectToAction(nameof(List), new {id = vm.MeetingId});
         }
 
@@ -79,16 +109,14 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(EditMessageViewModel vm)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return RedirectToAction(nameof(List));
+            var message = new Message
             {
-                var message = new Message
-                {
-                    MessageId = vm.MessageId,
-                    Text = vm.Text
-                };
-                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
-                _messageRepository.SaveMessage(message);
-            }
+                MessageId = vm.MessageId,
+                Text = vm.Text
+            };
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+            _messageRepository.SaveMessage(message);
 
             return RedirectToAction(nameof(List));
         }

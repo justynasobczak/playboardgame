@@ -26,8 +26,8 @@ namespace PlayBoardGame
         public const string WrongFileSize = "The file is too big, please upload smaller one";
         public const string GameConnectedWithMeetingErrorMessage = "Cannot remove the game which is connected with the meeting";
         public const string PopulateGamesMessage = "The number of added games";
-        public const string OldValueMeetingMessage = "Previous value of";
-        public const string CurrentValueMeetingMessage = "Current value of";
+        public const string OldValueMeetingMessage = "previous value of";
+        public const string CurrentValueMeetingMessage = "current value of";
         
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";
@@ -76,6 +76,10 @@ namespace PlayBoardGame
         public const string SubjectTomorrowsMeetingEmail = "Meeting is coming";
         public const string TitleTomorrowsMeetingEmail = "Notification about tomorrow's meeting";
         public const string ContentTomorrowsMeetingEmail = "Reminder about tomorrow's meeting: ";
+        
+        public const string SubjectNewMessageEmail = "New message added to the meeting";
+        public const string TitleNewMessageEmail = "New message";
+        public const string ContentNewMessageEmail = "Please look at the new message added to the meeting";
 
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";

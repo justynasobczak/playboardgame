@@ -102,9 +102,9 @@ namespace PlayBoardGames.Tests
             using (var factory = new SQLiteDbContextFactory())
             {
                 var participant1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+                var participant2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
                 var meeting1 = new Meeting
                     {MeetingId = 1, Organizer = participant1, StartDateTime = DateTime.UtcNow.AddDays(1)};
-                var participant2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
                 var meeting2 = new Meeting
                     {MeetingId = 2, Organizer = participant2, StartDateTime = DateTime.UtcNow.AddDays(2)};
                 var result1 = new TomorrowsMeetingsNotification();

@@ -309,7 +309,7 @@ namespace PlayBoardGames.Tests
                 }
             }
         }
-        
+
         [Fact]
         public void Can_Get_Invited_Users_Emails()
         {
@@ -335,7 +335,7 @@ namespace PlayBoardGames.Tests
                         {Title = "Meeting2", Organizer = user2};
                     var meeting3 = new Meeting
                         {Title = "Meeting3", Organizer = user3};
-                    
+
                     context.Meetings.Add(meeting1);
                     context.Meetings.Add(meeting2);
                     context.Meetings.Add(meeting3);
@@ -351,10 +351,12 @@ namespace PlayBoardGames.Tests
 
                     //Act
                     var invitedUserRepository = new EFInvitedUserRepository(context);
-                    var result1 = invitedUserRepository.GetInvitedUsersEmails(meeting1.MeetingId).OrderBy(s=> s).ToList();
+                    var result1 = invitedUserRepository.GetInvitedUsersEmails(meeting1.MeetingId).OrderBy(s => s)
+                        .ToList();
                     var list1 = new List<string> {user2.Email, user3.Email};
 
-                    var result2 = invitedUserRepository.GetInvitedUsersEmails(meeting2.MeetingId).OrderBy(s => s).ToList();
+                    var result2 = invitedUserRepository.GetInvitedUsersEmails(meeting2.MeetingId).OrderBy(s => s)
+                        .ToList();
                     var list2 = new List<string> {user1.Email};
 
                     var result3 = invitedUserRepository.GetInvitedUsersEmails(meeting3.MeetingId).ToList();
@@ -371,6 +373,94 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(result2, list2.OrderBy(s => s));
 
                     Assert.Empty(result3);
+                }
+            }
+        }
+
+        [Fact]
+        public void Can_Get_Users_Emails_For_Notification()
+        {
+            //Arrange
+            using (var factory = new SQLiteDbContextFactory())
+            {
+                using (var context = factory.CreateContext())
+                {
+                    var user1 = new AppUser
+                        {Id = "1", UserName = "user1", Email = "user1@example.com"};
+                    var user2 = new AppUser
+                        {Id = "2", UserName = "user2", Email = "user2@example.com"};
+                    var user3 = new AppUser
+                        {Id = "3", UserName = "user3", Email = "user3@example.com"};
+                    var user4 = new AppUser
+                        {Id = "4", UserName = "user4", Email = "user4@example.com"};
+                    context.Users.Add(user1);
+                    context.Users.Add(user2);
+                    context.Users.Add(user3);
+                    context.Users.Add(user4);
+                    context.SaveChanges();
+
+                    var meeting1 = new Meeting
+                        {Title = "Meeting1", Organizer = user1};
+                    var meeting2 = new Meeting
+                        {Title = "Meeting2", Organizer = user2};
+                    var meeting3 = new Meeting
+                        {Title = "Meeting3", Organizer = user3};
+                    var meeting4 = new Meeting
+                        {Title = "Meeting4", Organizer = user4};
+
+                    context.Meetings.Add(meeting1);
+                    context.Meetings.Add(meeting2);
+                    context.Meetings.Add(meeting3);
+                    context.Meetings.Add(meeting4);
+                    context.SaveChanges();
+
+                    var invitedUsers1 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user3};
+                    var invitedUsers3 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user4};
+                    var invitedUsers4 = new MeetingInvitedUser {Meeting = meeting2, AppUser = user1};
+                    var invitedUsers5 = new MeetingInvitedUser {Meeting = meeting2, AppUser = user4};
+                    var invitedUsers6 = new MeetingInvitedUser {Meeting = meeting3, AppUser = user4};
+                    context.MeetingInvitedUser.Add(invitedUsers1);
+                    context.MeetingInvitedUser.Add(invitedUsers2);
+                    context.MeetingInvitedUser.Add(invitedUsers3);
+                    context.MeetingInvitedUser.Add(invitedUsers4);
+                    context.MeetingInvitedUser.Add(invitedUsers5);
+                    context.MeetingInvitedUser.Add(invitedUsers6);
+                    context.SaveChanges();
+
+                    //Act
+                    var invitedUserRepository = new EFInvitedUserRepository(context);
+                    var result1 = invitedUserRepository.GetUsersEmailsForNotification(meeting1.MeetingId, user1.Id)
+                        .OrderBy(s => s).ToList();
+                    var list1 = new List<string> {user2.Email, user3.Email, user4.Email};
+
+                    var result2 = invitedUserRepository.GetUsersEmailsForNotification(meeting2.MeetingId, user4.Id)
+                        .OrderBy(s => s)
+                        .ToList();
+                    var list2 = new List<string> {user1.Email, user2.Email};
+
+                    var result3 = invitedUserRepository.GetUsersEmailsForNotification(meeting3.MeetingId, user3.Id)
+                        .ToList();
+                    var list3 = new List<string> {user4.Email};
+                    
+                    var result4 = invitedUserRepository.GetUsersEmailsForNotification(meeting4.MeetingId, user4.Id)
+                        .ToList();
+
+                    //Assert
+                    Assert.Equal(4, context.Meetings.Count());
+                    Assert.Equal(4, context.Users.Count());
+                    Assert.Equal(6, context.MeetingInvitedUser.Count());
+
+                    Assert.Equal(3, result1.Count);
+                    Assert.Equal(list1.OrderBy(s => s), result1);
+
+                    Assert.Equal(2, result2.Count());
+                    Assert.Equal(list2.OrderBy(s => s), result2);
+
+                    Assert.Single(result3);
+                    Assert.Equal(list3, result3);
+
+                    Assert.Empty(result4);
                 }
             }
         }

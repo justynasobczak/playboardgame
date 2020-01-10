@@ -1068,7 +1068,7 @@ namespace PlayBoardGames.Tests
             }
         }
 
-        /*[Fact]
+        [Fact]
         public void Can_Get_Tomorrows_Meetings()
         {
             //Arrange
@@ -1091,14 +1091,17 @@ namespace PlayBoardGames.Tests
                     var meeting3 = new Meeting
                         {Title = "Meeting3", Organizer = user2, StartDateTime = DateTime.UtcNow.AddMinutes(1)};
                     var meeting4 = new Meeting
-                        {Title = "Meeting4", Organizer = user2, StartDateTime = DateTime.UtcNow.AddDays(4)};
+                    {
+                        Title = "Meeting4", Organizer = user1,
+                        StartDateTime = DateTime.UtcNow.AddHours(23).AddMinutes(58)
+                    };
                     var meeting5 = new Meeting
                     {
-                        Title = "Meeting5", Organizer = user1,
-                        StartDateTime = DateTime.UtcNow.AddDays(6).AddHours(23).AddMinutes(59)
+                        Title = "Meeting5", Organizer = user2,
+                        StartDateTime = DateTime.UtcNow.AddHours(24).AddMinutes(1)
                     };
                     var meeting6 = new Meeting
-                        {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(8)};
+                        {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddDays(3)};
                     context.Meetings.Add(meeting1);
                     context.Meetings.Add(meeting2);
                     context.Meetings.Add(meeting3);
@@ -1108,41 +1111,30 @@ namespace PlayBoardGames.Tests
                     context.SaveChanges();
 
                     var invitedUsers1 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
-                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting1, AppUser = user2};
+                    var invitedUsers2 = new MeetingInvitedUser {Meeting = meeting2, AppUser = user2};
                     context.MeetingInvitedUser.Add(invitedUsers1);
                     context.MeetingInvitedUser.Add(invitedUsers2);
                     context.SaveChanges();
 
                     //Act
                     var meetingRepository = new EFMeetingRepository(context);
-                    var result1 = meetingRepository.GetMeetingsForUserForNextDays(user1.Id, 7).ToList();
-                    var list1 = new List<Meeting> {meeting5};
+                    var result = meetingRepository.GetTomorrowsMeetings();
+                    var list = new List<Meeting> {meeting3, meeting4};
 
-                    var result2 = meetingRepository.GetMeetingsForUserForNextDays(user2.Id, 7).ToList();
-                    var list2 = new List<Meeting> {meeting3, meeting4};
-
-                    var result3 = meetingRepository.GetMeetingsForUserForNextDays(user2.Id, 7).ToList();
-                    var list3 = new List<Meeting> {meeting4};
 
                     //Assert
                     Assert.Equal(6, context.Meetings.Count());
                     Assert.Equal(2, context.Users.Count());
                     Assert.Equal(2, context.MeetingInvitedUser.Count());
 
-                    Assert.Single(result1);
-                    Assert.Equal(result1.OrderBy(m => m.Title), list1.OrderBy(m => m.Title));
-
-                    Assert.Equal(2, result2.Count);
-                    Assert.Equal(result2.OrderBy(m => m.Title), list2.OrderBy(m => m.Title));
-
-                    Assert.Single(result3);
-                    Assert.Equal(result3, list3);
+                    Assert.Equal(2, result.Count());
+                    Assert.Equal(result.OrderBy(m => m.Title), list.OrderBy(m => m.Title));
                 }
             }
-        }*/
+        }
 
         [Fact]
-        public void Can_Get_Users_To_Send_Notification()
+        public void Can_Get_Users_To_Send_Tomorrows_Notification()
         {
             //Arrange
             using (var factory = new SQLiteDbContextFactory())
@@ -1174,7 +1166,7 @@ namespace PlayBoardGames.Tests
                         {Title = "Meeting6", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
                     var meeting7 = new Meeting
                         {Title = "Meeting7", Organizer = user1, StartDateTime = DateTime.UtcNow.AddHours(4)};
-                    
+
                     context.Meetings.Add(meeting1);
                     context.Meetings.Add(meeting2);
                     context.Meetings.Add(meeting3);
@@ -1193,30 +1185,37 @@ namespace PlayBoardGames.Tests
                     context.MeetingInvitedUser.Add(invitedUsers3);
                     context.MeetingInvitedUser.Add(invitedUsers4);
                     context.SaveChanges();
-                    
+
                     var notification1 = new TomorrowsMeetingsNotification()
                     {
-                        Meeting = meeting3, Participant = user2, IfSent = true, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting3.StartDateTime
+                        Meeting = meeting3, Participant = user2, IfSent = true, PostDate = DateTime.UtcNow,
+                        MeetingStartDateTime = meeting3.StartDateTime
                     };
                     var notification2 = new TomorrowsMeetingsNotification()
                     {
-                        Meeting = meeting3, Participant = user1, IfSent = true, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting3.StartDateTime
+                        Meeting = meeting3, Participant = user1, IfSent = true, PostDate = DateTime.UtcNow,
+                        MeetingStartDateTime = meeting3.StartDateTime
                     };
                     var notification3 = new TomorrowsMeetingsNotification()
                     {
-                        Meeting = meeting4, Participant = user1, IfSent = true, PostDate = DateTime.UtcNow, MeetingStartDateTime = DateTime.UtcNow.AddDays(4)
+                        Meeting = meeting4, Participant = user1, IfSent = true, PostDate = DateTime.UtcNow,
+                        MeetingStartDateTime = DateTime.UtcNow.AddDays(4)
                     };
                     var notification4 = new TomorrowsMeetingsNotification()
                     {
-                        Meeting = meeting5, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting5.StartDateTime, NumberOfTries = 1
+                        Meeting = meeting5, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow,
+                        MeetingStartDateTime = meeting5.StartDateTime, NumberOfTries = 1
                     };
                     var notification5 = new TomorrowsMeetingsNotification()
                     {
-                        Meeting = meeting6, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting6.StartDateTime, NumberOfTries = 2
+                        Meeting = meeting6, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow,
+                        MeetingStartDateTime = meeting6.StartDateTime, NumberOfTries = 2
                     };
                     var notification6 = new TomorrowsMeetingsNotification()
                     {
-                        Meeting = meeting7, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow, MeetingStartDateTime = meeting7.StartDateTime, NumberOfTries = Constants.NumberOfTriesSendNotification
+                        Meeting = meeting7, Participant = user1, IfSent = false, PostDate = DateTime.UtcNow,
+                        MeetingStartDateTime = meeting7.StartDateTime,
+                        NumberOfTries = Constants.NumberOfTriesSendNotification
                     };
                     context.TomorrowsMeetingsNotifications.Add(notification1);
                     context.TomorrowsMeetingsNotifications.Add(notification2);
@@ -1228,7 +1227,7 @@ namespace PlayBoardGames.Tests
 
                     //Act
                     var meetingRepository = new EFMeetingRepository(context);
-                    var result1 = meetingRepository.GetUsersToSendNotification();
+                    var result1 = meetingRepository.GetUsersToSendTomorrowsNotification();
 
                     //Assert
                     Assert.Equal(7, context.Meetings.Count());

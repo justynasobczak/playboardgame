@@ -16,7 +16,7 @@ namespace PlayBoardGame.Models
         
         IQueryable<Meeting> GetTomorrowsMeetings();
 
-        List<NotificationList> GetUsersToSendNotification();
+        List<NotificationList> GetUsersToSendTomorrowsNotification();
 
         void SaveMeeting(Meeting meeting);
 

@@ -68,7 +68,7 @@ namespace PlayBoardGame.Models
                 .ThenInclude(iu => iu.AppUser);
         }
 
-        public List<NotificationList> GetUsersToSendNotification()
+        public List<NotificationList> GetUsersToSendTomorrowsNotification()
         {
             var list = new List<NotificationList>();
             var meetings = GetTomorrowsMeetings();
@@ -94,19 +94,6 @@ namespace PlayBoardGame.Models
                     {
                         list.Add(new NotificationList {Meeting = meeting, User = user});
                     }
-
-                    /*if (_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
-                                                                                      n.Meeting.MeetingId ==
-                                                                                      meeting.MeetingId &&
-                                                                                      n.IfSent.Equals(false) &&
-                                                                                      n.NumberOfTries <
-                                                                                      Constants
-                                                                                          .NumberOfTriesSendNotification &&
-                                                                                      n.MeetingStartDateTime ==
-                                                                                      meeting.StartDateTime))
-                    {
-                        list.Add(new NotificationList {Meeting = meeting, User = user});
-                    }*/
                 }
             }
 
@@ -170,11 +157,9 @@ namespace PlayBoardGame.Models
         {
             var dbEntry = _applicationDBContext.MeetingGame.FirstOrDefault(mg => mg.GameId == gameId
                                                                                  && mg.MeetingId == meetingId);
-            if (dbEntry != null)
-            {
-                _applicationDBContext.MeetingGame.Remove(dbEntry);
-                _applicationDBContext.SaveChanges();
-            }
+            if (dbEntry == null) return dbEntry;
+            _applicationDBContext.MeetingGame.Remove(dbEntry);
+            _applicationDBContext.SaveChanges();
 
             return dbEntry;
         }

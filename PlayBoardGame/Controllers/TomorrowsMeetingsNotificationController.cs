@@ -32,7 +32,7 @@ namespace PlayBoardGame.Controllers
         [HttpPost]
         public void SendNotification()
         {
-            var usersToSendNotification = _meetingRepository.GetUsersToSendNotification();
+            var usersToSendNotification = _meetingRepository.GetUsersToSendTomorrowsNotification();
             foreach (var item in usersToSendNotification)
             {
                 var appLink = Url.Action("Edit", "Meeting", new {id = item.Meeting.MeetingId},
@@ -41,7 +41,7 @@ namespace PlayBoardGame.Controllers
                 var StartDateTime = ToolsExtensions
                     .ConvertToTimeZoneFromUtc(item.Meeting.StartDateTime, timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture);
-                var content = $"Start date: {StartDateTime}, Organizer: {item.User.FullName}.";
+                var content = $"Title: {item.Meeting.Title}, Start date: {StartDateTime}, Organizer: {item.User.FullName}.";
                 var result = _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                     {
                         IsHTML = true,
@@ -51,8 +51,7 @@ namespace PlayBoardGame.Controllers
                     $"{Constants.ContentTomorrowsMeetingEmail}{content}",
                     Constants.ButtonCheckMeeting,
                     appLink);
-
-                //Async?
+                
                 var notification = _notificationRepository.GetNotification(item.Meeting.MeetingId,
                                        item.User.Id, item.Meeting.StartDateTime) ??
                                    new TomorrowsMeetingsNotification();
