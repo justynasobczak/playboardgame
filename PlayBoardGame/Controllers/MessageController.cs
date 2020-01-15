@@ -82,7 +82,7 @@ namespace PlayBoardGame.Controllers
                             ToEmail = email,
                             Subject = Constants.SubjectNewMessageEmail
                         }, Constants.TitleNewMessageEmail, $"{Constants.ContentNewMessageEmail}: {content}",
-                        Constants.ButtonVisitSide,
+                        Constants.ButtonCheckMeeting,
                         appLink)
                     .ContinueWith(t =>
                     {

@@ -68,12 +68,33 @@ namespace PlayBoardGame.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(string userId, int meetingId)
+        public async Task<IActionResult> Delete(string userId, int meetingId)
         {
             var deletedEntry = _invitedUserRepository.RemoveUserFromMeeting(userId, meetingId);
-            if (deletedEntry != null)
+            if (deletedEntry == null) return RedirectToAction(nameof(List), new {id = meetingId});
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var meeting = _meetingRepository.GetMeeting(meetingId);
+            var appLink = Url.Action("Login", "Account", null, HttpContext.Request.Scheme);
+            var content = $"{Constants.ContentDeleteInvitationEmail}: Meeting title: {meeting.Title}, Organizer: {meeting.Organizer.FullName}";
+            var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                {
+                    IsHTML = true,
+                    ToEmail = user.Email,
+                    Subject = Constants.SubjectDeleteInvitationEmail
+                }, Constants.TitleDeleteInvitationEmail, content,
+                Constants.ButtonVisitSide,
+                appLink);
+
+            if (response.Successful)
             {
                 TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+                return RedirectToAction(nameof(List), new {id = meetingId});
+            }
+
+            TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+            foreach (var error in response.Errors)
+            {
+                _logger.LogError(error);
             }
 
             return RedirectToAction(nameof(List), new {id = meetingId});
@@ -117,33 +138,21 @@ namespace PlayBoardGame.Controllers
             var content =
                 $"{Constants.ContentInviteUserEmail}: Organizer: {meeting.Organizer.FullName}; Start date: {meetingStartDate}; End date: {meetingEndDate};" +
                 $" Games: {string.Join(", ", games)}";
-            _templateSender.SendGeneralEmailAsync(new SendEmailDetails
-                    {
-                        IsHTML = true,
-                        ToEmail = user.Email,
-                        Subject = Constants.SubjectInviteUserEmail
-                    }, Constants.TitleInviteUserEmail, content,
-                    Constants.ButtonVisitSide,
-                    appLink)
-                .ContinueWith(t =>
+            var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                 {
-                    if (!t.Result.Successful)
-                    {
-                        foreach (var error in t.Result.Errors)
-                        {
-                            _logger.LogError(error);
-                        }
-                    }
-                }, TaskScheduler.Default);
+                    IsHTML = true,
+                    ToEmail = user.Email,
+                    Subject = Constants.SubjectInviteUserEmail
+                }, Constants.TitleInviteUserEmail, content,
+                Constants.ButtonCheckMeeting,
+                appLink);
 
-/*
             if (response.Successful) return RedirectToAction(nameof(List), new {id = meetingId});
             TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
             foreach (var error in response.Errors)
             {
                 _logger.LogError(error);
             }
-*/
 
             return RedirectToAction(nameof(List), new {id = meetingId});
         }
@@ -153,6 +162,31 @@ namespace PlayBoardGame.Controllers
         public IActionResult ChangeStatus(string userId, int meetingId, InvitationStatus status)
         {
             _invitedUserRepository.ChangeStatus(userId, meetingId, status);
+            
+            var appLink = Url.Action(nameof(List), "InvitedUser", new {id = meetingId}, HttpContext.Request.Scheme);
+            var meeting = _meetingRepository.GetMeeting(meetingId);
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var content = $"meeting: {meeting.Title}, new status: {status} changed by the user: {user.FullName}";
+            var users = _invitedUserRepository.GetUsersEmailsForNotification(meetingId, _userManager.FindByIdAsync(userId).Result.Id);
+            foreach (var email in users)
+            {
+                _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                        {
+                            IsHTML = true,
+                            ToEmail = email,
+                            Subject = Constants.SubjectNewStatusInvitationEmail
+                        }, Constants.TitleNewStatusInvitationEmail, $"{Constants.ContentNewStatusInvitationEmail}: {content}",
+                        Constants.ButtonCheckMeeting,
+                        appLink)
+                    .ContinueWith(t =>
+                    {
+                        if (t.Result.Successful) return;
+                        foreach (var error in t.Result.Errors)
+                        {
+                            _logger.LogError(error);
+                        }
+                    }, TaskScheduler.Default);
+            }
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List), new {id = meetingId});
         }

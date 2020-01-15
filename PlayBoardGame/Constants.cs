@@ -20,15 +20,21 @@ namespace PlayBoardGame
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
         public const string WrongDateTimeFormat = "Please enter a date in format: yyyy/MM/dd HH:mm";
         public const string AuthProviderError = "Error from external authenticate provider, please contact support.";
-        public const string LoginByExternalProviderMessage = "You registered by using external provider like Google etc., " +
-                                                             "please change your password on the page of your provider.";
+
+        public const string LoginByExternalProviderMessage =
+            "You registered by using external provider like Google etc., " +
+            "please change your password on the page of your provider.";
+
         public const string WrongFileExtension = "Wrong file extension";
         public const string WrongFileSize = "The file is too big, please upload smaller one";
-        public const string GameConnectedWithMeetingErrorMessage = "Cannot remove the game which is connected with the meeting";
+
+        public const string GameConnectedWithMeetingErrorMessage =
+            "Cannot remove the game which is connected with the meeting";
+
         public const string PopulateGamesMessage = "The number of added games";
         public const string OldValueMeetingMessage = "previous value of";
         public const string CurrentValueMeetingMessage = "current value of";
-        
+
         //Tooltips
         public const string DeleteInvitationTooltip = "Delete an invitation";
         public const string AcceptInvitationTooltip = "Accept an invitation";
@@ -39,7 +45,9 @@ namespace PlayBoardGame
         public const string DeleteMessageTooltip = "Delete a message";
         public const string DeleteGameFromShelfTooltip = "Remove the game from shelf";
         public const string AddGameToShelfTooltip = "Put the game on the shelf";
-        public const string MeetingNotificationTooltip = "Invited people will be informed about each change of this field";
+
+        public const string MeetingNotificationTooltip =
+            "Invited people will be informed about each change of this field";
 
         //Logs
         public const string UnknownId = "Unknown Id";
@@ -55,43 +63,53 @@ namespace PlayBoardGame
 
         public const string ContentRegistrationEmail = "Thank you for creating an account with The Gameet. " +
                                                        "With your new account, you can organize the meeting with the board games" +
-                                                       " and communicte with the players.";
+                                                       " and communicate with the players.";
+
         public const string ButtonVisitSide = "Visit our side";
         public const string ButtonCheckMeeting = "Check the meeting";
-        
+
         public const string SubjectResetPasswordEmail = "Reset your Gameet account password";
         public const string TitleResetPasswordEmail = "Reset password";
 
         public const string ContentResetPasswordEmail = "To reset your password click the link below: ";
         public const string ButtonResetPassword = "Reset password";
-        
+
         public const string SubjectInviteUserEmail = "Invitation from Gameet account";
-        public const string TitleInviteUserEmail = "Invitation";
-        public const string ContentInviteUserEmail = "You are invited to the meeting with board games";
+        public const string TitleInviteUserEmail = "New invitation";
+        public const string ContentInviteUserEmail =
+            "You are invited to the meeting with board games. Check and accept or decline the invitation";
+
+        public const string SubjectDeleteInvitationEmail = "Gameet invitation has changed";
+        public const string TitleDeleteInvitationEmail = "Invitation has changed";
+        public const string ContentDeleteInvitationEmail = "Your invitation from Gameet accout was deleted";
         
+        public const string SubjectNewStatusInvitationEmail = "Gameet invitation status has changed";
+        public const string TitleNewStatusInvitationEmail = "Invitation status has changed";
+        public const string ContentNewStatusInvitationEmail = "Invited person changed the status of the invitation";
+
         public const string SubjectChangeMeetingDataEmail = "Gameet meeting data have changed";
         public const string TitleChangeMeetingDataEmail = "Changes of main meeting data";
         public const string ContentChangeMeetingDataEmail = "Please look at the new data of the meeting";
-        
+
         public const string SubjectTomorrowsMeetingEmail = "Meeting is coming";
         public const string TitleTomorrowsMeetingEmail = "Notification about tomorrow's meeting";
         public const string ContentTomorrowsMeetingEmail = "Reminder about tomorrow's meeting: ";
-        
+
         public const string SubjectNewMessageEmail = "New message added to the meeting";
         public const string TitleNewMessageEmail = "New message";
         public const string ContentNewMessageEmail = "Please look at the new message added to the meeting";
 
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";
-        
+
         public const long FileSizeLimit = 2097152;
 
         public const int PageSize = 8;
-        
+
         public const int PicturesNumber = 20;
 
         public const int NumberOfTriesSendNotification = 3;
-        
+
         public static readonly string[] PicturePermittedExtensions = {".jpg", ".png"};
 
         public static readonly Dictionary<string, string> Countries = new Dictionary<string, string>

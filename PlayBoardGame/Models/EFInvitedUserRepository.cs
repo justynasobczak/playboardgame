@@ -61,13 +61,6 @@ namespace PlayBoardGame.Models
             _applicationDbContext.SaveChanges();
         }
 
-        //TODO remove, replace by GetUsersEmailsForNotification
-        public IQueryable<string> GetInvitedUsersEmails(int meetingId)
-        {
-            return _applicationDbContext.Users.Where(u => u.MeetingInvitedUser.Any(iu => iu.MeetingId == meetingId))
-                .Select(u => u.Email);
-        }
-
         public IQueryable<string> GetUsersEmailsForNotification(int meetingId, string currentUserId)
         {
             return _applicationDbContext.Users.Where(u =>

@@ -187,7 +187,7 @@ namespace PlayBoardGame.Controllers
                 if (changes == null) return RedirectToAction(nameof(Edit), new {id = meeting.MeetingId});
                 var appLink = Url.Action(nameof(Edit), "Meeting", new {id = baseMeeting.MeetingId},
                     HttpContext.Request.Scheme);
-                foreach (var email in _invitedUserRepository.GetInvitedUsersEmails(baseMeeting.MeetingId))
+                foreach (var email in _invitedUserRepository.GetUsersEmailsForNotification(baseMeeting.MeetingId, currentUserId))
                 {
                     _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                             {
