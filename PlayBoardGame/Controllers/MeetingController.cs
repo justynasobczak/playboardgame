@@ -65,6 +65,7 @@ namespace PlayBoardGame.Controllers
                 Games = _meetingRepository.GetGamesForOrganizer(id, meeting.OrganizerId).OrderBy(g => g.Title),
                 SelectedGames = GetGameIdsFromMeeting(id),
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name,
+                TimeZone = timeZone,
                 Address = new AddressViewModels
                 {
                     Street = meeting.Street,
@@ -229,7 +230,8 @@ namespace PlayBoardGame.Controllers
                 EndDateTime = ToolsExtensions.ConvertToTimeZoneFromUtc(DateTime.UtcNow.AddHours(2), timeZone, _logger)
                     .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture),
                 IsEditable = true,
-                Address = new AddressViewModels()
+                Address = new AddressViewModels(),
+                TimeZone = timeZone
             });
         }
 

@@ -49,6 +49,8 @@ namespace PlayBoardGame
         public const string MeetingNotificationTooltip =
             "Invited people will be informed about each change of this field";
 
+        public const string MeetingTimeZoneTooltip = "Click if you want to change your time zone in user profile";
+
         //Logs
         public const string UnknownId = "Unknown Id";
         public const string UnknownError = "Unknown error occurred";
@@ -76,13 +78,14 @@ namespace PlayBoardGame
 
         public const string SubjectInviteUserEmail = "Invitation from Gameet account";
         public const string TitleInviteUserEmail = "New invitation";
+
         public const string ContentInviteUserEmail =
             "You are invited to the meeting with board games. Check and accept or decline the invitation";
 
         public const string SubjectDeleteInvitationEmail = "Gameet invitation has changed";
         public const string TitleDeleteInvitationEmail = "Invitation has changed";
         public const string ContentDeleteInvitationEmail = "Your invitation from Gameet accout was deleted";
-        
+
         public const string SubjectNewStatusInvitationEmail = "Gameet invitation status has changed";
         public const string TitleNewStatusInvitationEmail = "Invitation status has changed";
         public const string ContentNewStatusInvitationEmail = "Invited person changed the status of the invitation";

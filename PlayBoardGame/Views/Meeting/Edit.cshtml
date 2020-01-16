@@ -34,7 +34,7 @@
             </div>
 
             <div class="form-row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="StartDateTime">Start date and time</label>
                         <i class="far fa-envelope iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingNotificationTooltip"></i>
@@ -42,14 +42,24 @@
                         <input id="startDatetimepicker" type="text" asp-for="StartDateTime" class="form-control"/>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="EndDateTime">End date and time</label>
                         <span asp-validation-for="EndDateTime" class="text-danger"></span>
                         <input id="endDatetimepicker" type="text" asp-for="EndDateTime" class="form-control"/>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="TimeZone">Your time zone</label>
+                        <a asp-controller="User" asp-action="UserProfileAsync">
+                            <i class="far fa-clock iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingTimeZoneTooltip"></i>
+                        </a>
+                        <span asp-validation-for="TimeZone" class="text-danger"></span>
+                        <input asp-for="TimeZone" readonly="readonly" class="form-control"/>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="form-group">
                         <label asp-for="Organizer">Organizer</label>
                         <span asp-validation-for="Organizer" class="text-danger"></span>

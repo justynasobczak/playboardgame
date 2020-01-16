@@ -30,6 +30,8 @@ namespace PlayBoardGame.Models.ViewModels
             public List<int> SelectedGames { get; set; }
 
             public IEnumerable<Game> Games { get; set; }
+
+            public string TimeZone { get; set; }
         }
     }
 }
