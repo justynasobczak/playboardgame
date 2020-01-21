@@ -36,9 +36,9 @@ namespace PlayBoardGame
             var databaseDocker = _configuration["DBDatabase"];
 
             services.AddMvc()
-                .AddJsonOptions(
+                /*.AddJsonOptions(
                     options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                );
+                )*/;
 
             if (_environment.IsDevelopment())
             {
