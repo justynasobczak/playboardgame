@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-//using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.Internal;
 using PlayBoardGame;
-using PlayBoardGame.Migrations;
 using PlayBoardGame.Models;
 using Xunit;
 
@@ -1227,7 +1224,21 @@ namespace PlayBoardGames.Tests
 
                     //Act
                     var meetingRepository = new EFMeetingRepository(context);
-                    var result1 = meetingRepository.GetUsersToSendTomorrowsNotification();
+                    var result1 = meetingRepository.GetUsersToSendTomorrowsNotification()
+                        .OrderBy(n => n.Meeting.MeetingId)
+                        .OrderBy(n => n.User.Id).ToList();
+                    var expectedResult = new List<NotificationList>()
+                    {
+                        new NotificationList {Meeting = meeting1, User = user1},
+                        new NotificationList {Meeting = meeting1, User = user2},
+                        new NotificationList {Meeting = meeting1, User = user3},
+                        new NotificationList {Meeting = meeting2, User = user1},
+                        new NotificationList {Meeting = meeting2, User = user2},
+                        new NotificationList {Meeting = meeting4, User = user1},
+                        new NotificationList {Meeting = meeting5, User = user1},
+                        new NotificationList {Meeting = meeting6, User = user1},
+
+                    }.OrderBy(n => n.Meeting.MeetingId).OrderBy(n => n.User.Id).ToList();
 
                     //Assert
                     Assert.Equal(7, context.Meetings.Count());
@@ -1235,46 +1246,24 @@ namespace PlayBoardGames.Tests
                     Assert.Equal(4, context.MeetingInvitedUser.Count());
                     Assert.Equal(6, context.TomorrowsMeetingsNotifications.Count());
 
-                    Assert.Equal(8, result1.Count);
-                    Assert.Collection(result1, item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting1.MeetingId);
-                            Assert.Equal(item.User.Id, user1.Id);
-                        }, item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting1.MeetingId);
-                            Assert.Equal(item.User.Id, user2.Id);
-                        },
-                        item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting1.MeetingId);
-                            Assert.Equal(item.User.Id, user3.Id);
-                        },
-                        item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting2.MeetingId);
-                            Assert.Equal(item.User.Id, user1.Id);
-                        },
-                        item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting2.MeetingId);
-                            Assert.Equal(item.User.Id, user2.Id);
-                        },
-                        item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting4.MeetingId);
-                            Assert.Equal(item.User.Id, user1.Id);
-                        },
-                        item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting5.MeetingId);
-                            Assert.Equal(item.User.Id, user1.Id);
-                        },
-                        item =>
-                        {
-                            Assert.Equal(item.Meeting.MeetingId, meeting6.MeetingId);
-                            Assert.Equal(item.User.Id, user1.Id);
-                        });
+                    Assert.Equal(8, result1.Count());
+                    Assert.Equal(expectedResult[0].Meeting.MeetingId, result1[0].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[0].User.Id, result1[0].User.Id);
+                    Assert.Equal(expectedResult[1].Meeting.MeetingId, result1[1].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[1].User.Id, result1[1].User.Id);
+                    Assert.Equal(expectedResult[2].Meeting.MeetingId, result1[2].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[2].User.Id, result1[2].User.Id);
+                    Assert.Equal(expectedResult[3].Meeting.MeetingId, result1[3].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[3].User.Id, result1[3].User.Id);
+                    Assert.Equal(expectedResult[4].Meeting.MeetingId, result1[4].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[4].User.Id, result1[4].User.Id);
+                    Assert.Equal(expectedResult[5].Meeting.MeetingId, result1[5].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[5].User.Id, result1[5].User.Id);
+                    Assert.Equal(expectedResult[6].Meeting.MeetingId, result1[6].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[6].User.Id, result1[6].User.Id);
+                    Assert.Equal(expectedResult[7].Meeting.MeetingId, result1[7].Meeting.MeetingId);
+                    Assert.Equal(expectedResult[7].User.Id, result1[7].User.Id);
+                    
                 }
             }
         }

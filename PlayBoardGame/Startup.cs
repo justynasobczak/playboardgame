@@ -7,9 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PlayBoardGame.Models;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.IdentityModel.Protocols;
 using Newtonsoft.Json;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
@@ -38,10 +35,6 @@ namespace PlayBoardGame
             var passwordDocker = _configuration["DBPassword"];
             var databaseDocker = _configuration["DBDatabase"];
 
-            /*services.AddMvc(options => options.EnableEndpointRouting = false)
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
-                ;*/
 
             services.AddControllersWithViews(options => options.SuppressAsyncSuffixInActionNames = false)
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -107,27 +100,20 @@ namespace PlayBoardGame
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
-                //app.UseMiniProfiler();
+                app.UseMiniProfiler();
             }
 
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            /*app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Account}/{action=Login}/{id?}");
-            });*/
+
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action}/{id?}",
                     defaults: new {controller = "Account", action = "Login"});
-                //endpoints.MapDefaultControllerRoute();
             });
             SeedData.EnsurePopulatedAsync(app, _configuration);
         }

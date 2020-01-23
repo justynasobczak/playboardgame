@@ -71,30 +71,19 @@ namespace PlayBoardGame.Models
         public List<NotificationList> GetUsersToSendTomorrowsNotification()
         {
             var list = new List<NotificationList>();
-            var meetings = GetTomorrowsMeetings();
+            var meetings = GetTomorrowsMeetings().ToList();
             foreach (var meeting in meetings)
             {
                 var users = _applicationDBContext.Users.Where(u =>
                     (u.MeetingInvitedUser.Any(mu => mu.MeetingId == meeting.MeetingId) ||
-                     u.OrganizedMeetings.Any(m => m.MeetingId == meeting.MeetingId)));
-                foreach (var user in users)
-                {
-                    if (!_applicationDBContext.TomorrowsMeetingsNotifications.Any(n => n.Participant.Id == user.Id &&
-                                                                                       n.Meeting.MeetingId ==
-                                                                                       meeting.MeetingId &&
-                                                                                       (n.IfSent.Equals(true) ||
-                                                                                        (n.IfSent.Equals(false) &&
-                                                                                         n.NumberOfTries >=
-                                                                                         Constants
-                                                                                             .NumberOfTriesSendNotification
-                                                                                        )
-                                                                                       ) &&
-                                                                                       n.MeetingStartDateTime ==
-                                                                                       meeting.StartDateTime))
-                    {
-                        list.Add(new NotificationList {Meeting = meeting, User = user});
-                    }
-                }
+                     u.OrganizedMeetings.Any(m => m.MeetingId == meeting.MeetingId))).ToList();
+                list.AddRange(from user in users
+                    where !_applicationDBContext.TomorrowsMeetingsNotifications.Any(n =>
+                        n.Participant.Id == user.Id && n.Meeting.MeetingId == meeting.MeetingId &&
+                        (n.IfSent.Equals(true) || (n.IfSent.Equals(false) &&
+                                                   n.NumberOfTries >= Constants.NumberOfTriesSendNotification)) &&
+                        n.MeetingStartDateTime == meeting.StartDateTime)
+                    select new NotificationList {Meeting = meeting, User = user});
             }
 
             return list;
@@ -177,21 +166,16 @@ namespace PlayBoardGame.Models
         {
             var checkedUsers = _applicationDBContext.Users
                 .Where(u => u.OrganizedMeetings.Any(m => m.MeetingId == meetingId) ||
-                            u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId)).Distinct();
+                            u.MeetingInvitedUser.Any(mu => mu.MeetingId == meetingId)).Distinct().ToList();
 
             var overlappingMeetings = new List<Meeting>();
-            foreach (var user in checkedUsers)
+            foreach (var meetingsForUser in checkedUsers.Select(user => _applicationDBContext.Meetings.Where(m =>
+                startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
+                m.MeetingId != meetingId &&
+                (m.Organizer.Id == user.Id ||
+                 m.MeetingInvitedUser.Any(mu => mu.UserId == user.Id))).ToList()))
             {
-                var meetingsForUser = _applicationDBContext.Meetings.Where(m =>
-                    startDate <= m.EndDateTime && endDate >= m.StartDateTime &&
-                    m.MeetingId != meetingId &&
-                    (m.Organizer.Id == user.Id ||
-                     m.MeetingInvitedUser.Any(mu => mu.UserId == user.Id)));
-
-                foreach (var m in meetingsForUser)
-                {
-                    overlappingMeetings.Add(m);
-                }
+                overlappingMeetings.AddRange(meetingsForUser);
             }
 
             return overlappingMeetings.Distinct();
