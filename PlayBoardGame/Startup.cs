@@ -7,23 +7,26 @@ using Microsoft.Extensions.DependencyInjection;
 using PlayBoardGame.Models;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Protocols;
 using Newtonsoft.Json;
 using PlayBoardGame.Email.SendGrid;
 using PlayBoardGame.Email.Template;
+using Microsoft.Extensions.Hosting;
 
 namespace PlayBoardGame
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             _configuration = configuration;
             _environment = env;
         }
 
         private IConfiguration _configuration { get; }
-        private IHostingEnvironment _environment { get; }
+        private IWebHostEnvironment _environment { get; }
         private string _connectionString { get; set; }
 
 
@@ -35,10 +38,14 @@ namespace PlayBoardGame
             var passwordDocker = _configuration["DBPassword"];
             var databaseDocker = _configuration["DBDatabase"];
 
-            services.AddMvc()
-                /*.AddJsonOptions(
-                    options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-                )*/;
+            /*services.AddMvc(options => options.EnableEndpointRouting = false)
+                    .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
+                ;*/
+
+            services.AddControllersWithViews(options => options.SuppressAsyncSuffixInActionNames = false)
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddRazorPages();
 
             if (_environment.IsDevelopment())
             {
@@ -94,22 +101,33 @@ namespace PlayBoardGame
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseStatusCodePages();
-                app.UseMiniProfiler();
+                //app.UseMiniProfiler();
             }
 
-            app.UseAuthentication();
             app.UseStaticFiles();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            /*app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Account}/{action=Login}/{id?}");
+            });*/
+            app.UseEndpoints(endpoints =>
+            {
+                //endpoints.MapRazorPages();
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action}/{id?}",
+                    defaults: new {controller = "Account", action = "Login"});
+                //endpoints.MapDefaultControllerRoute();
             });
             SeedData.EnsurePopulatedAsync(app, _configuration);
         }
