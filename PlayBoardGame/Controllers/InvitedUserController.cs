@@ -19,19 +19,21 @@ namespace PlayBoardGame.Controllers
     {
         private readonly IInvitedUserRepository _invitedUserRepository;
         private readonly IMeetingRepository _meetingRepository;
+        private readonly IFriendInvitationRepository _friendInvitationRepository;
         private readonly IEmailTemplateSender _templateSender;
         private readonly ILogger<InvitedUserController> _logger;
         private readonly UserManager<AppUser> _userManager;
 
         public InvitedUserController(IInvitedUserRepository invitedUserRepository, IMeetingRepository meetingRepository,
             IEmailTemplateSender templateSender, ILogger<InvitedUserController> logger,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager, IFriendInvitationRepository friendInvitationRepository)
         {
             _invitedUserRepository = invitedUserRepository;
             _meetingRepository = meetingRepository;
             _templateSender = templateSender;
             _logger = logger;
             _userManager = userManager;
+            _friendInvitationRepository = friendInvitationRepository;
         }
 
         public IActionResult List(int id)
@@ -57,9 +59,10 @@ namespace PlayBoardGame.Controllers
             var vm = new InvitedUserViewModel.InvitedUserListViewModel
             {
                 MeetingId = id,
-                AvailableUsers = _invitedUserRepository.GetAvailableUsers(id)
+                /*AvailableUsers = _invitedUserRepository.GetAvailableUsers(id)
                     .OrderBy(u => u.LastName).ThenBy(u => u.Email)
-                    .ToList(),
+                    .ToList(),*/
+                AvailableUsers = _friendInvitationRepository.GetFriends(GetCurrentUserId().Result).ToList(),
                 InvitedUsersList = invitedUsersList,
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name
             };
@@ -189,6 +192,12 @@ namespace PlayBoardGame.Controllers
             }
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List), new {id = meetingId});
+        }
+        
+        private async Task<string> GetCurrentUserId()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            return user.Id;
         }
     }
 }

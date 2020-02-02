@@ -89,6 +89,21 @@ namespace PlayBoardGame.Models
             builder.Entity<Message>()
                 .Property(m => m.Created)
                 .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+            
+            builder.Entity<FriendInvitation>()
+                .HasOne(fi => fi.Sender)
+                .WithMany(u => u.SentFriendInvitations)
+                .HasForeignKey(fi => fi.SenderId);
+            builder.Entity<FriendInvitation>()
+                .HasOne(fi => fi.Invited)
+                .WithMany(u => u.ReceivedFriendInvitations)
+                .HasForeignKey(fi => fi.InvitedId);
+            
+            builder.Entity<FriendInvitation>()
+                .Property(fi => fi.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (FriendInvitationStatus) Enum.Parse(typeof(FriendInvitationStatus), v));
         }
 
         public DbSet<Game> Games { get; set; }
@@ -98,5 +113,6 @@ namespace PlayBoardGame.Models
         public DbSet<MeetingGame> MeetingGame { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<TomorrowsMeetingsNotification> TomorrowsMeetingsNotifications { get; set; }
+        public DbSet<FriendInvitation> FriendInvitations { get; set; }
     }
 }

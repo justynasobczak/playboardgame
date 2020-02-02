@@ -31,6 +31,10 @@ namespace PlayBoardGame.Models
         public IEnumerable<Message> WrittenMessages { get; set; }
 
         public IEnumerable<MeetingInvitedUser> MeetingInvitedUser { get; set; }
+        
+        public IEnumerable<FriendInvitation> SentFriendInvitations { get; set; }
+        
+        public IEnumerable<FriendInvitation> ReceivedFriendInvitations { get; set; }
 
         [NotMapped] public string FullName => LastName.IsNullOrWhiteSpace() ? Email : $"{LastName} {FirstName}";
     }
