@@ -1,0 +1,30 @@
+@model InvitationsViewModel.SentInvitationsViewModel
+@{
+    ViewBag.Title = "Sent invitations";
+}
+
+<table class="table table-hover">
+
+    @if (!Model.InvitedUsersList.Any())
+    {
+        <tr>
+            <td colspan="4" class="text-center">No invited users</td>
+        </tr>
+    }
+    else
+    {
+        foreach (var item in Model.InvitedUsersList)
+        {
+            <tr>
+                <td class="tdAvatar">
+                    <div>
+                        <img gravatar-email="@item.UserEmail" alt="Avatar"/>
+                    </div>
+                </td>
+                <td>@item.DisplayedUserName</td>
+                <td>@item.PostDate</td>
+                <td>@item.Status.ToString()</td>
+            </tr>
+        }
+    }
+</table>
