@@ -2,7 +2,7 @@
     <div class="container">
         <div class="navbar-brand">
             <a asp-controller="Start" asp-action="Index">
-            <img src="~/lib/custom/img/logo-small.png" alt="logo"/>
+                <img src="~/lib/custom/img/logo-small.png" alt="logo"/>
             </a>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu"
@@ -19,6 +19,9 @@
                 </li>
                 <li class="nav-item">
                     <a asp-controller="Meeting" asp-action="List" class="nav-link"> Calendar </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-controller="SentInvitation" asp-action="List" class="nav-link"> Invitations </a>
                 </li>
                 @if (User?.Identity?.Name == "Admin")
                 {

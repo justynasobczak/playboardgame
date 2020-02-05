@@ -32,6 +32,7 @@ namespace PlayBoardGame.Models
         public void AddInvitation(FriendInvitation invitation)
         {
             invitation.PostDateTime = DateTime.UtcNow;
+            invitation.Status = FriendInvitationStatus.Pending;
             _applicationDbContext.FriendInvitations.Add(invitation);
 
             _applicationDbContext.SaveChanges();

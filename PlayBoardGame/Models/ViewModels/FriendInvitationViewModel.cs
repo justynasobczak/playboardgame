@@ -1,14 +1,17 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PlayBoardGame.Models.ViewModels
 {
-    public class InvitationsViewModel
+    public class FriendInvitationViewModel
     {
         public class SentInvitationsViewModel
         {
             public List<InvitationsListViewModel> InvitedUsersList { get; set; }
 
-            public string FiendEmailAddress { get; set; }
+            [EmailAddress, MaxLength(256)]
+            [Display(Name = "Invite your friend")]
+            public string InvitedEmail { get; set; }
         }
 
         public class InvitationsListViewModel
