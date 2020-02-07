@@ -8,22 +8,47 @@
     @if (!Model.InvitedUsersList.Any())
     {
         <tr>
-            <td colspan="4" class="text-center">No invited users</td>
+            <td colspan="5" class="text-center">No invited users</td>
         </tr>
     }
     else
     {
+        <tr>
+            <th>Gravatar</th>
+            <th>User</th>
+            <th>Email</th>
+            <th>Post date</th>
+            <th>Status</th>
+        </tr>
         foreach (var item in Model.InvitedUsersList)
         {
             <tr>
                 <td class="tdAvatar">
                     <div>
-                        <img gravatar-email="@item.UserEmail" alt="Avatar"/>
+                        <img gravatar-email="@item.InvitedEmail" alt="Avatar"/>
                     </div>
                 </td>
                 <td>@item.DisplayedUserName</td>
+                <td>@item.InvitedEmail</td>
                 <td>@item.PostDate</td>
-                <td>@item.Status.ToString()</td>
+                @switch (item.Status)
+                {
+                    case FriendInvitationStatus.Accepted:
+                        <td class="acceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    case FriendInvitationStatus.Deleted:
+                        <td class="notAcceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    case FriendInvitationStatus.Pending:
+                        <td class="pendingStatus">@item.Status.ToString()</td>
+                        break;
+                    case FriendInvitationStatus.Rejected:
+                        <td class="notAcceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    default:
+                        <td class="text-primary">@item.Status.ToString()</td>
+                        break;
+                }
             </tr>
         }
     }

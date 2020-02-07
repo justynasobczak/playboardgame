@@ -104,6 +104,10 @@ namespace PlayBoardGame.Models
                 .HasConversion(
                     v => v.ToString(),
                     v => (FriendInvitationStatus) Enum.Parse(typeof(FriendInvitationStatus), v));
+            
+            builder.Entity<FriendInvitation>()
+                .Property(fi => fi.PostDateTime)
+                .HasConversion(v => v, v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
         }
 
         public DbSet<Game> Games { get; set; }

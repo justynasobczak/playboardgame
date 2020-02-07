@@ -1,7 +1,11 @@
+using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
@@ -11,23 +15,29 @@ namespace PlayBoardGame.Controllers
     {
         private readonly IFriendInvitationRepository _friendInvitationRepository;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ILogger<SentInvitationController> _logger;
 
         public SentInvitationController(IFriendInvitationRepository friendInvitationRepository,
-            UserManager<AppUser> userManager)
+            UserManager<AppUser> userManager, ILogger<SentInvitationController> logger)
         {
             _friendInvitationRepository = friendInvitationRepository;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public IActionResult List(FriendInvitationViewModel.SentInvitationsViewModel vm)
         {
+            var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
+            var timeZone = currentUser.TimeZone;
             var sentInvitationsList = _friendInvitationRepository
-                .GetInvitationsSentByCurrentUser(GetCurrentUserId().Result)
-                .Select(item => new FriendInvitationViewModel.InvitationsListViewModel()
+                .GetInvitationsSentByCurrentUser(currentUser.Id)
+                .Select(item => new FriendInvitationViewModel.SentInvitationsList()
                 {
-                    DisplayedUserName = item.Invited.FullName, UserName = item.Invited.UserName,
-                    UserEmail = item.Invited.Email, Status = item.Status,
-                    Id = item.FriendInvitationId
+                    DisplayedUserName = item.Invited != null ? item.Invited.FullName : Constants.NoAccountInvitationListMessage,
+                    InvitedEmail = item.InvitedEmail,
+                    Status = item.Status,
+                    PostDate = ToolsExtensions.ConvertToTimeZoneFromUtc(item.PostDateTime, timeZone, _logger)
+                        .ToString(Constants.DateTimeFormat, CultureInfo.InvariantCulture)
                 })
                 .ToList();
 
@@ -42,19 +52,25 @@ namespace PlayBoardGame.Controllers
             if (!ModelState.IsValid) return RedirectToAction(nameof(List), new {vm.InvitedEmail});
             if (ModelState.IsValid)
             {
-                var friend = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
-                var invitation = new FriendInvitation();
-                if (friend != null)
+                if (string.IsNullOrEmpty(vm.InvitedEmail))
                 {
-                    invitation.Invited = friend;
+                    TempData["ErrorMessage"] = Constants.EmptyEmailInvitationMessage;
+                    return RedirectToAction(nameof(List));
+                }
+
+                var user = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
+                var invitation = new FriendInvitation();
+                if (user != null)
+                {
+                    invitation.Invited = user;
                 }
 
                 invitation.InvitedEmail = vm.InvitedEmail;
                 invitation.SenderId = GetCurrentUserId().Result;
                 _friendInvitationRepository.AddInvitation(invitation);
+                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             }
 
-            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List));
         }
 

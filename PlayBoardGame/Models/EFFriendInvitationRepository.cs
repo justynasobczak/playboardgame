@@ -26,7 +26,8 @@ namespace PlayBoardGame.Models
         public IQueryable<FriendInvitation> GetInvitationsSentByCurrentUser(string currentUserId)
         {
             return _applicationDbContext.FriendInvitations
-                .Where(fi => fi.SenderId == currentUserId);
+                .Where(fi => fi.SenderId == currentUserId)
+                .Include(fi => fi.Invited);
         }
 
         public void AddInvitation(FriendInvitation invitation)
