@@ -1,0 +1,85 @@
+@model FriendInvitationViewModel.ReceivedInvitationsViewModel
+@{
+    ViewBag.Title = "Invitations";
+}
+
+
+@await Component.InvokeAsync("InvitationTabs", new
+{
+    tabName = InvitationTabName.Received
+})
+
+<table class="table table-hover">
+
+    @if (!Model.ReceivedInvitationsList.Any())
+    {
+        <tr>
+            <td colspan="4" class="text-center">No received invitations</td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <th>Gravatar</th>
+            <th>Sender</th>
+            <th>Post date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        foreach (var item in Model.ReceivedInvitationsList)
+        {
+            <tr>
+                <td class="tdAvatar">
+                    <div>
+                        <img gravatar-email="@item.SenderEmail" alt="Avatar"/>
+                    </div>
+                </td>
+                <td>@item.SenderUserName</td>
+                <td>@item.PostDate</td>
+                @switch (item.Status)
+                {
+                    case FriendInvitationStatus.Accepted:
+                        <td class="acceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    case FriendInvitationStatus.Deleted:
+                        <td class="notAcceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    case FriendInvitationStatus.Pending:
+                        <td class="pendingStatus">@item.Status.ToString()</td>
+                        break;
+                    case FriendInvitationStatus.Rejected:
+                        <td class="notAcceptedStatus">@item.Status.ToString()</td>
+                        break;
+                    default:
+                        <td class="text-primary">@item.Status.ToString()</td>
+                        break;
+                }
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="invitationId" value="@item.InvitationId.ToString()"/>
+
+                        @if (@item.Status == FriendInvitationStatus.Pending)
+                        {
+                        <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Accepted">
+                            <i class="fas fa-user-check icons" data-toggle="tooltip" title="@Constants.AcceptInvitationTooltip"></i>
+                        </button>
+                        }
+                        @if (@item.Status == FriendInvitationStatus.Pending)
+                        {
+                        <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Rejected">
+                            <i class="fas fa-window-close icons" data-toggle="tooltip" title="@Constants.RejectInvitationTooltip"></i>
+                        </button>
+                        }
+                        @if (@item.Status == FriendInvitationStatus.Accepted)
+                        {
+                        <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Deleted">
+                            <i class="fas fa-ban icons" data-toggle="tooltip" title="@Constants.CancelInvitationTooltip"></i>
+                        </button>
+                        }
+
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>

@@ -1,7 +1,12 @@
 @model FriendInvitationViewModel.SentInvitationsViewModel
 @{
-    ViewBag.Title = "Sent invitations";
+    ViewBag.Title = "Invitations";
 }
+
+@await Component.InvokeAsync("InvitationTabs", new
+{
+    tabName = InvitationTabName.Sent
+})
 
 <table class="table table-hover">
 

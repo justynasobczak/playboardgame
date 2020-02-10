@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,7 +32,9 @@ namespace PlayBoardGame.Controllers
                 .GetInvitationsSentByCurrentUser(currentUser.Id)
                 .Select(item => new FriendInvitationViewModel.SentInvitationsList()
                 {
-                    DisplayedUserName = item.Invited != null ? item.Invited.FullName : Constants.NoAccountInvitationListMessage,
+                    DisplayedUserName = item.Invited != null
+                        ? item.Invited.FullName
+                        : Constants.NoAccountInvitationListMessage,
                     InvitedEmail = item.InvitedEmail,
                     Status = item.Status,
                     PostDate = ToolsExtensions.ConvertToTimeZoneFromUtc(item.PostDateTime, timeZone, _logger)
@@ -50,26 +51,28 @@ namespace PlayBoardGame.Controllers
         public IActionResult Sent(FriendInvitationViewModel.SentInvitationsViewModel vm)
         {
             if (!ModelState.IsValid) return RedirectToAction(nameof(List), new {vm.InvitedEmail});
-            if (ModelState.IsValid)
+
+            if (string.IsNullOrEmpty(vm.InvitedEmail))
             {
-                if (string.IsNullOrEmpty(vm.InvitedEmail))
-                {
-                    TempData["ErrorMessage"] = Constants.EmptyEmailInvitationMessage;
-                    return RedirectToAction(nameof(List));
-                }
-
-                var user = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
-                var invitation = new FriendInvitation();
-                if (user != null)
-                {
-                    invitation.Invited = user;
-                }
-
-                invitation.InvitedEmail = vm.InvitedEmail;
-                invitation.SenderId = GetCurrentUserId().Result;
-                _friendInvitationRepository.AddInvitation(invitation);
-                TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
+                TempData["ErrorMessage"] = Constants.EmptyEmailInvitationMessage;
+                return RedirectToAction(nameof(List));
             }
+
+            var user = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
+            var invitation = new FriendInvitation();
+            if (user != null)
+            {
+                invitation.Invited = user;
+                TempData["SuccessMessage"] = Constants.ExistingAccountSentInvitationMessage;
+            }
+            else
+            {
+                TempData["SuccessMessage"] = Constants.NoAccountSentInvitationMessage;
+            }
+
+            invitation.InvitedEmail = vm.InvitedEmail;
+            invitation.SenderId = GetCurrentUserId().Result;
+            _friendInvitationRepository.AddInvitation(invitation);
 
             return RedirectToAction(nameof(List));
         }

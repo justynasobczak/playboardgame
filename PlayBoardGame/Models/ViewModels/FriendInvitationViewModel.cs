@@ -13,6 +13,11 @@ namespace PlayBoardGame.Models.ViewModels
             [Display(Name = "Invite your friend")]
             public string InvitedEmail { get; set; }
         }
+        
+        public class ReceivedInvitationsViewModel
+        {
+            public List<ReceivedInvitationsList> ReceivedInvitationsList { get; set; }
+        }
 
         public class SentInvitationsList
         {
@@ -23,6 +28,19 @@ namespace PlayBoardGame.Models.ViewModels
             public string InvitedEmail { get; set; }
 
             public FriendInvitationStatus Status { get; set; }
+        }
+        
+        public class ReceivedInvitationsList
+        {
+            public string PostDate { get; set; }
+
+            public string SenderUserName { get; set; }
+            
+            public string SenderEmail { get; set; }
+
+            public FriendInvitationStatus Status { get; set; }
+            
+            public int InvitationId { get; set; }
         }
     }
 }

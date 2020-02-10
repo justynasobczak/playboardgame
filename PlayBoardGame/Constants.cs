@@ -32,10 +32,15 @@ namespace PlayBoardGame
             "Cannot remove the game which is connected with the meeting";
 
         public const string PopulateGamesMessage = "The number of added games";
-        
+
         public const string EmptyEmailInvitationMessage = "Provide email address";
         public const string NoAccountInvitationListMessage = "Has not registered yet";
-        
+
+        public const string NoAccountSentInvitationMessage =
+            "We didn't find any user with provided email address. Email with the invitation to the Gameet as your friend was sent.";
+
+        public const string ExistingAccountSentInvitationMessage = "Email with the invitation was sent";
+
         public const string OldValueMeetingMessage = "previous value of";
         public const string CurrentValueMeetingMessage = "current value of";
 
