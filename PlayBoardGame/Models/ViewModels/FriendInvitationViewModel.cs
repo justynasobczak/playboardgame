@@ -23,7 +23,7 @@ namespace PlayBoardGame.Models.ViewModels
         {
             public string PostDate { get; set; }
 
-            public string DisplayedUserName { get; set; }
+            public string InvitedUser { get; set; }
 
             public string InvitedEmail { get; set; }
 

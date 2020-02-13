@@ -23,7 +23,7 @@
     <rules>
         <!--All logs, including from Microsoft-->
         <logger name="*" minlevel="Trace" writeTo="Console"/>
-        <logger name="*" minlevel="Error" writeTo="allfile"/>
+        <logger name="*" minlevel="Trace" writeTo="allfile"/>
 
         <!--Skip non-critical Microsoft logs and so log only own logs-->
         <logger name="Microsoft.*" maxlevel="Info" final="true"/> <!-- BlackHole without writeTo -->

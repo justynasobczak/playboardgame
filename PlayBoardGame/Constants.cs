@@ -18,6 +18,7 @@ namespace PlayBoardGame
         public const string FutureDateInPastMessage = "Please enter a date in the future.";
         public const string EndDateBeforeStartMessage = "Please enter a date later than start date.";
         public const string OverlappingMeetingsMessage = "There are some overlapping meetings";
+        public const string ExistingMeetingInvitationMessage = "You have already invited this person, please check the list.";
         public const string WrongDateTimeFormat = "Please enter a date in format: yyyy/MM/dd HH:mm";
         public const string AuthProviderError = "Error from external authenticate provider, please contact support.";
 
@@ -40,6 +41,11 @@ namespace PlayBoardGame
             "We didn't find any user with provided email address. Email with the invitation to the Gameet as your friend was sent.";
 
         public const string ExistingAccountSentInvitationMessage = "Email with the invitation was sent";
+
+        public const string ExistingInvitationSentByCurrentUserErrorMessage =
+            "Invitation to provided email address has been already sent, please check Sent invitations list.";
+        public const string ExistingInvitationReceivedByCurrentUserErrorMessage =
+            "Invitation from provided email address has been already sent, please check Received invitations list.";
 
         public const string OldValueMeetingMessage = "previous value of";
         public const string CurrentValueMeetingMessage = "current value of";

@@ -46,10 +46,14 @@ namespace PlayBoardGame.Models
             _applicationDbContext.SaveChanges();
         }
 
-        public void ChangeStatus(int invitationId, FriendInvitationStatus status)
+        public void ChangeStatus(int invitationId, FriendInvitationStatus status, AppUser currentUser)
         {
             var dbEntry = _applicationDbContext.FriendInvitations.FirstOrDefault
                 (fi => fi.FriendInvitationId == invitationId);
+            if (dbEntry.Invited == null)
+            {
+                dbEntry.Invited = currentUser;
+            }
             if (dbEntry == null) return;
             dbEntry.Status = status;
 
@@ -62,6 +66,18 @@ namespace PlayBoardGame.Models
             return _applicationDbContext.FriendInvitations.Include(fi => fi.Invited)
                 .Include(fi => fi.Sender)
                 .FirstOrDefault(fi => fi.FriendInvitationId == invitationId);
+        }
+
+        public bool IfInvitationWasSentByCurrentUser(string currentUserId, string InvitedEmail)
+        {
+            return _applicationDbContext.FriendInvitations
+                       .FirstOrDefault(fi => fi.SenderId == currentUserId && fi.InvitedEmail == InvitedEmail) != null;
+        }
+        
+        public bool IfInvitationWasReceivedByCurrentUser(AppUser sender, string currentUserEmail)
+        {
+            return _applicationDbContext.FriendInvitations
+                .FirstOrDefault(fi => fi.Sender == sender && fi.InvitedEmail == currentUserEmail) != null;
         }
     }
 }

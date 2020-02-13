@@ -16,5 +16,7 @@ namespace PlayBoardGame.Models
         void ChangeStatus(string userId, int meetingId, InvitationStatus status);
 
         IQueryable<string> GetUsersEmailsForNotification(int meetingId, string currentUserId);
+
+        public bool IfUserIsInvited(int meetingId, string userId);
     }
 }

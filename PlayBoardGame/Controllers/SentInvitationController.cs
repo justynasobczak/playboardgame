@@ -32,9 +32,9 @@ namespace PlayBoardGame.Controllers
                 .GetInvitationsSentByCurrentUser(currentUser.Id)
                 .Select(item => new FriendInvitationViewModel.SentInvitationsList()
                 {
-                    DisplayedUserName = item.Invited != null
+                    InvitedUser = item.Invited != null
                         ? item.Invited.FullName
-                        : Constants.NoAccountInvitationListMessage,
+                        : item.InvitedEmail,
                     InvitedEmail = item.InvitedEmail,
                     Status = item.Status,
                     PostDate = ToolsExtensions.ConvertToTimeZoneFromUtc(item.PostDateTime, timeZone, _logger)
@@ -50,15 +50,31 @@ namespace PlayBoardGame.Controllers
         [AutoValidateAntiforgeryToken]
         public IActionResult Sent(FriendInvitationViewModel.SentInvitationsViewModel vm)
         {
-            if (!ModelState.IsValid) return RedirectToAction(nameof(List), new {vm.InvitedEmail});
 
             if (string.IsNullOrEmpty(vm.InvitedEmail))
             {
                 TempData["ErrorMessage"] = Constants.EmptyEmailInvitationMessage;
                 return RedirectToAction(nameof(List));
             }
+            if (!ModelState.IsValid) return RedirectToAction(nameof(List), new {vm.InvitedEmail});
+            
+            var currentUserId = GetCurrentUserId().Result;
 
+            if (_friendInvitationRepository.IfInvitationWasSentByCurrentUser(currentUserId, vm.InvitedEmail))
+            {
+                TempData["ErrorMessage"] = Constants.ExistingInvitationSentByCurrentUserErrorMessage;
+                return RedirectToAction(nameof(List), new {vm.InvitedEmail});
+            }
+            
             var user = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
+            var currentUserEmail = _userManager.FindByIdAsync(currentUserId).Result.Email;
+
+            if (_friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(user, currentUserEmail))
+            {
+                TempData["ErrorMessage"] = Constants.ExistingInvitationReceivedByCurrentUserErrorMessage;
+                return RedirectToAction(nameof(List), new {vm.InvitedEmail});
+            }
+            
             var invitation = new FriendInvitation();
             if (user != null)
             {
@@ -71,7 +87,7 @@ namespace PlayBoardGame.Controllers
             }
 
             invitation.InvitedEmail = vm.InvitedEmail;
-            invitation.SenderId = GetCurrentUserId().Result;
+            invitation.SenderId = currentUserId;
             _friendInvitationRepository.AddInvitation(invitation);
 
             return RedirectToAction(nameof(List));

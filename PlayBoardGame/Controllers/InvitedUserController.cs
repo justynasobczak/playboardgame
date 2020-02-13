@@ -46,9 +46,6 @@ namespace PlayBoardGame.Controllers
             var invitedUsersList = _invitedUserRepository.GetInvitedUsersList(id)
                 .Select(item => new InvitedUserViewModel.InvitedUsersList
                 {
-                    // bozy Use string interpolation
-                    // DisplayedUserName = $"{user.UserName} {user.FirstName} {user.LastName}";
-                    //Changed in AppUser
                     DisplayedUserName = item.AppUser.FullName, UserName = item.AppUser.UserName,
                     UserEmail = item.AppUser.Email, Status = item.Status,
                     Id = item.AppUser.Id
@@ -62,7 +59,9 @@ namespace PlayBoardGame.Controllers
                 /*AvailableUsers = _invitedUserRepository.GetAvailableUsers(id)
                     .OrderBy(u => u.LastName).ThenBy(u => u.Email)
                     .ToList(),*/
-                AvailableUsers = _friendInvitationRepository.GetFriendsOfCurrentUser(GetCurrentUserId().Result).ToList(),
+                AvailableUsers =
+                    _friendInvitationRepository.GetFriendsOfCurrentUser(GetCurrentUserId().Result).ToList(),
+                        //.OrderBy(u => u.LastName).ThenBy(u => u.Email).ToList(),
                 InvitedUsersList = invitedUsersList,
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name
             };
@@ -78,7 +77,8 @@ namespace PlayBoardGame.Controllers
             var user = _userManager.FindByIdAsync(userId).Result;
             var meeting = _meetingRepository.GetMeeting(meetingId);
             var appLink = Url.Action("Login", "Account", null, HttpContext.Request.Scheme);
-            var content = $"{Constants.ContentDeleteInvitationEmail}: Meeting title: {meeting.Title}, Organizer: {meeting.Organizer.FullName}";
+            var content =
+                $"{Constants.ContentDeleteInvitationEmail}: Meeting title: {meeting.Title}, Organizer: {meeting.Organizer.FullName}";
             var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                 {
                     IsHTML = true,
@@ -109,6 +109,12 @@ namespace PlayBoardGame.Controllers
         {
             var userId = vm.SelectedToInviteUserId;
             var meetingId = vm.MeetingId;
+            if (_invitedUserRepository.IfUserIsInvited(meetingId, userId))
+            {
+                TempData["ErrorMessage"] = Constants.ExistingMeetingInvitationMessage;
+                return RedirectToAction(nameof(List), new {id = meetingId});
+            }
+
             var meeting = _meetingRepository.GetMeeting(meetingId);
             var user = _userManager.FindByIdAsync(userId).Result;
             var games = meeting.MeetingGame.Select(mg => mg.Game.Title);
@@ -165,12 +171,13 @@ namespace PlayBoardGame.Controllers
         public IActionResult ChangeStatus(string userId, int meetingId, InvitationStatus status)
         {
             _invitedUserRepository.ChangeStatus(userId, meetingId, status);
-            
+
             var appLink = Url.Action(nameof(List), "InvitedUser", new {id = meetingId}, HttpContext.Request.Scheme);
             var meeting = _meetingRepository.GetMeeting(meetingId);
             var user = _userManager.FindByIdAsync(userId).Result;
             var content = $"meeting: {meeting.Title}, new status: {status} changed by the user: {user.FullName}";
-            var users = _invitedUserRepository.GetUsersEmailsForNotification(meetingId, _userManager.FindByIdAsync(userId).Result.Id);
+            var users = _invitedUserRepository.GetUsersEmailsForNotification(meetingId,
+                _userManager.FindByIdAsync(userId).Result.Id);
             foreach (var email in users)
             {
                 _templateSender.SendGeneralEmailAsync(new SendEmailDetails
@@ -178,7 +185,8 @@ namespace PlayBoardGame.Controllers
                             IsHTML = true,
                             ToEmail = email,
                             Subject = Constants.SubjectNewStatusInvitationEmail
-                        }, Constants.TitleNewStatusInvitationEmail, $"{Constants.ContentNewStatusInvitationEmail}: {content}",
+                        }, Constants.TitleNewStatusInvitationEmail,
+                        $"{Constants.ContentNewStatusInvitationEmail}: {content}",
                         Constants.ButtonCheckMeeting,
                         appLink)
                     .ContinueWith(t =>
@@ -190,10 +198,11 @@ namespace PlayBoardGame.Controllers
                         }
                     }, TaskScheduler.Default);
             }
+
             TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List), new {id = meetingId});
         }
-        
+
         private async Task<string> GetCurrentUserId()
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);

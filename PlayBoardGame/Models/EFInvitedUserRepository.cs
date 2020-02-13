@@ -69,5 +69,11 @@ namespace PlayBoardGame.Models
                 .Where(u => u.Id != currentUserId)
                 .Select(u => u.Email);
         }
+        
+        public bool IfUserIsInvited(int meetingId, string userId)
+        {
+            return _applicationDbContext.MeetingInvitedUser.FirstOrDefault(mi =>
+                mi.MeetingId == meetingId && mi.UserId == userId) != null;
+        }
     }
 }

@@ -23,7 +23,6 @@ namespace PlayBoardGame.Models
     {
         Pending,
         Accepted,
-        Rejected,
-        Deleted
+        Rejected
     }
 }

@@ -52,7 +52,9 @@ namespace PlayBoardGame.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ChangeStatus(int invitationId, FriendInvitationStatus status)
         {
-            _friendInvitationRepository.ChangeStatus(invitationId, status);
+            var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
+            _friendInvitationRepository.ChangeStatus(invitationId, status, currentUser);
+            TempData["SuccessMessage"] = Constants.GeneralSuccessMessage;
             return RedirectToAction(nameof(List));
         }
     }
