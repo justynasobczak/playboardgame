@@ -1,27 +1,34 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PlayBoardGame.Email.SendGrid;
+using PlayBoardGame.Email.Template;
 using PlayBoardGame.Infrastructure;
 using PlayBoardGame.Models;
 using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize]
     public class SentInvitationController : Controller
     {
         private readonly IFriendInvitationRepository _friendInvitationRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly ILogger<SentInvitationController> _logger;
+        private readonly IEmailTemplateSender _templateSender;
 
         public SentInvitationController(IFriendInvitationRepository friendInvitationRepository,
-            UserManager<AppUser> userManager, ILogger<SentInvitationController> logger)
+            UserManager<AppUser> userManager, ILogger<SentInvitationController> logger,
+            IEmailTemplateSender templateSender)
         {
             _friendInvitationRepository = friendInvitationRepository;
             _userManager = userManager;
             _logger = logger;
+            _templateSender = templateSender;
         }
 
         public IActionResult List(FriendInvitationViewModel.SentInvitationsViewModel vm)
@@ -48,16 +55,16 @@ namespace PlayBoardGame.Controllers
 
         [HttpPost]
         [AutoValidateAntiforgeryToken]
-        public IActionResult Sent(FriendInvitationViewModel.SentInvitationsViewModel vm)
+        public async Task<IActionResult> Sent(FriendInvitationViewModel.SentInvitationsViewModel vm)
         {
-
             if (string.IsNullOrEmpty(vm.InvitedEmail))
             {
                 TempData["ErrorMessage"] = Constants.EmptyEmailInvitationMessage;
                 return RedirectToAction(nameof(List));
             }
+
             if (!ModelState.IsValid) return RedirectToAction(nameof(List), new {vm.InvitedEmail});
-            
+
             var currentUserId = GetCurrentUserId().Result;
 
             if (_friendInvitationRepository.IfInvitationWasSentByCurrentUser(currentUserId, vm.InvitedEmail))
@@ -65,32 +72,56 @@ namespace PlayBoardGame.Controllers
                 TempData["ErrorMessage"] = Constants.ExistingInvitationSentByCurrentUserErrorMessage;
                 return RedirectToAction(nameof(List), new {vm.InvitedEmail});
             }
-            
-            var user = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
+
+            var invitedUser = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
             var currentUserEmail = _userManager.FindByIdAsync(currentUserId).Result.Email;
 
-            if (_friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(user, currentUserEmail))
+            if (_friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(invitedUser, currentUserEmail))
             {
                 TempData["ErrorMessage"] = Constants.ExistingInvitationReceivedByCurrentUserErrorMessage;
                 return RedirectToAction(nameof(List), new {vm.InvitedEmail});
             }
-            
-            var invitation = new FriendInvitation();
-            if (user != null)
+
+            //TODO Filled in email address
+            var appLinkRegister = Url.Action("Register", "Account", null, HttpContext.Request.Scheme);
+            var appLinkInvitations = Url.Action("List", "ReceivedInvitation", null, HttpContext.Request.Scheme);
+            var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
+                {
+                    IsHTML = true,
+                    ToEmail = vm.InvitedEmail,
+                    Subject = Constants.SubjectNewFriendInvitationEmail
+                }, Constants.TitleNewFriendInvitationEmail,
+                invitedUser != null ? Constants.ContentNewFriendInvitationExistingUserEmail : Constants.ContentNewFriendInvitationNonExistingUserEmail,
+                invitedUser != null ? Constants.ButtonCheckFriendInvitation : Constants.ButtonVisitSide, invitedUser != null ? appLinkInvitations : appLinkRegister);
+            if (response.Successful)
             {
-                invitation.Invited = user;
-                TempData["SuccessMessage"] = Constants.ExistingAccountSentInvitationMessage;
-            }
-            else
-            {
-                TempData["SuccessMessage"] = Constants.NoAccountSentInvitationMessage;
+                var invitation = new FriendInvitation();
+                if (invitedUser != null)
+                {
+                    invitation.Invited = invitedUser;
+                    TempData["SuccessMessage"] = Constants.ExistingAccountSentInvitationMessage;
+                }
+                else
+                {
+                    TempData["SuccessMessage"] = Constants.NoAccountSentInvitationMessage;
+                }
+
+                invitation.InvitedEmail = vm.InvitedEmail;
+                invitation.SenderId = currentUserId;
+                _friendInvitationRepository.AddInvitation(invitation);
+
+                return RedirectToAction(nameof(List));
             }
 
-            invitation.InvitedEmail = vm.InvitedEmail;
-            invitation.SenderId = currentUserId;
-            _friendInvitationRepository.AddInvitation(invitation);
+            _logger.LogCritical(vm.InvitedEmail);
+            //TODO Standard message is too less
+            TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+            foreach (var error in response.Errors)
+            {
+                _logger.LogError(error);
+            }
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new {vm.InvitedEmail});
         }
 
         private async Task<string> GetCurrentUserId()

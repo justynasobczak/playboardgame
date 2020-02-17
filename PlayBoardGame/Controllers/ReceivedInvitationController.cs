@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using PlayBoardGame.Models.ViewModels;
 
 namespace PlayBoardGame.Controllers
 {
+    [Authorize]
     public class ReceivedInvitationController : Controller
     {
         private readonly IFriendInvitationRepository _friendInvitationRepository;

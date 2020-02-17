@@ -8,7 +8,26 @@
     isCreateMode = false
 })
 
-<table class="table table-hover">
+<form class="form-inline" asp-action="Add" method="post">
+
+    @if (Model.IsEditable && Model.AvailableUsers.Any())
+    {
+        <label class="mr-sm-2 mb-0">Friends:</label>
+        <select class="form-control mr-sm-2 mb-2 mb-sm-0 custom-select" asp-for="SelectedToInviteUserId"
+                asp-items="@(new SelectList(Model.AvailableUsers, "Id", "FullName"))">
+        </select>
+        <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
+        <button type="submit" class="btn btn-info mt-2 mt-sm-0">Invite for meeting</button>
+        <div class="plainText standardLink">
+            Do you want to invite more people but they are not on the list of friends?
+            <a asp-controller="SentInvitation" asp-action="List">Send friend request.</a>
+        </div>
+    }
+
+</form>
+
+
+<table class="table table-hover mt-3">
 
     @if (!Model.InvitedUsersList.Any())
     {
@@ -83,22 +102,6 @@
         }
     }
 </table>
-
-<form class="form-inline" asp-action="Add" method="post">
-    <label class="mr-sm-2 mb-0">Friends:</label>
-    <select class="form-control mr-sm-2 mb-2 mb-sm-0 custom-select" asp-for="SelectedToInviteUserId"
-            asp-items="@(new SelectList(Model.AvailableUsers, "Id", "FullName"))">
-    </select>
-    <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-    @if (Model.IsEditable && Model.AvailableUsers.Any())
-    {
-        <button type="submit" class="btn btn-info mt-2 mt-sm-0">Invite for meeting</button>
-    }
-    <a asp-controller="Meeting" asp-action="List" class="btn btn-secondary ml-1">Cancel</a>
-
-</form>
-
-<div class="plainText standardLink">Do you want to invite more people but they are not on the list of friends? <a asp-controller="SentInvitation" asp-action="List">Send friend request.</a></div>
 
 <script>
 $(document).ready(function(){
