@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ namespace PlayBoardGame.Models
             _applicationDbContext = applicationDbContext;
         }
 
-        public IQueryable<AppUser> GetFriendsOfCurrentUser(string currentUserId)
+        public IEnumerable<AppUser> GetFriendsOfCurrentUser(string currentUserId)
         {
             return _applicationDbContext.FriendInvitations
                 .Where(fi =>

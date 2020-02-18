@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Linq;
 
 namespace PlayBoardGame.Models
 {
     public interface IFriendInvitationRepository
     {
-        IQueryable<AppUser> GetFriendsOfCurrentUser(string currentUserId);
+        IEnumerable<AppUser> GetFriendsOfCurrentUser(string currentUserId);
         IQueryable<FriendInvitation> GetInvitationsReceivedByCurrentUser(string currentUserEmail);
         IQueryable<FriendInvitation> GetInvitationsSentByCurrentUser(string currentUserId);
         void AddInvitation(FriendInvitation invitation);

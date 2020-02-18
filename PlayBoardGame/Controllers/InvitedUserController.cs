@@ -60,8 +60,8 @@ namespace PlayBoardGame.Controllers
                     .OrderBy(u => u.LastName).ThenBy(u => u.Email)
                     .ToList(),*/
                 AvailableUsers =
-                    _friendInvitationRepository.GetFriendsOfCurrentUser(GetCurrentUserId().Result).ToList(),
-                        //.OrderBy(u => u.LastName).ThenBy(u => u.Email).ToList(),
+                    _friendInvitationRepository.GetFriendsOfCurrentUser(GetCurrentUserId().Result)
+                        .OrderBy(u => u.LastName).ThenBy(u => u.Email).ToList(),
                 InvitedUsersList = invitedUsersList,
                 IsEditable = meeting.Organizer.UserName == User.Identity.Name
             };
