@@ -313,26 +313,95 @@ namespace PlayBoardGames.Tests
 
             using (var context = factory.CreateContext())
             {
-                var meetings = context.FriendInvitations
+                var invitations = context.FriendInvitations
                     .Include(i => i.Invited)
                     .Include(i => i.Sender)
                     .OrderBy(i => i.FriendInvitationId).ToList();
                 Assert.Equal(3, context.Users.Count());
                 Assert.Equal(2, context.FriendInvitations.Count());
-                Assert.Equal(request1ToAdd.FriendInvitationId, meetings[0].FriendInvitationId);
-                Assert.Equal(request2ToAdd.FriendInvitationId, meetings[1].FriendInvitationId);
+                Assert.Equal(request1ToAdd.FriendInvitationId, invitations[0].FriendInvitationId);
+                Assert.Equal(request2ToAdd.FriendInvitationId, invitations[1].FriendInvitationId);
 
-                Assert.Equal(FriendInvitationStatus.Pending, meetings[0].Status);
-                Assert.Equal(FriendInvitationStatus.Pending, meetings[1].Status);
+                Assert.Equal(FriendInvitationStatus.Pending, invitations[0].Status);
+                Assert.Equal(FriendInvitationStatus.Pending, invitations[1].Status);
 
-                Assert.Equal(request1ToAdd.Sender.Id, meetings[0].SenderId);
-                Assert.Equal(request2ToAdd.Sender.Id, meetings[1].SenderId);
+                Assert.Equal(request1ToAdd.Sender.Id, invitations[0].SenderId);
+                Assert.Equal(request2ToAdd.Sender.Id, invitations[1].SenderId);
 
-                Assert.Equal(request1ToAdd.Invited.Id, meetings[0].InvitedId);
-                Assert.Null(meetings[1].InvitedId);
+                Assert.Equal(request1ToAdd.Invited.Id, invitations[0].InvitedId);
+                Assert.Null(invitations[1].InvitedId);
 
-                Assert.Equal(request1ToAdd.InvitedEmail, meetings[0].InvitedEmail);
-                Assert.Equal("user4@example.com", meetings[1].InvitedEmail);
+                Assert.Equal(request1ToAdd.InvitedEmail, invitations[0].InvitedEmail);
+                Assert.Equal("user4@example.com", invitations[1].InvitedEmail);
+            }
+        }
+        
+        [Fact]
+        public void Can_Change_Status()
+        {
+            //Arrange
+            using var factory = new SQLiteDbContextFactory();
+            //Arrange
+            var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+            var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
+            var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
+            var user4 = new AppUser {Id = "id4", UserName = "user4", Email = "user4@example.com"};
+            var request1 = new FriendInvitation
+            {
+                FriendInvitationId = 1,
+                Sender = user1,
+                Invited = user2,
+                InvitedEmail = user2.Email,
+                Status = FriendInvitationStatus.Pending
+            };
+
+            var request2 = new FriendInvitation
+            {
+                FriendInvitationId = 2,
+                Sender = user3,
+                InvitedEmail = "user4@example.com",
+                Status = FriendInvitationStatus.Pending
+            };
+
+            //Act
+            using (var context = factory.CreateContext())
+            {
+                context.Users.Add(user1);
+                context.Users.Add(user2);
+                context.Users.Add(user3);
+                context.Users.Add(user4);
+                context.SaveChanges();
+                context.FriendInvitations.Add(request1);
+                context.FriendInvitations.Add(request2);
+                context.SaveChanges();
+                var friendInvitationRepository = new EFFriendInvitationRepository(context);
+                friendInvitationRepository.ChangeStatus(request1.FriendInvitationId, FriendInvitationStatus.Accepted, user2);
+                friendInvitationRepository.ChangeStatus(request2.FriendInvitationId, FriendInvitationStatus.Rejected, user4);
+                
+            }
+
+            using (var context = factory.CreateContext())
+            {
+                var invitations = context.FriendInvitations
+                    .Include(i => i.Invited)
+                    .Include(i => i.Sender)
+                    .OrderBy(i => i.FriendInvitationId).ToList();
+                Assert.Equal(4, context.Users.Count());
+                Assert.Equal(2, context.FriendInvitations.Count());
+                Assert.Equal(request1.FriendInvitationId, invitations[0].FriendInvitationId);
+                Assert.Equal(request2.FriendInvitationId, invitations[1].FriendInvitationId);
+
+                Assert.Equal(FriendInvitationStatus.Accepted, invitations[0].Status);
+                Assert.Equal(FriendInvitationStatus.Rejected, invitations[1].Status);
+
+                Assert.Equal(request1.Sender.Id, invitations[0].SenderId);
+                Assert.Equal(request2.Sender.Id, invitations[1].SenderId);
+
+                Assert.Equal(request1.Invited.Id, invitations[0].InvitedId);
+                Assert.Equal(user4.Id, invitations[1].InvitedId);
+
+                Assert.Equal(request1.InvitedEmail, invitations[0].InvitedEmail);
+                Assert.Equal(user4.Email, invitations[1].InvitedEmail);
             }
         }
     }
