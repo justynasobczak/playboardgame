@@ -76,7 +76,7 @@ namespace PlayBoardGame.Controllers
             var invitedUser = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
             var currentUserEmail = _userManager.FindByIdAsync(currentUserId).Result.Email;
 
-            if (_friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(invitedUser, currentUserEmail))
+            if (_friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(invitedUser.Id, currentUserEmail))
             {
                 TempData["ErrorMessage"] = Constants.ExistingInvitationReceivedByCurrentUserErrorMessage;
                 return RedirectToAction(nameof(List), new {vm.InvitedEmail});

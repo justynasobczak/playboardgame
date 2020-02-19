@@ -404,5 +404,202 @@ namespace PlayBoardGames.Tests
                 Assert.Equal(user4.Email, invitations[1].InvitedEmail);
             }
         }
+        
+        [Fact]
+        public void Can_Get_Invitation()
+        {
+            //Arrange
+            using var factory = new SQLiteDbContextFactory();
+            //Arrange
+            var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+            var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
+            var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
+            var request1 = new FriendInvitation
+            {
+                FriendInvitationId = 1,
+                Sender = user1,
+                Invited = user2,
+                InvitedEmail = user2.Email,
+                Status = FriendInvitationStatus.Pending
+            };
+
+            var request2 = new FriendInvitation
+            {
+                FriendInvitationId = 2,
+                Sender = user3,
+                InvitedEmail = "user4@example.com",
+                Status = FriendInvitationStatus.Pending
+            };
+            
+            var result = new FriendInvitation();
+
+            //Act
+            using (var context = factory.CreateContext())
+            {
+                context.Users.Add(user1);
+                context.Users.Add(user2);
+                context.Users.Add(user3);
+                context.SaveChanges();
+                context.FriendInvitations.Add(request1);
+                context.FriendInvitations.Add(request2);
+                context.SaveChanges();
+                var friendInvitationRepository = new EFFriendInvitationRepository(context);
+                result = friendInvitationRepository.GetInvitation(request1.FriendInvitationId);
+
+            }
+
+            using (var context = factory.CreateContext())
+            {
+                Assert.Equal(3, context.Users.Count());
+                Assert.Equal(2, context.FriendInvitations.Count());
+                Assert.Equal(request1.FriendInvitationId, result.FriendInvitationId);
+                Assert.Equal(FriendInvitationStatus.Pending, result.Status);
+                Assert.Equal(request1.Invited.Id, result.Invited.Id);
+                Assert.Equal(request1.InvitedId, result.InvitedId);
+                Assert.Equal(request1.InvitedEmail, result.InvitedEmail);
+                Assert.Equal(request1.Sender.Id, result.Sender.Id);
+                Assert.Equal(request1.SenderId, result.SenderId);
+            }
+        }
+        
+        [Fact]
+        public void Can_Check_If_Invitation_Was_Sent_By_Current_User()
+        {
+            //Arrange
+            using var factory = new SQLiteDbContextFactory();
+            //Arrange
+            var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+            var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
+            var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
+            
+            var request1 = new FriendInvitation
+            {
+                FriendInvitationId = 1,
+                Sender = user1,
+                InvitedEmail = "user2@example.com",
+                Status = FriendInvitationStatus.Pending
+            };
+
+            var request2 = new FriendInvitation
+            {
+                FriendInvitationId = 2,
+                Sender = user1,
+                InvitedEmail = "user4@example.com",
+                Status = FriendInvitationStatus.Rejected
+            };
+            
+            var request3 = new FriendInvitation
+            {
+                FriendInvitationId = 3,
+                Sender = user3,
+                InvitedEmail = "user2@example.com",
+                Status = FriendInvitationStatus.Accepted
+            };
+            
+            var request4 = new FriendInvitation
+            {
+                FriendInvitationId = 4,
+                Sender = user2,
+                Invited = user1,
+                InvitedEmail = user1.Email,
+                Status = FriendInvitationStatus.Pending
+            };
+            
+            bool result;
+
+            //Act
+            using (var context = factory.CreateContext())
+            {
+                context.Users.Add(user1);
+                context.Users.Add(user2);
+                context.Users.Add(user3);
+                context.SaveChanges();
+                context.FriendInvitations.Add(request1);
+                context.FriendInvitations.Add(request2);
+                context.FriendInvitations.Add(request3);
+                context.FriendInvitations.Add(request4);
+                context.SaveChanges();
+                var friendInvitationRepository = new EFFriendInvitationRepository(context);
+                result = friendInvitationRepository.IfInvitationWasSentByCurrentUser(user1.Id, "user2@example.com");
+
+            }
+
+            using (var context = factory.CreateContext())
+            {
+                Assert.Equal(3, context.Users.Count());
+                Assert.Equal(4, context.FriendInvitations.Count());
+                Assert.True(result);
+            }
+        }
+        
+        [Fact]
+        public void Can_Check_If_Invitation_Was_Received_By_Current_User()
+        {
+            //Arrange
+            using var factory = new SQLiteDbContextFactory();
+            //Arrange
+            var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+            var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
+            var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
+            
+            var request1 = new FriendInvitation
+            {
+                FriendInvitationId = 1,
+                Sender = user1,
+                InvitedEmail = "user2@example.com",
+                Status = FriendInvitationStatus.Pending
+            };
+
+            var request2 = new FriendInvitation
+            {
+                FriendInvitationId = 2,
+                Sender = user1,
+                InvitedEmail = "user4@example.com",
+                Status = FriendInvitationStatus.Rejected
+            };
+            
+            var request3 = new FriendInvitation
+            {
+                FriendInvitationId = 3,
+                Sender = user3,
+                InvitedEmail = "user2@example.com",
+                Status = FriendInvitationStatus.Accepted
+            };
+            
+            var request4 = new FriendInvitation
+            {
+                FriendInvitationId = 4,
+                Sender = user2,
+                Invited = user1,
+                InvitedEmail = user1.Email,
+                Status = FriendInvitationStatus.Pending
+            };
+            
+            bool result;
+
+            //Act
+            using (var context = factory.CreateContext())
+            {
+                context.Users.Add(user1);
+                context.Users.Add(user2);
+                context.Users.Add(user3);
+                context.SaveChanges();
+                context.FriendInvitations.Add(request1);
+                context.FriendInvitations.Add(request2);
+                context.FriendInvitations.Add(request3);
+                context.FriendInvitations.Add(request4);
+                context.SaveChanges();
+                var friendInvitationRepository = new EFFriendInvitationRepository(context);
+                result = friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(user1.Id, "user2@example.com");
+
+            }
+
+            using (var context = factory.CreateContext())
+            {
+                Assert.Equal(3, context.Users.Count());
+                Assert.Equal(4, context.FriendInvitations.Count());
+                Assert.True(result);
+            }
+        }
     }
 }

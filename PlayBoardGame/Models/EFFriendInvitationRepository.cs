@@ -75,10 +75,10 @@ namespace PlayBoardGame.Models
                        .FirstOrDefault(fi => fi.SenderId == currentUserId && fi.InvitedEmail == InvitedEmail) != null;
         }
         
-        public bool IfInvitationWasReceivedByCurrentUser(AppUser sender, string currentUserEmail)
+        public bool IfInvitationWasReceivedByCurrentUser(string senderId, string currentUserEmail)
         {
             return _applicationDbContext.FriendInvitations
-                .FirstOrDefault(fi => fi.Sender == sender && fi.InvitedEmail == currentUserEmail) != null;
+                .FirstOrDefault(fi => fi.SenderId == senderId && fi.InvitedEmail == currentUserEmail) != null;
         }
     }
 }
