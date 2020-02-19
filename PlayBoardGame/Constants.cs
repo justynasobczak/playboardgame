@@ -35,12 +35,15 @@ namespace PlayBoardGame
         public const string GameConnectedWithMeetingErrorMessage =
             "Cannot remove the game which is connected with the meeting";
 
+        public const string FriendInvitationEmailErrorMessage =
+            "We could not send the invitation so the friend request wasn't added.";
+
         public const string PopulateGamesMessage = "The number of added games";
 
         public const string EmptyEmailInvitationMessage = "Provide email address";
 
         public const string NoAccountSentInvitationMessage =
-            "We didn't find any user with provided email address. Email with the invitation to the Gameet as your friend was sent.";
+            "It looks like your friend does not have Gameet account. We sent the invitation to register and check your friend request.";
 
         public const string ExistingAccountSentInvitationMessage = "Email with the invitation was sent";
 

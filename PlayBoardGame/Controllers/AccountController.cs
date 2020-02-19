@@ -36,10 +36,11 @@ namespace PlayBoardGame.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register(string returnUrl)
+        public async Task<IActionResult> Register(string returnUrl, string email)
         {
             var model = new RegisterViewModel
             {
+                Email = email,
                 ReturnUrl = returnUrl,
                 ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList(),
                 TimeZoneList = ToolsExtensions.GetTimeZones()

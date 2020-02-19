@@ -76,14 +76,15 @@ namespace PlayBoardGame.Controllers
             var invitedUser = _userManager.FindByEmailAsync(vm.InvitedEmail).Result;
             var currentUserEmail = _userManager.FindByIdAsync(currentUserId).Result.Email;
 
-            if (_friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(invitedUser.Id, currentUserEmail))
+            if (invitedUser != null &&
+                _friendInvitationRepository.IfInvitationWasReceivedByCurrentUser(invitedUser.Id, currentUserEmail))
             {
                 TempData["ErrorMessage"] = Constants.ExistingInvitationReceivedByCurrentUserErrorMessage;
                 return RedirectToAction(nameof(List), new {vm.InvitedEmail});
             }
 
-            //TODO Filled in email address
-            var appLinkRegister = Url.Action("Register", "Account", null, HttpContext.Request.Scheme);
+            var appLinkRegister = Url.Action("Register", "Account", new {Email = vm.InvitedEmail},
+                HttpContext.Request.Scheme);
             var appLinkInvitations = Url.Action("List", "ReceivedInvitation", null, HttpContext.Request.Scheme);
             var response = await _templateSender.SendGeneralEmailAsync(new SendEmailDetails
                 {
@@ -91,8 +92,11 @@ namespace PlayBoardGame.Controllers
                     ToEmail = vm.InvitedEmail,
                     Subject = Constants.SubjectNewFriendInvitationEmail
                 }, Constants.TitleNewFriendInvitationEmail,
-                invitedUser != null ? Constants.ContentNewFriendInvitationExistingUserEmail : Constants.ContentNewFriendInvitationNonExistingUserEmail,
-                invitedUser != null ? Constants.ButtonCheckFriendInvitation : Constants.ButtonVisitSide, invitedUser != null ? appLinkInvitations : appLinkRegister);
+                invitedUser != null
+                    ? Constants.ContentNewFriendInvitationExistingUserEmail
+                    : Constants.ContentNewFriendInvitationNonExistingUserEmail,
+                invitedUser != null ? Constants.ButtonCheckFriendInvitation : Constants.ButtonVisitSide,
+                invitedUser != null ? appLinkInvitations : appLinkRegister);
             if (response.Successful)
             {
                 var invitation = new FriendInvitation();
@@ -114,8 +118,8 @@ namespace PlayBoardGame.Controllers
             }
 
             _logger.LogCritical(vm.InvitedEmail);
-            //TODO Standard message is too less
-            TempData["ErrorMessage"] = Constants.GeneralSendEmailErrorMessage;
+            TempData["ErrorMessage"] =
+                $"{Constants.GeneralSendEmailErrorMessage} {Constants.FriendInvitationEmailErrorMessage}";
             foreach (var error in response.Errors)
             {
                 _logger.LogError(error);
