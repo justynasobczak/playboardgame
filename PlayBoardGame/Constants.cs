@@ -43,7 +43,7 @@ namespace PlayBoardGame
         public const string EmptyEmailInvitationMessage = "Provide email address";
 
         public const string NoAccountSentInvitationMessage =
-            "It looks like your friend does not have Gameet account. We sent the invitation to register and check your friend request.";
+            "It looks like your friend does not have Gameet account. We sent email invitation to register and check your friend request.";
 
         public const string ExistingAccountSentInvitationMessage = "Email with the invitation was sent";
 
@@ -132,6 +132,16 @@ namespace PlayBoardGame
 
         public const string ContentNewFriendInvitationNonExistingUserEmail =
             "Your friend sent you the invitation to Gameet, portal for people who like board games. You can register and then accept or decline the invitation";
+
+        public const string SubjectFriendInvitationNewStatusEmail = "Your friend request from Gameet has changed";
+        public const string TitleFriendInvitationAcceptanceEmail = "Friend invitation from Gameet was accepted";
+        public const string TitleFriendInvitationRejectionEmail = "Friend invitation from Gameet was rejected";
+
+        public const string ContentFriendInvitationAcceptanceEmail =
+            "Your friend request was accepted by ";
+
+        public const string ContentFriendInvitationRejectionEmail =
+            "Your friend request was rejected by ";
 
         //Consts
         public const string DateTimeFormat = "yyyy/MM/dd HH:mm";

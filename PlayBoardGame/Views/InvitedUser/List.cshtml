@@ -18,13 +18,16 @@
         </select>
         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
         <button type="submit" class="btn btn-info mt-2 mt-sm-0">Invite for meeting</button>
-        <div class="plainText standardLink">
-            Do you want to invite more people but they are not on the list of friends?
-            <a asp-controller="SentInvitation" asp-action="List">Send friend request.</a>
-        </div>
     }
 
 </form>
+@if (Model.IsEditable)
+{
+    <div class="plainText standardLink">
+        No people to invite? Do you want to invite more people but they are not on the list of friends?
+        <a asp-controller="SentInvitation" asp-action="List">Send friend request.</a>
+    </div>
+}
 
 
 <table class="table table-hover mt-3">
