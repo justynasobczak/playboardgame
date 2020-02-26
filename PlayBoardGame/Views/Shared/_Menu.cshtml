@@ -21,7 +21,9 @@
                     <a asp-controller="Meeting" asp-action="List" class="nav-link"> Calendar </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="SentInvitation" asp-action="List" class="nav-link"> Friend requests </a>
+                    <a asp-controller="ReceivedInvitation" asp-action="List" class="nav-link" invitation-bubble="@User.Identity.Name">
+                        @*Content is generated from tag helper*@
+                    </a>
                 </li>
                 @if (User?.Identity?.Name == "Admin")
                 {

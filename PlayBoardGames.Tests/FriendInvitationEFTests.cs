@@ -601,5 +601,90 @@ namespace PlayBoardGames.Tests
                 Assert.True(result);
             }
         }
+        
+        [Fact]
+        public void Can_Get_Number_Of_Pending_Invitations_For_CurrentUser()
+        {
+            //Arrange
+            using var factory = new SQLiteDbContextFactory();
+            //Arrange
+            var user1 = new AppUser {Id = "id1", UserName = "user1", Email = "user1@example.com"};
+            var user2 = new AppUser {Id = "id2", UserName = "user2", Email = "user2@example.com"};
+            var user3 = new AppUser {Id = "id3", UserName = "user3", Email = "user3@example.com"};
+            var user4 = new AppUser {Id = "id4", UserName = "user4", Email = "user4@example.com"};
+            
+            var request1 = new FriendInvitation
+            {
+                FriendInvitationId = 1,
+                Sender = user1,
+                Invited = user2,
+                Status = FriendInvitationStatus.Pending
+            };
+
+            var request2 = new FriendInvitation
+            {
+                FriendInvitationId = 2,
+                Sender = user3,
+                Invited = user2,
+                Status = FriendInvitationStatus.Rejected
+            };
+            
+            var request3 = new FriendInvitation
+            {
+                FriendInvitationId = 3,
+                Sender = user4,
+                Invited = user2,
+                Status = FriendInvitationStatus.Accepted
+            };
+            
+            var request4 = new FriendInvitation
+            {
+                FriendInvitationId = 4,
+                Sender = user1,
+                Invited = user3,
+                Status = FriendInvitationStatus.Pending
+            };
+            
+            var request5 = new FriendInvitation
+            {
+                FriendInvitationId = 5,
+                Sender = user2,
+                Invited = user3,
+                Status = FriendInvitationStatus.Pending
+            };
+            
+            int result1;
+            int result2;
+            int result3;
+
+            //Act
+            using (var context = factory.CreateContext())
+            {
+                context.Users.Add(user1);
+                context.Users.Add(user2);
+                context.Users.Add(user3);
+                context.Users.Add(user4);
+                context.SaveChanges();
+                context.FriendInvitations.Add(request1);
+                context.FriendInvitations.Add(request2);
+                context.FriendInvitations.Add(request3);
+                context.FriendInvitations.Add(request4);
+                context.FriendInvitations.Add(request5);
+                context.SaveChanges();
+                var friendInvitationRepository = new EFFriendInvitationRepository(context);
+                result1 = friendInvitationRepository.GetNumberOfPendingInvitationsForCurrentUser(user1.UserName);
+                result2 = friendInvitationRepository.GetNumberOfPendingInvitationsForCurrentUser(user2.UserName);
+                result3 = friendInvitationRepository.GetNumberOfPendingInvitationsForCurrentUser(user3.UserName);
+            }
+
+            using (var context = factory.CreateContext())
+            {
+                Assert.Equal(4, context.Users.Count());
+                Assert.Equal(5, context.FriendInvitations.Count());
+                Assert.Equal(0, result1);
+                Assert.Equal(1, result2);
+                Assert.Equal(2, result3);
+            }
+        }
     }
 }

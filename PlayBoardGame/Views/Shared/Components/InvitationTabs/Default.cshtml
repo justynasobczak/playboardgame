@@ -3,12 +3,16 @@
 <div class="tabs">
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <a class="@("nav-link " + (Model.SelectedTab == InvitationTabName.Sent ? "active" : "tab-links"))" 
-               asp-controller="SentInvitation" asp-action="List"> Sent </a>
+            <a class="@("nav-link " + (Model.SelectedTab == InvitationTabName.Received ? "active" : "tab-links"))"
+               asp-controller="ReceivedInvitation" asp-action="List">
+                Received
+            </a>
         </li>
         <li class="nav-item">
-            <a class="@("nav-link " + (Model.SelectedTab == InvitationTabName.Received ? "active" : "tab-links"))" 
-               asp-controller="ReceivedInvitation" asp-action="List"> Received </a>
+            <a class="@("nav-link " + (Model.SelectedTab == InvitationTabName.Sent ? "active" : "tab-links"))"
+               asp-controller="SentInvitation" asp-action="List">
+                Sent
+            </a>
         </li>
     </ul>
 </div>

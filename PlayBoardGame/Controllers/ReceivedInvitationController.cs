@@ -33,6 +33,7 @@ namespace PlayBoardGame.Controllers
 
         public IActionResult List()
         {
+            //TODO sort by status, PEnding first, then sort by Date
             var currentUser = _userManager.FindByNameAsync(User.Identity.Name).Result;
             var timeZone = currentUser.TimeZone;
             var receivedInvitationsList = _friendInvitationRepository

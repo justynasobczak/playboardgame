@@ -80,5 +80,11 @@ namespace PlayBoardGame.Models
             return _applicationDbContext.FriendInvitations
                 .FirstOrDefault(fi => fi.SenderId == senderId && fi.InvitedEmail == currentUserEmail) != null;
         }
+
+        public int GetNumberOfPendingInvitationsForCurrentUser(string currentUserName)
+        {
+            return _applicationDbContext.FriendInvitations
+                .Count(fi => fi.Invited.UserName == currentUserName && fi.Status == FriendInvitationStatus.Pending);
+        }
     }
 }

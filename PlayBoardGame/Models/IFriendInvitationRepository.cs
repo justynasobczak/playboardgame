@@ -12,6 +12,7 @@ namespace PlayBoardGame.Models
         void ChangeStatus(int invitationId, FriendInvitationStatus status, AppUser currentUser);
         FriendInvitation GetInvitation(int invitationId);
         bool IfInvitationWasSentByCurrentUser(string currentUserId, string InvitedEmail);
-        public bool IfInvitationWasReceivedByCurrentUser(string senderId, string currentUserEmail);
+        bool IfInvitationWasReceivedByCurrentUser(string senderId, string currentUserEmail);
+        int GetNumberOfPendingInvitationsForCurrentUser(string currentUserName);
     }
 }
