@@ -53,6 +53,9 @@ namespace PlayBoardGame
         public const string ExistingInvitationReceivedByCurrentUserErrorMessage =
             "Invitation from provided email address has been already sent, please check Received invitations list.";
 
+        public const string InvitationSentToAndByCurrentUserErrorMessage =
+            "You have provided your email address.";
+
         public const string OldValueMeetingMessage = "previous value of";
         public const string CurrentValueMeetingMessage = "current value of";
 
@@ -66,6 +69,7 @@ namespace PlayBoardGame
         public const string DeleteMessageTooltip = "Delete a message";
         public const string DeleteGameFromShelfTooltip = "Remove the game from shelf";
         public const string AddGameToShelfTooltip = "Put the game on the shelf";
+        public const string MeetingDetailsTooltip = "Go to meeting details";
 
         public const string MeetingNotificationTooltip =
             "Invited people will be informed about each change of this field";

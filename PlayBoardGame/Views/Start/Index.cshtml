@@ -10,7 +10,7 @@
     <a asp-controller="User" asp-action="UserProfileAsync">Fill in your data</a>.
 </div>
 <div class="plainText standardLink">
-    <a asp-controller="SentInvitation" asp-action="List">Send friend requests</a>, build your group of friends who play board games. 
+    <a asp-controller="SentInvitation" asp-action="List">Send friend requests</a>, build your group of friends who play board games.
 </div>
 <div class="plainText standardLink">
     <a asp-controller="Meeting" asp-action="Create">Add a meeting</a>, provide the dates, invite the people,
@@ -45,10 +45,16 @@
                 <td>@item.People</td>
                 <td>
                     <a href=@item.Url>
-                        <i class="fas fa-info icons"></i>
+                        <i class="fas fa-info icons" data-toggle="tooltip" title="@Constants.MeetingDetailsTooltip"></i>
                     </a>
                 </td>
             </tr>
         }
     }
 </table>
+
+<script>
+$(document).ready(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

@@ -30,7 +30,7 @@ namespace PlayBoardGame.Models
                 .Where(fi => fi.SenderId == currentUserId)
                 .Include(fi => fi.Invited);
         }
-        
+
         public IQueryable<FriendInvitation> GetInvitationsReceivedByCurrentUser(string currentUserEmail)
         {
             return _applicationDbContext.FriendInvitations
@@ -55,6 +55,7 @@ namespace PlayBoardGame.Models
             {
                 dbEntry.Invited = currentUser;
             }
+
             if (dbEntry == null) return;
             dbEntry.Status = status;
 
@@ -72,14 +73,15 @@ namespace PlayBoardGame.Models
         public bool IfInvitationWasSentByCurrentUser(string currentUserId, string InvitedEmail)
         {
             return _applicationDbContext.FriendInvitations
-                       .FirstOrDefault(fi => fi.SenderId == currentUserId && fi.InvitedEmail == InvitedEmail) != null;
+                .FirstOrDefault(fi => fi.SenderId == currentUserId && fi.InvitedEmail == InvitedEmail) != null;
         }
-        
+
         public bool IfInvitationWasReceivedByCurrentUser(string senderId, string currentUserEmail)
         {
             return _applicationDbContext.FriendInvitations
                 .FirstOrDefault(fi => fi.SenderId == senderId && fi.InvitedEmail == currentUserEmail) != null;
         }
+
 
         public int GetNumberOfPendingInvitationsForCurrentUser(string currentUserName)
         {

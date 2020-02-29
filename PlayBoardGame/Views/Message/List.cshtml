@@ -12,7 +12,7 @@
 <div>
     <form class="form-inline" asp-action="Create" method="post">
         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-        <textarea asp-for="Text" class="form-control mr-sm-2 mb-2 mb-sm-0" placeholder="Type message" rows="3"></textarea>
+        <textarea asp-for="Text" class="form-control mr-sm-2 mb-2 mb-sm-0 w-50" placeholder="Type message" rows="3"></textarea>
         <button type="submit" class="btn btn-info mt-2 mt-sm-0">Send</button>
     </form>
 </div>
