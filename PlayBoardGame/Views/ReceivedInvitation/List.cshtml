@@ -73,8 +73,11 @@
         }
     }
 </table>
-<script>
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-});
-</script>
+
+@section Scripts
+{
+    <script src="/lib/custom/main.js"></script>
+    <script>
+        generateTooltip()
+    </script>
+}

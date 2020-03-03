@@ -59,9 +59,7 @@
             </div>
             <a asp-action="Login" class="btn secondButtonBeforeLogin btn-block">LOG IN</a>
             <script>
-                var timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                document.getElementById("TimeZone").value = timeZone;
-                document.getElementById("TimeZoneInput").value = timeZone;
+                setTimeZoneSelect()
             </script>
         </div>
     </div>
