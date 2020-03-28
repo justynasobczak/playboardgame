@@ -42,7 +42,7 @@
                 <td class="text-right">
                     @if (message.Author.UserName == User?.Identity?.Name)
                     {
-                        <button class="buttonForIcons" onclick="ShowMessage(@message.MessageId.ToString())">
+                        <button class="buttonForIcons" onclick="showMessage(@message.MessageId.ToString())">
                             <i class="fas fa-pencil-alt icons" data-toggle="tooltip" title="@Constants.EditMessageTooltip"></i>
                         </button>
                         <form asp-action="Delete" method="post">
@@ -72,44 +72,18 @@
 
             </div>
             <div class="modal-footer">
-                <input type="reset" value="Save" class="btn btn-info" id="btnSubmit" onclick="EditMessage()"/>
+                <input type="reset" value="Save" class="btn btn-info" id="btnSubmit" onclick="editMessage()"/>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-$(document).ready(function(){
-  $('[data-toggle="tooltip"]').tooltip();
-});
-    let ShowMessage = function(id) {
-        $.ajax({
-            type: "POST",
-            url: "/Message/ShowMessage",
-            data: { id: id },
-            success: function(response) {
-                $("#messageModalBody").html(response);
-                $("#messageModal").modal("show");
-            }
+@section Scripts
+{
+    <script src="~/lib/custom/main.js"></script>
 
-        })
-    }
-
-    let EditMessage = function() {
-        $(document).ready(function() {
-            const message = $("#messageForm").serialize();
-
-            $.ajax({
-                    type: "POST",
-                    url: "/Message/Edit",
-                    data: message,
-                    success: function() {
-                        $("#messageModal").modal("hide");
-                        location.reload();
-                    }
-                }
-            )
-        })
-    }
-</script>
+    <script>
+        generateTooltip()
+    </script>
+}

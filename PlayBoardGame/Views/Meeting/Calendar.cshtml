@@ -10,53 +10,10 @@
 {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="~/lib/fullcalendar/fullcalendar.min.js"></script>
-
+    <script src="~/lib/custom/main.js"></script>
 
     <script>
-        $(document).ready(function() {
-            var events = [];
-            $.ajax({
-                url: "/api/FullCalendar",
-                contentType: "application/json",
-                method: "GET",
-                dataType: "json",
-                success: function(data) {
-                    $.each(data,
-                        function(i, v) {
-                            events.push({
-                                id: v.meetingId,
-                                title: v.title,
-                                start: moment(v.startDateTime),
-                                end: moment(v.endDateTime)
-                            });
-                        })
-                    GenerateCalendar(events);
-                },
-                error: function(error) {
-                    alert('failed');
-                }
-
-            })
-
-            function GenerateCalendar(eventsToList) {
-                $('#calendar').fullCalendar('destroy');
-                $('#calendar').fullCalendar({
-                    contentHeight: 500,
-                    defaultDate: new Date(),
-                    timeFormat: 'h(:mm)a',
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,basicWeek,basicDay,agenda'
-                    },
-                    eventLimit: true,
-                    events: eventsToList,
-                    eventClick: function(calEvent, jsEvent, view) {
-                        window.location.href = "/meeting/edit/" + calEvent.id;
-                    }
-                })
-            }
-        })
+        getEventsAndGenerateCalendar()
     </script>
 }
 

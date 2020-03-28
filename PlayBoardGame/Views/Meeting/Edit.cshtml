@@ -86,7 +86,7 @@
                     <div class="form-group">
                         <label asp-for="Address.Street">Street</label>
                         <i class="far fa-envelope iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingNotificationTooltip"></i>
-                        <button type="button" onclick="CopyAddress()" class="buttonForIcons"
+                        <button type="button" onclick="copyAddress()" class="buttonForIcons"
                                 data-toggle="tooltip" title="@Constants.CopyAddressTooltip">
                             <i class="far fa-copy icons"></i>
                         </button>
@@ -153,37 +153,12 @@
     </form>
 </div>
 
-<script>
-    $(document).ready(function() {
-            $('[data-toggle="tooltip"]').tooltip();
-            $('#startDatetimepicker').datetimepicker();
-            $('#endDatetimepicker').datetimepicker();
-        });
-    let CopyAddress = function() {
-        $.ajax({
-            url: "/api/HomeAddress",
-            contentType: "application/json",
-            method: "GET",
-            dataType: "json",
-            success: function(data) {
-                $.each(data,
-                    function(index, element) {
-                        switch (index) {
-                        case "Street":
-                            document.getElementById("Street").value = element;
-                            break;
-                        case "City":
-                            document.getElementById("City").value = element;
-                            break;
-                        case "PostalCode":
-                            document.getElementById("Code").value = element;
-                            break;
-                        case "Country":
-                            document.getElementById("Country").value = element;
-                            break;
-                        }
-                    });
-            }
-        });
-    };
-</script>
+@section Scripts
+{
+    <script src="~/lib/custom/main.js"></script>
+
+    <script>
+        generateTooltip()
+        setDates()
+    </script>
+}

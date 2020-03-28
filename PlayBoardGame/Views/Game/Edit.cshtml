@@ -39,11 +39,11 @@
     </div>
 
 </form>
-<script>
-$(document).ready(function() {
-  $('.custom-file-input').on("change", function() {
-      var fileName = $(this).val().split("\\").pop();
-      $(this).next('.custom-file-label').html(fileName);
-  })
-})
-</script>
+
+@section Scripts
+{
+    <script src="/lib/custom/main.js"></script>
+    <script>
+    setFileName()
+    </script>
+}

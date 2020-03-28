@@ -10,7 +10,7 @@
 })
 
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="MeetingId" />
+    <input type="hidden" asp-for="MeetingId"/>
     <div class="form-group">
         <textarea asp-for="Description" id="meetingDescription"></textarea>
     </div>
@@ -20,11 +20,13 @@
     </div>
 </form>
 
-<script>
-    var editor = new Editor({
-        element: document.getElementById("meetingDescription")
-    });
+@section Scripts
+{
+    <script src="//cdn.jsdelivr.net/editor/0.1.0/editor.js"></script>
+    <script src="//cdn.jsdelivr.net/editor/0.1.0/marked.js"></script>
+    <script src="~/lib/custom/main.js"></script>
 
-    editor.render();
-
-</script>
+    <script>
+        renderMarkdownEditor()
+    </script>
+}
