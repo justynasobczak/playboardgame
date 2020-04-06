@@ -17,7 +17,7 @@
                 asp-items="@(new SelectList(Model.AvailableUsers, "Id", "FullName"))">
         </select>
         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
-        <button type="submit" class="btn btn-info mt-2 mt-sm-0">Invite for meeting</button>
+        <button type="submit" class="btn btn-info mt-2 mt-sm-0" id="btnInviteForMeeting">Invite for meeting</button>
     }
 
 </form>
@@ -30,7 +30,7 @@
 }
 
 
-<table class="table table-hover mt-3">
+<table class="table table-hover mt-3" id="listInvitedUser">
 
     @if (!Model.InvitedUsersList.Any())
     {
@@ -74,7 +74,7 @@
                         @if (Model.IsEditable)
                         {
                             <button asp-action="Delete" type="submit" class="buttonForIcons">
-                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteInvitationTooltip"></i>
+                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteInvitationTooltip" id="iconDeleteInvitation"></i>
                             </button>
                         }
                         @if (item.UserName == User.Identity.Name)
@@ -83,19 +83,19 @@
                                 || item.Status == InvitationStatus.Cancelled)
                             {
                                 <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Accepted">
-                                    <i class="fas fa-user-check icons" data-toggle="tooltip" title="@Constants.AcceptInvitationTooltip"></i>
+                                    <i class="fas fa-user-check icons" data-toggle="tooltip" title="@Constants.AcceptInvitationTooltip" id="iconChangeToAccepted"></i>
                                 </button>
                             }
                             if (item.Status == InvitationStatus.Pending)
                             {
                                 <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Rejected">
-                                    <i class="fas fa-window-close icons" data-toggle="tooltip" title="@Constants.RejectInvitationTooltip"></i>
+                                    <i class="fas fa-window-close icons" data-toggle="tooltip" title="@Constants.RejectInvitationTooltip" id="iconChangeToRejected"></i>
                                 </button>
                             }
                             if (item.Status == InvitationStatus.Accepted)
                             {
                                 <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Cancelled">
-                                    <i class="fas fa-ban icons" data-toggle="tooltip" title="@Constants.CancelInvitationTooltip"></i>
+                                    <i class="fas fa-ban icons" data-toggle="tooltip" title="@Constants.CancelInvitationTooltip" id="iconChangeToCancelled"></i>
                                 </button>
                             }
                         }

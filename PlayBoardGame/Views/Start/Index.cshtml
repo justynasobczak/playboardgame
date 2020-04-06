@@ -3,21 +3,21 @@
     ViewBag.Title = "Let's play board games";
 }
 <div class="plainText standardLink">
-    <a asp-controller="Shelf" asp-action="List">Organize your shelf</a>, put your games on your virtual shelf, it will be
+    <a asp-controller="Shelf" asp-action="List" id="linkShelf">Organize your shelf</a>, put your games on your virtual shelf, it will be
     possible to select the games for the meeting.
 </div >
 <div class="plainText standardLink">
-    <a asp-controller="User" asp-action="UserProfileAsync">Fill in your data</a>.
+    <a asp-controller="User" asp-action="UserProfileAsync" id="linkUserProfile">Fill in your data</a>.
 </div>
 <div class="plainText standardLink">
-    <a asp-controller="SentInvitation" asp-action="List">Send friend requests</a>, build your group of friends who play board games.
+    <a asp-controller="SentInvitation" asp-action="List" id="linkInvitations">Send friend requests</a>, build your group of friends who play board games.
 </div>
 <div class="plainText standardLink">
-    <a asp-controller="Meeting" asp-action="Create">Add a meeting</a>, provide the dates, invite the people,
+    <a asp-controller="Meeting" asp-action="Create" id="linkAddMeeting">Add a meeting</a>, provide the dates, invite the people,
     they will be informed about your invitation by email.
 </div>
-<div class="plainText standardLink">Check your meetings in the <a asp-controller="Meeting" asp-action="List">calendar</a>.</div>
-<div class="plainText standardLink">Do you know <a asp-controller="HangingTree" asp-action="HangingTree">hanged man</a> game?</div>
+<div class="plainText standardLink">Check your meetings in the <a asp-controller="Meeting" asp-action="List" id="linkCalendar">calendar</a>.</div>
+<div class="plainText standardLink">Do you know <a asp-controller="HangingTree" asp-action="HangingTree" id="linkHangedMan">hanged man</a> game?</div>
 <div class="mt-5 mb-3">
     <h4>Upcoming meetings (next 7 days)</h4>
 </div>
@@ -45,7 +45,7 @@
                 <td>@item.People</td>
                 <td>
                     <a href=@item.Url>
-                        <i class="fas fa-info icons" data-toggle="tooltip" title="@Constants.MeetingDetailsTooltip"></i>
+                        <i class="fas fa-info icons" data-toggle="tooltip" title="@Constants.MeetingDetailsTooltip" id="iconMeetingDetails"></i>
                     </a>
                 </td>
             </tr>

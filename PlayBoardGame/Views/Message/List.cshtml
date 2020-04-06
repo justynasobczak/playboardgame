@@ -13,12 +13,12 @@
     <form class="form-inline" asp-action="Create" method="post">
         <input type="hidden" name="meetingId" value="@Model.MeetingId.ToString()"/>
         <textarea asp-for="Text" class="form-control mr-sm-2 mb-2 mb-sm-0 w-50" placeholder="Type message" rows="3"></textarea>
-        <button type="submit" class="btn btn-info mt-2 mt-sm-0">Send</button>
+        <button type="submit" class="btn btn-info mt-2 mt-sm-0" id="btnSendMessage">Send</button>
     </form>
 </div>
 
 
-<table class="table table-hover mt-3">
+<table class="table table-hover mt-3" id="listMessages">
     @if (!Model.Messages.Any())
     {
         <tr>
@@ -43,12 +43,12 @@
                     @if (message.Author.UserName == User?.Identity?.Name)
                     {
                         <button class="buttonForIcons" onclick="showMessage(@message.MessageId.ToString())">
-                            <i class="fas fa-pencil-alt icons" data-toggle="tooltip" title="@Constants.EditMessageTooltip"></i>
+                            <i class="fas fa-pencil-alt icons" data-toggle="tooltip" title="@Constants.EditMessageTooltip" id="iconEditMessage"></i>
                         </button>
                         <form asp-action="Delete" method="post">
                             <input type="hidden" name="id" value="@message.MessageId.ToString()"/>
                             <button type="submit" class="buttonForIcons">
-                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteMessageTooltip"></i>
+                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteMessageTooltip" id="iconDeleteMessage"></i>
                             </button>
                         </form>
                     }

@@ -4,10 +4,10 @@
 }
 <form asp-action="List" class="form-inline mb-4" method="get">
     @await Component.InvokeAsync("SearchFields", new {ActionMethod = nameof(ShelfController.List)})
-    <a asp-action="Edit" class="btn btn-info btn-sm text-right ml-auto">Add to shelf</a>
+    <a asp-action="Edit" class="btn btn-info btn-sm text-right ml-auto" id="btnAddToShelf">Add to shelf</a>
 </form>
 
-<table class="table table-hover">
+<table class="table table-hover" id="listShelf">
 
     @if (!Model.Shelf.Any())
     {
@@ -37,7 +37,7 @@
                             @game.Title
                             <input type="hidden" name="id" value="@game.GameId.ToString()"/>
                             <button type="submit" class="buttonForIcons">
-                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip"></i>
+                                <i class="far fa-trash-alt icons" data-toggle="tooltip" title="@Constants.DeleteGameFromShelfTooltip" id="iconDeleteFromShelf"></i>
                             </button>
                         </p>
                     </form>

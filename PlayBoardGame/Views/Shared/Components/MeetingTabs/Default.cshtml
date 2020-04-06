@@ -4,19 +4,19 @@
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Details ? "active" : "tab-links"))" 
-               asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId"> Details </a>
+               asp-controller="Meeting" asp-action="Edit" asp-route-id="@Model.MeetingId" id="tabDetailsMeeting"> Details </a>
         </li>
         <li class="nav-item">
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.People ? "active" : "tab-links"))" 
-               asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId"> People </a>
+               asp-controller="InvitedUser" asp-action="List" asp-route-id="@Model.MeetingId" id="tabPeopleMeeting"> People </a>
         </li>
         <li class="nav-item">
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Messages ? "active" : "tab-links"))" 
-               asp-controller="Message" asp-action="List" asp-route-id="@Model.MeetingId"> Messages </a>
+               asp-controller="Message" asp-action="List" asp-route-id="@Model.MeetingId" id="tabMessagesMeeting"> Messages </a>
         </li>
         <li class="nav-item">
             <a class="@("nav-link " + (Model.IsCreateMode ? "disabled " : "") + (Model.SelectedTab == MeetingTabName.Description ? "active" : "tab-links"))" 
-               asp-controller="MeetingDescription" asp-action="Edit" asp-route-id="@Model.MeetingId"> Description, results </a>
+               asp-controller="MeetingDescription" asp-action="Edit" asp-route-id="@Model.MeetingId" id="tabDescriptionMeeting"> Description, results </a>
         </li>
     </ul>
 </div>

@@ -9,7 +9,7 @@
     tabName = InvitationTabName.Received
 })
 
-<table class="table table-hover">
+<table class="table table-hover" id="listReceivedInvitations">
 
     @if (!Model.ReceivedInvitationsList.Any())
     {
@@ -57,13 +57,13 @@
                         @if (@item.Status == FriendInvitationStatus.Pending)
                         {
                             <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Accepted">
-                                <i class="fas fa-user-check icons" data-toggle="tooltip" title="@Constants.AcceptInvitationTooltip"></i>
+                                <i class="fas fa-user-check icons" data-toggle="tooltip" title="@Constants.AcceptInvitationTooltip" id="iconChangeToAccepted"></i>
                             </button>
                         }
                         @if (@item.Status == FriendInvitationStatus.Pending)
                         {
                             <button asp-action="ChangeStatus" type="submit" class="buttonForIcons" asp-route-status="Rejected">
-                                <i class="fas fa-window-close icons" data-toggle="tooltip" title="@Constants.RejectInvitationTooltip"></i>
+                                <i class="fas fa-window-close icons" data-toggle="tooltip" title="@Constants.RejectInvitationTooltip" id="iconChangeToRejected"></i>
                             </button>
                         }
 

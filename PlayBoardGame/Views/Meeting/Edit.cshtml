@@ -53,7 +53,7 @@
                     <div class="form-group">
                         <label asp-for="TimeZone">Your time zone</label>
                         <a asp-controller="User" asp-action="UserProfileAsync">
-                            <i class="far fa-clock iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingTimeZoneTooltip"></i>
+                            <i class="far fa-clock iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingTimeZoneTooltip" id="iconTimeZone"></i>
                         </a>
                         <span asp-validation-for="TimeZone" class="text-danger"></span>
                         <input asp-for="TimeZone" readonly="readonly" class="form-control"/>
@@ -88,7 +88,7 @@
                         <i class="far fa-envelope iconsForNotification" data-toggle="tooltip" title="@Constants.MeetingNotificationTooltip"></i>
                         <button type="button" onclick="copyAddress()" class="buttonForIcons"
                                 data-toggle="tooltip" title="@Constants.CopyAddressTooltip">
-                            <i class="far fa-copy icons"></i>
+                            <i class="far fa-copy icons" id="iconCopyAddress"></i>
                         </button>
                         <span asp-validation-for="Address.Street" class="text-danger"></span>
                         <input asp-for="Address.Street" class="form-control" id="Street"/>
@@ -144,10 +144,10 @@
                         <text>disabled="disabled"</text>
                     }
                 }
-                class="btn btn-info" type="submit">
+                class="btn btn-info" type="submit" id="btnSaveMeeting">
                 Save
             </button>
-            <a asp-action="List" class="btn btn-secondary">Cancel</a>
+            <a asp-action="List" class="btn btn-secondary" id="btnCancelMeeting">Cancel</a>
         </div>
 
     </form>

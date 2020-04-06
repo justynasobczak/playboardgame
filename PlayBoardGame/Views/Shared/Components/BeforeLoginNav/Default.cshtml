@@ -14,19 +14,19 @@
                 @if (Model.PageName == BeforeLoginPageName.Login || Model.PageName == BeforeLoginPageName.Register)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Account" asp-action="SendResetPasswordLink"> Forgotten Password? </a>
+                        <a class="nav-link" asp-controller="Account" asp-action="SendResetPasswordLink" id="linkForgottenPassword"> Forgotten Password? </a>
                     </li>
                 }
                 @if (Model.PageName == BeforeLoginPageName.ResetPassword || Model.PageName == BeforeLoginPageName.Register)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Account" asp-action="Login"> Login </a>
+                        <a class="nav-link" asp-controller="Account" asp-action="Login" id="linkLogIn"> Login </a>
                     </li>
                 }
                 @if (Model.PageName == BeforeLoginPageName.ResetPassword || Model.PageName == BeforeLoginPageName.Login)
                 {
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Account" asp-action="Register"> Register </a>
+                        <a class="nav-link" asp-controller="Account" asp-action="Register" id="linkRegister"> Register </a>
                     </li>
                 }
 

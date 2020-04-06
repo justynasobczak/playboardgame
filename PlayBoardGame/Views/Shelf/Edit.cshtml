@@ -4,7 +4,7 @@
 }
 <form asp-action="Edit" class="form-inline mb-4" method="get">
     @await Component.InvokeAsync("SearchFields", new {ActionMethod = nameof(ShelfController.Edit)})
-    <a asp-action="List" class="btn btn-secondary text-right ml-auto btn-sm">Back to shelf</a>
+    <a asp-action="List" class="btn btn-secondary text-right ml-auto btn-sm" id="btnBackToShelf">Back to shelf</a>
 </form>
 
 <div class="row">
@@ -22,7 +22,7 @@
                                 @game.Title
                                 <input type="hidden" name="id" value="@game.GameId.ToString()"/>
                                 <button type="submit" class="buttonForIcons">
-                                    <i class="fas fa-plus icons" data-toggle="tooltip" title="@Constants.AddGameToShelfTooltip"></i>
+                                    <i class="fas fa-plus icons" data-toggle="tooltip" title="@Constants.AddGameToShelfTooltip" id="iconAddToShelf"></i>
                                 </button>
                             </p>
                         </form>
@@ -37,7 +37,7 @@
                                 @game.Title
                                 <input type="hidden" name="id" value="@game.GameId.ToString()"/>
                                 <button type="submit" class="buttonForIcons">
-                                    <i class="fas fa-plus icons" data-toggle="tooltip" title="@Constants.AddGameToShelfTooltip"></i>
+                                    <i class="fas fa-plus icons" data-toggle="tooltip" title="@Constants.AddGameToShelfTooltip" id="iconAddToShelf"></i>
                                 </button>
                             </p>
                         </form>

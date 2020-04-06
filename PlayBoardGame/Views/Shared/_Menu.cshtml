@@ -12,23 +12,23 @@
         <div class="collapse navbar-collapse" id="mainmenu">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Start" asp-action="Index"> Start </a>
+                    <a class="nav-link" asp-controller="Start" asp-action="Index" id="menuStart"> Start </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Shelf" asp-action="List" class="nav-link"> My shelf </a>
+                    <a asp-controller="Shelf" asp-action="List" class="nav-link" id="menuMyShelf"> My shelf </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="Meeting" asp-action="List" class="nav-link"> Calendar </a>
+                    <a asp-controller="Meeting" asp-action="List" class="nav-link" id="menuCalendar"> Calendar </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-controller="ReceivedInvitation" asp-action="List" class="nav-link" invitation-bubble="@User.Identity.Name">
+                    <a asp-controller="ReceivedInvitation" asp-action="List" class="nav-link" invitation-bubble="@User.Identity.Name" id="menuInvitations">
                         @*Content is generated from tag helper*@
                     </a>
                 </li>
                 @if (User?.Identity?.Name == "Admin")
                 {
                     <li class="nav-item">
-                        <a asp-controller="Game" asp-action="List" class="nav-link"> Games </a>
+                        <a asp-controller="Game" asp-action="List" class="nav-link" id="menuGames"> Games </a>
                     </li>
                 }
             </ul>
@@ -36,10 +36,10 @@
         <div class="collapse navbar-collapse" id="mainmenu">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="User" asp-action="UserProfileAsync"> Profile </a>
+                    <a class="nav-link" asp-controller="User" asp-action="UserProfileAsync" id="menuProfile"> Profile </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Account" asp-action="LogoutAsync"> Logout </a>
+                    <a class="nav-link" asp-controller="Account" asp-action="LogoutAsync" id="menuLogout"> Logout </a>
                 </li>
             </ul>
         </div>

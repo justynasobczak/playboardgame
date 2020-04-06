@@ -4,11 +4,11 @@
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="@("nav-link " + (Model.SelectedTab == ProfileTabName.Details ? "active" : "tab-links"))" 
-               asp-controller="User" asp-action="UserProfileAsync"> Details </a>
+               asp-controller="User" asp-action="UserProfileAsync" id="tabDetailsProfile"> Details </a>
         </li>
         <li class="nav-item">
             <a class="@("nav-link " + (Model.SelectedTab == ProfileTabName.Password ? "active" : "tab-links"))" 
-               asp-controller="User" asp-action="ChangePassword"> Change password </a>
+               asp-controller="User" asp-action="ChangePassword" id="tabPasswordProfile"> Change password </a>
         </li>
     </ul>
 </div>

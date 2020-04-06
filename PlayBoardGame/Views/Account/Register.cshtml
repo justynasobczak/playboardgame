@@ -40,13 +40,13 @@
                                                               .OrderBy(i => i.Value), "Key", "Value"))" class="form-control">
                     </select>
                 </div>
-                <button class="btn mainButtonBeforeLogin btn-block" type="submit">REGISTER</button>
+                <button class="btn mainButtonBeforeLogin btn-block" type="submit" id="btnRegisterWithEmail">REGISTER</button>
             </form>
             <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-pageType="@AuthPageType.Register.ToString()">
                 <div>
                     @foreach (var provider in Model.ExternalLogins)
                     {
-                        <button class="btn secondProviderButtonBeforeLogin btn-block" type="submit" name="provider" value="@provider.Name">
+                        <button class="btn secondProviderButtonBeforeLogin btn-block" type="submit" name="provider" value="@provider.Name" id="@("btnRegisterWith" + provider.Name)">
                             Register with <i class="fab fa-@provider.Name.ToLower()"></i>
                         </button>
                     }
@@ -57,7 +57,7 @@
             <div>
                 <h4>Already have an account?</h4>
             </div>
-            <a asp-action="Login" class="btn secondButtonBeforeLogin btn-block">LOG IN</a>
+            <a asp-action="Login" class="btn secondButtonBeforeLogin btn-block" id="btnLogIn">LOG IN</a>
             <script>
                 setTimeZoneSelect()
             </script>
